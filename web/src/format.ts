@@ -30,6 +30,13 @@ export function qty(value: number): string {
   return value.toPrecision(4);
 }
 
+export function quote(value: number | null): string {
+  if (value == null || !Number.isFinite(value)) return "—";
+  const abs = Math.abs(value);
+  const digits = abs >= 1000 ? 0 : abs >= 1 ? 2 : 4;
+  return new Intl.NumberFormat("en-US", { maximumFractionDigits: digits }).format(value);
+}
+
 export function day(ms: number): string {
   return new Date(ms).toISOString().slice(0, 10);
 }

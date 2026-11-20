@@ -2,7 +2,7 @@ import { correlationMatrix } from "@engine/correlation.ts";
 import { guardsAreActive, simulate, simulateNaive } from "@engine/simulate.ts";
 import type { CandleSeries, Frequency, SimInput, SimSuccess } from "@engine/types.ts";
 import { envelope, renderLineChart, renderStack, type ChartLine } from "./chart.ts";
-import { cls, day, num, parseDayEnd, parseDayStart, pct, qty, usdt } from "./format.ts";
+import { cls, day, num, parseDayEnd, parseDayStart, pct, qty, quote, usdt } from "./format.ts";
 import { loadCandles } from "./load.ts";
 
 interface CoinInfo {
@@ -36,7 +36,21 @@ interface Holding {
 }
 
 const BASE = import.meta.env.BASE_URL;
-const PALETTE = ["#d7a35a", "#8fb3ae", "#e6dcc4", "#c4846a", "#9cbe86", "#d07a8a", "#8aa0c8", "#cbbf70", "#b9a0c4", "#7f9a78"];
+const PALETTE = ["#8fb3ae", "#c4846a", "#9cbe86", "#d07a8a", "#8aa0c8", "#cbbf70", "#b9a0c4", "#7f9a78", "#e0b07a", "#6fbfc4"];
+
+interface ChartSpec {
+  id: string;
+  name: string;
+  color: string;
+  dash?: string;
+  width?: number;
+  axis: "left" | "right";
+  on: boolean;
+  values: Array<number | null>;
+  label: (value: number) => string;
+}
+
+type PathStep = "day" | "week" | "month" | "bar";
 const FREQUENCIES: Frequency[] = ["none", "daily", "weekly", "biweekly", "monthly"];
 
 const PRESETS: Array<{ id: string; name: string; frequency: Frequency; holdings: Holding[] }> = [
@@ -487,7 +501,12 @@ function paintResults(
   host.append(stats);
 
   const chartCard = el("div", "chart-card");
-  chartCard.append(el("h2", "", "Value in USDT"));
+  chartCard.append(el("h2", "", "Value over time"));
+  chartCard.append(el(
+    "p",
+    "hint",
+    "Linear scale. Coin lines are the USDT value of the coins this book is holding. The left axis is USDT. BTC price uses the right axis, so a high bitcoin price does not flatten the book. Hide any line and the chart rescales.",
+  ));
   const chart = el("div", "chart");
   const legend = el("div", "legend");
   chartCard.append(chart, legend);
@@ -499,26 +518,116 @@ function paintResults(
   weightCard.append(weights);
   host.append(weightCard);
 
-  const draw = () => {
-    const times = result.points.map((point) => point.t);
-    const lines: ChartLine[] = [
-      { name: "Strategy", color: "#d7a35a", values: result.points.map((point) => point.equity) },
-      { name: "Hold", color: "#8fb3ae", values: result.points.map((point) => point.hold) },
-    ];
-    if (result.points.some((point) => point.btc != null) && !(result.assets.length === 1 && result.assets[0].symbol === "BTC")) {
-      lines.push({ name: "BTC hold", color: "#e6dcc4", values: result.points.map((point) => point.btc) });
-    }
-    if (naive) lines.push({ name: "Unguarded", color: "#e08b78", dash: "5 4", values: naive.points.map((point) => point.equity) });
-    const packed = envelope(times, lines);
-    renderLineChart(chart, packed.times, packed.lines);
-    legend.replaceChildren();
-    for (const line of lines) {
-      const item = el("span");
-      const swatch = el("i");
-      swatch.style.background = line.color;
-      item.append(swatch, document.createTextNode(line.name));
-      legend.append(item);
-    }
+  const times = result.points.map((point) => point.t);
+  const money = (value: number) => usdt(value);
+  const btcLabel = (value: number) => `${quote(value)} USDT`;
+  const specs: ChartSpec[] = [
+    {
+      id: "equity",
+      name: "Portfolio",
+      color: "#d7a35a",
+      width: 2.6,
+      axis: "left",
+      on: true,
+      values: result.points.map((point) => point.equity),
+      label: money,
+    },
+  ];
+  result.assets.forEach((asset, index) => {
+    specs.push({
+      id: `coin:${asset.symbol}`,
+      name: asset.symbol,
+      color: PALETTE[index % PALETTE.length],
+      width: 1.7,
+      axis: "left",
+      on: true,
+      values: result.points.map((point) => point.values[index] ?? null),
+      label: money,
+    });
+  });
+  if (result.points.some((point) => point.usdt > 1)) {
+    specs.push({
+      id: "cash",
+      name: "USDT cash",
+      color: "#8a8476",
+      width: 1.4,
+      axis: "left",
+      on: false,
+      values: result.points.map((point) => point.usdt),
+      label: money,
+    });
+  }
+  specs.push({
+    id: "hold",
+    name: "Hold",
+    color: "#6f8f9a",
+    dash: "3 3",
+    width: 1.5,
+    axis: "left",
+    on: false,
+    values: result.points.map((point) => point.hold),
+    label: money,
+  });
+  if (naive) {
+    const naiveAt = new Map(naive.points.map((point) => [point.t, point.equity]));
+    specs.push({
+      id: "unguarded",
+      name: "Unguarded",
+      color: "#e08b78",
+      dash: "6 4",
+      width: 1.5,
+      axis: "left",
+      on: false,
+      values: times.map((time) => naiveAt.get(time) ?? null),
+      label: money,
+    });
+  }
+  if (result.points.some((point) => point.btcPrice != null)) {
+    specs.push({
+      id: "btc-price",
+      name: "BTC price",
+      color: "#f2efe4",
+      dash: "5 3",
+      width: 1.8,
+      axis: "right",
+      on: true,
+      values: result.points.map((point) => point.btcPrice),
+      label: btcLabel,
+    });
+  }
+
+  const hidden = new Set(specs.filter((spec) => !spec.on).map((spec) => spec.id));
+  for (const spec of specs) {
+    const item = el("label", spec.on ? "" : "off");
+    const box = el("input") as HTMLInputElement;
+    box.type = "checkbox";
+    box.checked = spec.on;
+    const swatch = el("i");
+    swatch.style.background = spec.color;
+    item.append(box, swatch, document.createTextNode(spec.name));
+    box.addEventListener("change", () => {
+      if (box.checked) hidden.delete(spec.id);
+      else hidden.add(spec.id);
+      item.classList.toggle("off", !box.checked);
+      paint();
+    });
+    legend.append(item);
+  }
+
+  const paint = () => {
+    const lines: ChartLine[] = specs
+      .filter((spec) => !hidden.has(spec.id))
+      .map((spec) => ({
+        name: spec.name,
+        color: spec.color,
+        dash: spec.dash,
+        width: spec.width,
+        axis: spec.axis,
+        values: spec.values,
+        label: spec.label,
+      }));
+    const packed = lines.length > 0 ? envelope(times, lines, 720) : { times, lines };
+    renderLineChart(chart, packed.times, packed.lines, { left: "USDT", right: "BTC price" });
     const stride = Math.max(1, Math.floor(result.points.length / 300));
     const sample = result.points.filter((_, index) => index % stride === 0 || index === result.points.length - 1);
     const stack = result.assets.map((asset, index) => ({
@@ -532,9 +641,10 @@ function paintResults(
     }
     renderStack(weights, sample.map((point) => point.t), stack);
   };
-  lastDraw = draw;
-  draw();
+  lastDraw = paint;
+  paint();
 
+  host.append(pathTable(result));
   host.append(frequencyTable(comparisons));
   host.append(holdingsTable(result));
   host.append(yearTable(result));
@@ -610,6 +720,79 @@ function frequencyTable(rows: Array<{ frequency: Frequency; result: SimSuccess }
   }
   card.append(wrap(table));
   return card;
+}
+
+function pathTable(result: SimSuccess): HTMLElement {
+  const card = el("div", "table-card");
+  const head = el("div", "table-head");
+  head.append(el("h2", "", "Numbers across time"));
+  const step = el("select") as HTMLSelectElement;
+  for (const [value, text] of [
+    ["day", "Daily"],
+    ["week", "Weekly"],
+    ["month", "Monthly"],
+    ["bar", "Every 4h bar"],
+  ] as const) {
+    const option = el("option");
+    option.value = value;
+    option.textContent = text;
+    step.append(option);
+  }
+  head.append(step);
+  card.append(head);
+  const note = el("p", "hint");
+  const scroller = el("div", "table-scroll tall");
+  card.append(note, scroller);
+  const fill = () => {
+    const rows = samplePoints(result.points, step.value as PathStep);
+    note.textContent = `${rows.length.toLocaleString("en-US")} marks. Each coin column is the USDT value of the coins held. The CSV has every 4h bar, including quantities.`;
+    const table = el("table");
+    const head = el("thead");
+    head.append(row("th", [
+      "Date",
+      "Portfolio",
+      ...result.assets.map((asset) => asset.symbol),
+      "BTC price",
+    ]));
+    const body = el("tbody");
+    for (const point of rows) {
+      body.append(row("td", [
+        day(point.t),
+        usdt(point.equity),
+        ...result.assets.map((_, index) => usdt(point.values[index] ?? 0)),
+        point.btcPrice == null ? "—" : quote(point.btcPrice),
+      ]));
+    }
+    table.append(head, body);
+    scroller.replaceChildren(table);
+  };
+  step.addEventListener("change", fill);
+  fill();
+  return card;
+}
+
+function samplePoints(points: SimSuccess["points"], step: PathStep): SimSuccess["points"] {
+  if (step === "bar" || points.length === 0) return points;
+  const buckets = new Map<string, SimSuccess["points"][number]>();
+  const order: string[] = [];
+  for (const point of points) {
+    const key = bucketKey(point.t, step);
+    if (!buckets.has(key)) order.push(key);
+    buckets.set(key, point);
+  }
+  return order.map((key) => buckets.get(key)!);
+}
+
+function bucketKey(ms: number, step: Exclude<PathStep, "bar">): string {
+  const date = new Date(ms);
+  if (step === "month") return date.toISOString().slice(0, 7);
+  if (step === "day") return date.toISOString().slice(0, 10);
+  const utc = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const weekday = utc.getUTCDay() || 7;
+  utc.setUTCDate(utc.getUTCDate() + 4 - weekday);
+  const yearStart = new Date(Date.UTC(utc.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((utc.getTime() - yearStart.getTime()) / 86_400_000 + 1) / 7);
+  return `${utc.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
 }
 
 function holdingsTable(result: SimSuccess): HTMLElement {
@@ -942,17 +1125,29 @@ function hex(value: string): [number, number, number] {
 }
 
 function equityCsv(result: SimSuccess): string {
-  const headers = ["time", "equity_usdt", "hold_usdt", "btc_usdt", "usdt_cash", ...result.assets.map((asset) => `qty_${asset.symbol}`)];
+  const headers = [
+    "time",
+    "equity_usdt",
+    "hold_usdt",
+    "btc_price",
+    "btc_hold_usdt",
+    "usdt_cash",
+    ...result.assets.flatMap((asset) => [`value_${asset.symbol}`, `qty_${asset.symbol}`]),
+  ];
   const lines = [headers.join(",")];
   for (const point of result.points) {
-    lines.push([
+    const cells = [
       new Date(point.t).toISOString(),
       point.equity.toFixed(4),
       point.hold.toFixed(4),
+      point.btcPrice == null ? "" : point.btcPrice.toFixed(8),
       point.btc == null ? "" : point.btc.toFixed(4),
       point.usdt.toFixed(6),
-      ...point.qty.map((value) => value.toFixed(8)),
-    ].join(","));
+    ];
+    result.assets.forEach((_, index) => {
+      cells.push((point.values[index] ?? 0).toFixed(4), (point.qty[index] ?? 0).toFixed(8));
+    });
+    lines.push(cells.join(","));
   }
   return lines.join("\n");
 }

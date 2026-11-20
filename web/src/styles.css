@@ -152,8 +152,17 @@ input:focus, select:focus { outline: 2px solid var(--accent); border-color: tran
   pointer-events: none;
 }
 .tip i { display: inline-block; width: 8px; height: 8px; border-radius: 99px; margin-right: 6px; }
-.legend { display: flex; flex-wrap: wrap; gap: 12px; color: var(--muted); font-size: 0.82rem; padding: 4px 6px 8px; }
-.legend i { display: inline-block; width: 14px; height: 3px; margin-right: 6px; vertical-align: middle; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; color: var(--muted); font-size: 0.82rem; padding: 4px 6px 8px; }
+.legend label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.legend input { width: auto; accent-color: var(--accent); }
+.legend .off { opacity: 0.4; }
+.legend i { display: inline-block; width: 18px; height: 3px; border-radius: 99px; }
+.axis-title { fill: var(--muted); font-size: 11px; font-family: var(--mono); }
+.line-label { font-size: 11px; font-family: var(--mono); }
+.table-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 4px; }
+.table-head select { width: auto; min-width: 150px; }
+.table-scroll.tall { max-height: 440px; }
+.table-scroll.tall thead th { position: sticky; top: 0; background: var(--bg-2); z-index: 1; }
 table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 th, td { text-align: right; padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 th:first-child, td:first-child { text-align: left; }
