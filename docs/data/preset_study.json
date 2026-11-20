@@ -1,0 +1,809 @@
+{
+  "generated_at": "2026-11-20T22:47:41.831Z",
+  "data_generated_at": "2026-11-20T22:45:09Z",
+  "capital_usdt": 10000,
+  "fee_bps": 10,
+  "slippage_bps": 5,
+  "guard": "5 percentage-point band, close half the gap, do not buy below the 60-day average, leave blocked cash in the winners",
+  "note": "One historical window per book, ending at the last stored candle. A higher past Sharpe is not a forecast. Baskets need 1.5 years of shared history and the scan uses equal weights with a monthly clock.",
+  "drafts": [
+    {
+      "name": "BTC untouched",
+      "symbols": [
+        "BTC"
+      ],
+      "weights": [
+        100
+      ],
+      "frequency": "none",
+      "start": "2023-11-21",
+      "end": "2026-11-20",
+      "years": 2.999771845767739,
+      "plain": {
+        "multiple": 1.5606843855815824,
+        "cagr": 0.15996066635220374,
+        "maxDrawdown": -0.5344740218167796,
+        "sharpe": 0.3234025845425388,
+        "dragUsdt": 0,
+        "trapEvents": 0,
+        "rebalances": 0,
+        "finalUsdt": 15606.843855815823
+      },
+      "guarded": {
+        "multiple": 1.5606843855815824,
+        "cagr": 0.15996066635220374,
+        "maxDrawdown": -0.5344740218167796,
+        "sharpe": 0.3234025845425388,
+        "dragUsdt": 0,
+        "trapEvents": 0,
+        "rebalances": 0,
+        "finalUsdt": 15606.843855815823
+      },
+      "holdMultiple": 1.5606843855815824,
+      "btcMultiple": 1.5606843855815824
+    },
+    {
+      "name": "TAO / PENDLE / HBAR",
+      "symbols": [
+        "TAO",
+        "PENDLE",
+        "HBAR"
+      ],
+      "weights": [
+        33,
+        33,
+        34
+      ],
+      "frequency": "weekly",
+      "start": "2024-04-11",
+      "end": "2026-11-20",
+      "years": 2.6096281086014144,
+      "plain": {
+        "multiple": 0.43906089476398436,
+        "cagr": -0.2705142923672281,
+        "maxDrawdown": -0.7714770905869887,
+        "sharpe": -0.34351481980627113,
+        "dragUsdt": -1256.5019862097402,
+        "trapEvents": 113,
+        "rebalances": 136,
+        "finalUsdt": 4390.608947639844
+      },
+      "guarded": {
+        "multiple": 0.39080452650405695,
+        "cagr": -0.30234550437671825,
+        "maxDrawdown": -0.7972372509413972,
+        "sharpe": -0.3897152302408749,
+        "dragUsdt": -738.2493832030913,
+        "trapEvents": 16,
+        "rebalances": 26,
+        "finalUsdt": 3908.0452650405696
+      },
+      "holdMultiple": 0.31783227761213384,
+      "btcMultiple": 0.8352974572857144
+    },
+    {
+      "name": "TAO / PENDLE / HBAR",
+      "symbols": [
+        "TAO",
+        "PENDLE",
+        "HBAR"
+      ],
+      "weights": [
+        33,
+        33,
+        34
+      ],
+      "frequency": "biweekly",
+      "start": "2024-04-11",
+      "end": "2026-11-20",
+      "years": 2.6096281086014144,
+      "plain": {
+        "multiple": 0.48227064646885454,
+        "cagr": -0.24379734529812958,
+        "maxDrawdown": -0.7654549354478135,
+        "sharpe": -0.3027376445212716,
+        "dragUsdt": -1681.5606292358862,
+        "trapEvents": 60,
+        "rebalances": 68,
+        "finalUsdt": 4822.706464688546
+      },
+      "guarded": {
+        "multiple": 0.3833393828906309,
+        "cagr": -0.3074826021680983,
+        "maxDrawdown": -0.800891173815721,
+        "sharpe": -0.3975462308230366,
+        "dragUsdt": -661.7403113704069,
+        "trapEvents": 9,
+        "rebalances": 15,
+        "finalUsdt": 3833.393828906309
+      },
+      "holdMultiple": 0.31783227761213384,
+      "btcMultiple": 0.8352974572857144
+    },
+    {
+      "name": "TAO / PENDLE / HBAR",
+      "symbols": [
+        "TAO",
+        "PENDLE",
+        "HBAR"
+      ],
+      "weights": [
+        33,
+        33,
+        34
+      ],
+      "frequency": "monthly",
+      "start": "2024-04-11",
+      "end": "2026-11-20",
+      "years": 2.6096281086014144,
+      "plain": {
+        "multiple": 0.5024502308591302,
+        "cagr": -0.23182539826899173,
+        "maxDrawdown": -0.7609079818940132,
+        "sharpe": -0.284440933149771,
+        "dragUsdt": -1873.5207568285648,
+        "trapEvents": 31,
+        "rebalances": 31,
+        "finalUsdt": 5024.502308591302
+      },
+      "guarded": {
+        "multiple": 0.3584253296752513,
+        "cagr": -0.3250879223846912,
+        "maxDrawdown": -0.8161557841007862,
+        "sharpe": -0.4292825669711371,
+        "dragUsdt": -410.4541517123401,
+        "trapEvents": 4,
+        "rebalances": 8,
+        "finalUsdt": 3584.253296752513
+      },
+      "holdMultiple": 0.31783227761213384,
+      "btcMultiple": 0.8352974572857144
+    },
+    {
+      "name": "TAO / ZEC / PENDLE",
+      "symbols": [
+        "TAO",
+        "ZEC",
+        "PENDLE"
+      ],
+      "weights": [
+        33,
+        33,
+        34
+      ],
+      "frequency": "weekly",
+      "start": "2024-04-11",
+      "end": "2026-11-20",
+      "years": 2.6096281086014144,
+      "plain": {
+        "multiple": 2.022393676847483,
+        "cagr": 0.30980493779172,
+        "maxDrawdown": -0.6592169835218543,
+        "sharpe": 0.2868920374322651,
+        "dragUsdt": 74809.7036047681,
+        "trapEvents": 113,
+        "rebalances": 136,
+        "finalUsdt": 20223.93676847483
+      },
+      "guarded": {
+        "multiple": 3.0947570232043486,
+        "cagr": 0.5417228611521778,
+        "maxDrawdown": -0.6713229706743439,
+        "sharpe": 0.4278737564636827,
+        "dragUsdt": 64594.061036207204,
+        "trapEvents": 29,
+        "rebalances": 33,
+        "finalUsdt": 30947.570232043487
+      },
+      "holdMultiple": 9.571437786503664,
+      "btcMultiple": 0.8352974572857144
+    },
+    {
+      "name": "TAO / ZEC / PENDLE",
+      "symbols": [
+        "TAO",
+        "ZEC",
+        "PENDLE"
+      ],
+      "weights": [
+        33,
+        33,
+        34
+      ],
+      "frequency": "monthly",
+      "start": "2024-04-11",
+      "end": "2026-11-20",
+      "years": 2.6096281086014144,
+      "plain": {
+        "multiple": 2.5816627179117053,
+        "cagr": 0.43826327602332116,
+        "maxDrawdown": -0.6663071965573777,
+        "sharpe": 0.378890824637851,
+        "dragUsdt": 69497.27486529166,
+        "trapEvents": 30,
+        "rebalances": 31,
+        "finalUsdt": 25816.62717911705
+      },
+      "guarded": {
+        "multiple": 3.8525690576002685,
+        "cagr": 0.6767079953046804,
+        "maxDrawdown": -0.6903258549318871,
+        "sharpe": 0.48807671444373935,
+        "dragUsdt": 57043.23926652347,
+        "trapEvents": 10,
+        "rebalances": 13,
+        "finalUsdt": 38525.690576002686
+      },
+      "holdMultiple": 9.571437786503664,
+      "btcMultiple": 0.8352974572857144
+    },
+    {
+      "name": "TAO / UNI / ENA",
+      "symbols": [
+        "TAO",
+        "UNI",
+        "ENA"
+      ],
+      "weights": [
+        33,
+        33,
+        34
+      ],
+      "frequency": "weekly",
+      "start": "2024-04-11",
+      "end": "2026-11-20",
+      "years": 2.6096281086014144,
+      "plain": {
+        "multiple": 0.31958693654162235,
+        "cagr": -0.3541073926510342,
+        "maxDrawdown": -0.8286778424953188,
+        "sharpe": -0.4477288203534041,
+        "dragUsdt": -513.2704055344043,
+        "trapEvents": 117,
+        "rebalances": 136,
+        "finalUsdt": 3195.8693654162234
+      },
+      "guarded": {
+        "multiple": 0.3123951061289211,
+        "cagr": -0.3597162268614099,
+        "maxDrawdown": -0.8335719387047325,
+        "sharpe": -0.456014757962788,
+        "dragUsdt": -414.4503192420655,
+        "trapEvents": 23,
+        "rebalances": 29,
+        "finalUsdt": 3123.951061289211
+      },
+      "holdMultiple": 0.2717020068134206,
+      "btcMultiple": 0.8352974572857144
+    },
+    {
+      "name": "TAO / UNI / ENA",
+      "symbols": [
+        "TAO",
+        "UNI",
+        "ENA"
+      ],
+      "weights": [
+        33,
+        33,
+        34
+      ],
+      "frequency": "monthly",
+      "start": "2024-04-11",
+      "end": "2026-11-20",
+      "years": 2.6096281086014144,
+      "plain": {
+        "multiple": 0.34661633635687766,
+        "cagr": -0.33369691980663363,
+        "maxDrawdown": -0.8144363034617924,
+        "sharpe": -0.41340490078644443,
+        "dragUsdt": -769.2246525678252,
+        "trapEvents": 30,
+        "rebalances": 31,
+        "finalUsdt": 3466.1633635687767
+      },
+      "guarded": {
+        "multiple": 0.26346050889328854,
+        "cagr": -0.40018089212138475,
+        "maxDrawdown": -0.8562107513319418,
+        "sharpe": -0.5280489743365762,
+        "dragUsdt": 79.39137491870073,
+        "trapEvents": 7,
+        "rebalances": 9,
+        "finalUsdt": 2634.6050889328853
+      },
+      "holdMultiple": 0.2717020068134206,
+      "btcMultiple": 0.8352974572857144
+    },
+    {
+      "name": "BTC / ETH",
+      "symbols": [
+        "BTC",
+        "ETH"
+      ],
+      "weights": [
+        80,
+        20
+      ],
+      "frequency": "monthly",
+      "start": "2023-11-21",
+      "end": "2026-11-20",
+      "years": 2.999771845767739,
+      "plain": {
+        "multiple": 1.4153550044967942,
+        "cagr": 0.12277384297936655,
+        "maxDrawdown": -0.5643094188034792,
+        "sharpe": 0.2427180739192558,
+        "dragUsdt": -97.56203412258049,
+        "trapEvents": 36,
+        "rebalances": 36,
+        "finalUsdt": 14153.550044967942
+      },
+      "guarded": {
+        "multiple": 1.4050699473446189,
+        "cagr": 0.12004737561399259,
+        "maxDrawdown": -0.5653659071778712,
+        "sharpe": 0.23902416110460714,
+        "dragUsdt": 22.759368655265007,
+        "trapEvents": 1,
+        "rebalances": 2,
+        "finalUsdt": 14050.699473446188
+      },
+      "holdMultiple": 1.4076278428637203,
+      "btcMultiple": 1.5606843855815824
+    },
+    {
+      "name": "BTC / ETH",
+      "symbols": [
+        "BTC",
+        "ETH"
+      ],
+      "weights": [
+        80,
+        20
+      ],
+      "frequency": "none",
+      "start": "2023-11-21",
+      "end": "2026-11-20",
+      "years": 2.999771845767739,
+      "plain": {
+        "multiple": 1.4076278428637203,
+        "cagr": 0.12072668822935295,
+        "maxDrawdown": -0.5544209299492733,
+        "sharpe": 0.24303112236233962,
+        "dragUsdt": 0,
+        "trapEvents": 0,
+        "rebalances": 0,
+        "finalUsdt": 14076.278428637203
+      },
+      "guarded": {
+        "multiple": 1.4076278428637203,
+        "cagr": 0.12072668822935295,
+        "maxDrawdown": -0.5544209299492733,
+        "sharpe": 0.24303112236233962,
+        "dragUsdt": 0,
+        "trapEvents": 0,
+        "rebalances": 0,
+        "finalUsdt": 14076.278428637203
+      },
+      "holdMultiple": 1.4076278428637203,
+      "btcMultiple": 1.5606843855815824
+    }
+  ],
+  "scan": {
+    "universe": [
+      "ETH",
+      "SOL",
+      "HBAR",
+      "TAO",
+      "PENDLE",
+      "ZEC",
+      "UNI",
+      "ENA",
+      "NEAR",
+      "AAVE",
+      "LINK",
+      "ADA",
+      "SUI",
+      "AVAX",
+      "INJ",
+      "WLD",
+      "ONDO",
+      "ATOM",
+      "ARB",
+      "LDO",
+      "RUNE",
+      "RENDER",
+      "GRAM"
+    ],
+    "bestGuardedSharpe": [
+      {
+        "symbols": [
+          "ZEC",
+          "NEAR",
+          "ONDO"
+        ],
+        "sharpe": 0.9944154275723791,
+        "multiple": 5.691544977825012,
+        "holdMultiple": 7.4366185142425545,
+        "drag": 32908.20195647863,
+        "premium": -0.44600241344395164
+      },
+      {
+        "symbols": [
+          "ZEC",
+          "SUI",
+          "ONDO"
+        ],
+        "sharpe": 0.9942776124403025,
+        "multiple": 5.958571444171801,
+        "holdMultiple": 7.077971234956311,
+        "drag": 44768.720352807,
+        "premium": -0.6361232673199517
+      },
+      {
+        "symbols": [
+          "SOL",
+          "ZEC",
+          "ONDO"
+        ],
+        "sharpe": 0.9887686759379579,
+        "multiple": 5.494044536204094,
+        "holdMultiple": 7.1697581417600365,
+        "drag": 41480.82529365427,
+        "premium": -0.5818655724159091
+      },
+      {
+        "symbols": [
+          "ZEC",
+          "INJ",
+          "ONDO"
+        ],
+        "sharpe": 0.988335327251454,
+        "multiple": 5.702553254632159,
+        "holdMultiple": 7.233222540921475,
+        "drag": 36424.68617738415,
+        "premium": -0.5070072199207311
+      },
+      {
+        "symbols": [
+          "SOL",
+          "ZEC",
+          "SUI"
+        ],
+        "sharpe": 0.9709528999745688,
+        "multiple": 20.162729134341948,
+        "holdMultiple": 9.544969358597404,
+        "drag": 3047.2239342518033,
+        "premium": -0.04946540868521365
+      },
+      {
+        "symbols": [
+          "ZEC",
+          "AAVE",
+          "ONDO"
+        ],
+        "sharpe": 0.9686759585228034,
+        "multiple": 5.344726083482618,
+        "holdMultiple": 7.214657404068149,
+        "drag": 37572.77375076512,
+        "premium": -0.5244088069958397
+      },
+      {
+        "symbols": [
+          "ETH",
+          "ZEC",
+          "ONDO"
+        ],
+        "sharpe": 0.9638200736721529,
+        "multiple": 4.685073947092655,
+        "holdMultiple": 7.3222761495734074,
+        "drag": 35908.00639717057,
+        "premium": -0.49416818251359274
+      },
+      {
+        "symbols": [
+          "ZEC",
+          "AVAX",
+          "ONDO"
+        ],
+        "sharpe": 0.959913634013698,
+        "multiple": 5.453766527547653,
+        "holdMultiple": 7.092922309197679,
+        "drag": 43899.21649355427,
+        "premium": -0.6219261195487389
+      }
+    ],
+    "largestPlainDrag": [
+      {
+        "symbols": [
+          "TAO",
+          "ZEC",
+          "WLD"
+        ],
+        "sharpe": 0.39917751345613683,
+        "multiple": 3.087783281145149,
+        "holdMultiple": 9.621842090031205,
+        "drag": 79701.38622261133,
+        "premium": -0.8317980617859966
+      },
+      {
+        "symbols": [
+          "TAO",
+          "ZEC",
+          "RUNE"
+        ],
+        "sharpe": 0.47272566191190324,
+        "multiple": 3.688165022883402,
+        "holdMultiple": 9.632869896395686,
+        "drag": 77035.88858870983,
+        "premium": -0.8032346908921277
+      },
+      {
+        "symbols": [
+          "ZEC",
+          "ENA",
+          "WLD"
+        ],
+        "sharpe": 0.38502391567594024,
+        "multiple": 3.1873928780626946,
+        "holdMultiple": 9.271045034029981,
+        "drag": 76100.01851919194,
+        "premium": -0.8250701797036957
+      },
+      {
+        "symbols": [
+          "TAO",
+          "ZEC",
+          "ARB"
+        ],
+        "sharpe": 0.5274413794315153,
+        "multiple": 4.388062927971715,
+        "holdMultiple": 9.63607178153632,
+        "drag": 75781.2322812367,
+        "premium": -0.7901583194288301
+      },
+      {
+        "symbols": [
+          "TAO",
+          "ZEC",
+          "LDO"
+        ],
+        "sharpe": 0.4724342112398606,
+        "multiple": 3.7106776832616175,
+        "holdMultiple": 9.641713874593593,
+        "drag": 74108.22536554589,
+        "premium": -0.7729209689942582
+      },
+      {
+        "symbols": [
+          "TAO",
+          "ZEC",
+          "ENA"
+        ],
+        "sharpe": 0.5058012293211949,
+        "multiple": 4.2660182083091,
+        "holdMultiple": 9.63261761953474,
+        "drag": 73229.46808935507,
+        "premium": -0.7646928390835632
+      },
+      {
+        "symbols": [
+          "ZEC",
+          "ENA",
+          "ARB"
+        ],
+        "sharpe": 0.5373266953687809,
+        "multiple": 5.044818728084868,
+        "holdMultiple": 9.285639240684745,
+        "drag": 73188.01806527014,
+        "premium": -0.7927790022277492
+      },
+      {
+        "symbols": [
+          "TAO",
+          "ZEC",
+          "ATOM"
+        ],
+        "sharpe": 0.5566671483658971,
+        "multiple": 4.473972955586242,
+        "holdMultiple": 9.647830779876653,
+        "drag": 73186.31638566984,
+        "premium": -0.7626005254379777
+      }
+    ],
+    "strongestRebalancePremium": [
+      {
+        "symbols": [
+          "WLD",
+          "LDO",
+          "RUNE"
+        ],
+        "sharpe": -0.7266794804791086,
+        "multiple": 0.11639940871879768,
+        "holdMultiple": 0.09609389777726406,
+        "drag": -800.4017289744279,
+        "premium": 0.8224940090909045
+      },
+      {
+        "symbols": [
+          "HBAR",
+          "PENDLE",
+          "NEAR"
+        ],
+        "sharpe": 0.1891064149984716,
+        "multiple": 1.6961193742874245,
+        "holdMultiple": 1.1223576121829697,
+        "drag": -8712.780423161154,
+        "premium": 0.7660378451790599
+      },
+      {
+        "symbols": [
+          "WLD",
+          "ARB",
+          "RUNE"
+        ],
+        "sharpe": -0.7293100892090535,
+        "multiple": 0.11721688223930728,
+        "holdMultiple": 0.09924869833549327,
+        "drag": -708.4290341858442,
+        "premium": 0.7043550748293759
+      },
+      {
+        "symbols": [
+          "HBAR",
+          "PENDLE",
+          "AAVE"
+        ],
+        "sharpe": 0.10360551179234223,
+        "multiple": 1.3169550623457347,
+        "holdMultiple": 0.98989318637297,
+        "drag": -6819.616268157872,
+        "premium": 0.6794159018655859
+      },
+      {
+        "symbols": [
+          "PENDLE",
+          "NEAR",
+          "AAVE"
+        ],
+        "sharpe": 0.2056419582226451,
+        "multiple": 1.7707875291617268,
+        "holdMultiple": 1.213806589703118,
+        "drag": -8153.776289374722,
+        "premium": 0.6617794575287161
+      },
+      {
+        "symbols": [
+          "HBAR",
+          "PENDLE",
+          "INJ"
+        ],
+        "sharpe": 0.047863752962926144,
+        "multiple": 1.1439038642223975,
+        "holdMultiple": 0.768824275323729,
+        "drag": -5135.672295312705,
+        "premium": 0.6580429585927299
+      },
+      {
+        "symbols": [
+          "NEAR",
+          "AAVE",
+          "SUI"
+        ],
+        "sharpe": 0.21994312523387863,
+        "multiple": 1.8214259038959932,
+        "holdMultiple": 1.218915319441531,
+        "drag": -8081.708906779195,
+        "premium": 0.6530171208509459
+      },
+      {
+        "symbols": [
+          "HBAR",
+          "PENDLE",
+          "UNI"
+        ],
+        "sharpe": 0.05272529413041952,
+        "multiple": 1.1523873698539135,
+        "holdMultiple": 0.9179392440876621,
+        "drag": -6016.20937069136,
+        "premium": 0.6455039857658893
+      }
+    ],
+    "lowestCorrelation": [
+      {
+        "a": "ZEC",
+        "b": "GRAM",
+        "all": 0.3528554177178598,
+        "btcUp": 0.1256251855127716,
+        "btcDown": 0.3165302837359723
+      },
+      {
+        "a": "ZEC",
+        "b": "RUNE",
+        "all": 0.3587544124154194,
+        "btcUp": 0.20487829861805312,
+        "btcDown": 0.257235789034123
+      },
+      {
+        "a": "HBAR",
+        "b": "ZEC",
+        "all": 0.3726002290425798,
+        "btcUp": 0.11618751856408063,
+        "btcDown": 0.3534556087424867
+      },
+      {
+        "a": "ZEC",
+        "b": "UNI",
+        "all": 0.3911940928416983,
+        "btcUp": 0.12310282146092875,
+        "btcDown": 0.3484596738947988
+      },
+      {
+        "a": "ZEC",
+        "b": "ENA",
+        "all": 0.39424946018448404,
+        "btcUp": 0.16566084325741437,
+        "btcDown": 0.35066908744611786
+      },
+      {
+        "a": "ZEC",
+        "b": "WLD",
+        "all": 0.3993491914695541,
+        "btcUp": 0.2563809793236377,
+        "btcDown": 0.2982635789338557
+      },
+      {
+        "a": "PENDLE",
+        "b": "ZEC",
+        "all": 0.40111630806580956,
+        "btcUp": 0.18495807717381355,
+        "btcDown": 0.3018616058146684
+      },
+      {
+        "a": "ZEC",
+        "b": "ATOM",
+        "all": 0.4013457641134381,
+        "btcUp": 0.153146564739242,
+        "btcDown": 0.36914556201155085
+      }
+    ],
+    "highestCorrelation": [
+      {
+        "a": "LINK",
+        "b": "AVAX",
+        "all": 0.8250656127505476,
+        "btcUp": 0.652587519716699,
+        "btcDown": 0.812152802033715
+      },
+      {
+        "a": "ETH",
+        "b": "SOL",
+        "all": 0.8198529532893677,
+        "btcUp": 0.655777699591986,
+        "btcDown": 0.7804773129612048
+      },
+      {
+        "a": "ETH",
+        "b": "LINK",
+        "all": 0.812965650282102,
+        "btcUp": 0.7369983317682962,
+        "btcDown": 0.7268588789703466
+      },
+      {
+        "a": "LINK",
+        "b": "ADA",
+        "all": 0.7924144141370502,
+        "btcUp": 0.6941797387738767,
+        "btcDown": 0.7422531593841957
+      },
+      {
+        "a": "SOL",
+        "b": "SUI",
+        "all": 0.7871608511372497,
+        "btcUp": 0.5841226267019186,
+        "btcDown": 0.7662415310737386
+      }
+    ]
+  }
+}

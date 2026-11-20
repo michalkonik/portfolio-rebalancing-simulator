@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio rebalancing simulator</title>
+    <meta
+      name="description"
+      content="Simulate crypto portfolio rebalancing on 4h history. Any coins, any weights, and guards against selling winners into laggards."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@380;500;600&family=Source+Serif+4:opsz,wght@8..60,460;8..60,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="top">
+        <div>
+          <p class="kicker">Research book</p>
+          <h1>Portfolio rebalancing simulator</h1>
+          <p class="lede">
+            Test any mix of the stored coins, at any weights, on 4-hour Binance history.
+            See the USDT result and the coins you would have held. Stop the book from selling a winner to buy a laggard.
+          </p>
+        </div>
+        <nav class="tabs" aria-label="Sections">
+          <button type="button" class="tab on" data-tab="sim">Simulate</button>
+          <button type="button" class="tab" data-tab="corr">Correlations</button>
+          <button type="button" class="tab" data-tab="data">Data</button>
+        </nav>
+      </header>
+      <div id="app"></div>
+      <footer class="foot">
+        <p>
+          Educational simulator. Not a forecast, not advice, and not an offer to trade.
+          Fills use 4h closes, a flat fee and slippage haircut, and no order-book depth.
+          Past rebalancing premia disappear when the coins move together and the fees are real.
+        </p>
+      </footer>
+    </div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

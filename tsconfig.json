@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "allowImportingTsExtensions": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "paths": { "@engine/*": ["./engine/*"] },
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["engine/**/*.ts", "web/src/**/*.ts", "scripts/**/*.ts", "vite.config.ts"]
+}
