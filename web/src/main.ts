@@ -316,13 +316,13 @@ function renderSimulator(): void {
   const switchRow = el("label", "switch");
   switchRow.append(protect, document.createTextNode("Intelligent rebalancing"));
   switchRow.append(infoControl(
-    "Off, this is a plain rebalance back to the weights you typed. That is the default. On, the book still holds only the coins you added. Bitcoin is not added unless you added it. Each check uses only prices already printed. A selected coin can take the leader share only if its price is above its trailing daily average and its return over the strength window is positive. If USDT is one of the coins, it is the store of value: a coin in a downtrend is sold and that share is moved into USDT, and if every coin is in a downtrend the book goes to USDT. If USDT is not in the book, the check only changes the split among the coins you picked. If bitcoin is one of those coins and none of them qualifies, the book shifts to bitcoin. If bitcoin is not in the book either, nothing is parked in cash. A coin with no price yet is left out until it lists. To do this yourself: on that same schedule, compute each coin's average and its return, then buy and sell on the exchange until the account matches those percents. This page does not send orders. That is one historical path, not a forecast.",
+    "Off, this is a plain rebalance back to the weights you typed. That is the default. On, the book still holds only the coins you added. Bitcoin is not added unless you added it. The tilt runs only while bitcoin itself is above its 200-day average of earlier closes. That average is a switch, not a holding. While bitcoin is below it, the check is skipped and the coins you already hold are left alone, so a downtrend does not sell a winner into something weaker. While bitcoin is above it, a selected coin can take the leader share only if its price is above the average below and its return over the strength window is positive. If USDT is one of the coins, a coin that fails that test is sold into USDT. If USDT is not in the book, the check only changes the split among the coins you picked. On 138 mixes this lost to holding about as often as it won. It is not a rule that wins every bear. This page does not send orders.",
   ));
   const guardBody = el("div", "guard-body");
   guardBody.hidden = true;
   guardBody.append(
     field("Strength window, days", momentumDays, "How far back the return is measured. 30 uses the close about 30 days ago. Only past closes are used."),
-    field("Must be above this average, days", trendDays, "Daily average of earlier closes. A coin at or below this average cannot be the one we add to. 50 days is the default that beat hold on the five test books."),
+    field("Must be above this average, days", trendDays, "Daily average of earlier closes for each selected coin. A coin at or below this average cannot be the one we add to. This is not the bitcoin switch: that one is fixed at 200 days."),
     field("Leader share, %", leaderPct, "How much of the coin sleeve goes to the leading coin. 80 leaves 20 percent for the other coins that still qualify. 100 puts that sleeve in the leader. If USDT is in the book, coins that fail their average are not part of this sleeve: their share sits in USDT."),
     field("How strength is measured", score, "Strongest in USDT uses each coin's own dollar return. Strongest against BTC uses the coin's return versus bitcoin, which is the rotation Ben Cowen watches. The default is the USDT return, because that one beat hold by more on the five test books."),
     field("If nothing qualifies", defense, "If USDT is in the book, a downtrend moves the book into USDT. If bitcoin is in the book and USDT is not, the book shifts to bitcoin. Otherwise, go back to your weights, or leave the book as it is. Nothing here adds a coin you left out."),
@@ -597,6 +597,8 @@ function buildInput(
         leaderWeight: Number(leaderPct.value) / 100,
         score: score.value === "vsbtc" ? "vsbtc" : "absolute",
         defense: defenseValue,
+        regime: "btc-stay",
+        regimeDays: 200,
       },
     },
   };

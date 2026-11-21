@@ -18,6 +18,13 @@ const DEFAULTS: IntelligentSpec = {
   defense: "btc",
 };
 
+const GATED: IntelligentSpec = {
+  ...DEFAULTS,
+  defense: "equal",
+  regime: "btc-stay",
+  regimeDays: 200,
+};
+
 function series(symbol: string, start: number, closes: number[]): CandleSeries {
   return {
     symbol,
@@ -207,12 +214,59 @@ test("the researched defaults beat hold by at least 20 percent on the five books
       fraction: 1,
       trend: { enabled: false, smaDays: 50 },
       blockedBuyPolicy: "keep_winners",
-      intelligent: DEFAULTS,
+      intelligent: GATED,
     });
     assert.equal(result.ok, true, symbols.join("/"));
     if (!result.ok) continue;
     const done = result as SimSuccess;
     const ratio = done.summary.finalEquity / done.summary.holdFinal;
     assert.ok(ratio >= 1.2, `${symbols.join("/")} ${ratio.toFixed(3)} is under 1.2`);
+  }
+});
+
+test("the bitcoin 200-day gate beats hold on the 2025 books it won in the sweep", () => {
+  const books = [
+    ["BTC", "ETH", "USDT"],
+    ["USDT", "SOL", "SUI"],
+    ["PEPE", "WIF", "DOGE"],
+    ["INJ", "GRAM", "BTC"],
+  ];
+  const cache = new Map<string, CandleSeries>();
+  const load = (symbol: string): CandleSeries => {
+    const got = cache.get(symbol);
+    if (got) return got;
+    const raw = gunzipSync(readFileSync(`docs/data/candles/${symbol}.csv.gz`));
+    const parsed = parseCandleCsv(raw.toString("utf8"), symbol);
+    cache.set(symbol, parsed);
+    return parsed;
+  };
+  for (const symbols of books) {
+    const seriesMap: Record<string, CandleSeries> = {};
+    for (const symbol of new Set([...symbols, "BTC"])) {
+      if (symbol === "USDT") continue;
+      seriesMap[symbol] = load(symbol);
+    }
+    const result = simulate({
+      assets: symbols.map((symbol) => ({ symbol, weight: 1 })),
+      series: seriesMap,
+      btc: seriesMap.BTC,
+      startMs: Date.UTC(2025, 0, 20),
+      endMs: Date.UTC(2026, 10, 20, 23, 59, 59),
+      initialUsdt: 10_000,
+      feeBps: 10,
+      slippageBps: 5,
+      frequency: "custom",
+      everyDays: 14,
+      band: 0,
+      fraction: 1,
+      trend: { enabled: false, smaDays: 50 },
+      blockedBuyPolicy: "keep_winners",
+      intelligent: GATED,
+    });
+    assert.equal(result.ok, true, symbols.join("/"));
+    if (!result.ok) continue;
+    const done = result as SimSuccess;
+    const ratio = done.summary.finalEquity / done.summary.holdFinal;
+    assert.ok(ratio > 1, `${symbols.join("/")} ${ratio.toFixed(3)} is not ahead of hold`);
   }
 });
