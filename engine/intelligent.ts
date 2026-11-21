@@ -93,6 +93,43 @@ export function intelligentTargets(
   const coins = tradable.filter((i) => assets[i].symbol !== "USDT");
   if (coins.length === 0) return "stay";
 
+  const userMix = (): WeightTarget[] => {
+    const raw = assets.map(() => 0);
+    for (const i of tradable) raw[i] = assets[i].weight;
+    return allocate(assets, raw);
+  };
+  const regimeDays = Math.max(2, Math.round(spec.regimeDays ?? trendDays));
+  const aboveAverage = (seriesFor: CandleSeries | null | undefined, px: number): boolean | null => {
+    if (!seriesFor) return null;
+    const average = smaBefore(seriesFor, dayIndex, regimeDays);
+    if (average == null || !(px > 0)) return null;
+    return px > average;
+  };
+  if (spec.regime && spec.regime !== "above-only") {
+    let down = false;
+    if (spec.regime === "btc-mix" || spec.regime === "btc-stay") {
+      const px = closeAt(btc, t);
+      const flag = px == null ? null : aboveAverage(btc, px);
+      down = flag === false;
+    } else {
+      let known = 0;
+      let above = 0;
+      for (const i of coins) {
+        const flag = aboveAverage(series[assets[i].symbol], price[i]);
+        if (flag == null) continue;
+        known += 1;
+        if (flag) above += 1;
+      }
+      if (known > 0) {
+        down = spec.regime.startsWith("alldown") ? above === 0 : above * 2 <= known;
+      }
+    }
+    if (down) {
+      if (spec.regime.endsWith("stay")) return "stay";
+      return userMix();
+    }
+  }
+
   const btcNow = closeAt(btc, t);
   const btcThen = closeAt(btc, t - momentumDays * DAY);
   const qualifying: number[] = [];
@@ -125,11 +162,45 @@ export function intelligentTargets(
   }
 
   const usdtIndex = assets.findIndex((asset) => asset.symbol === "USDT");
-  const userMix = (): WeightTarget[] => {
+
+  if (spec.regime === "above-only") {
+    const hot: number[] = [];
+    for (const i of coins) {
+      if (aboveAverage(series[assets[i].symbol], price[i]) === true) hot.push(i);
+    }
+    if (hot.length === 0) return userMix();
+    let leader = hot[0];
+    let leaderScore = -Infinity;
+    for (const i of hot) {
+      const then = closeAt(series[assets[i].symbol], t - momentumDays * DAY);
+      const now = price[i];
+      const score = then != null && then > 0 ? now / then - 1 : -Infinity;
+      if (score > leaderScore) {
+        leaderScore = score;
+        leader = i;
+      }
+    }
     const raw = assets.map(() => 0);
-    for (const i of tradable) raw[i] = assets[i].weight;
+    if (usdtIndex >= 0) {
+      let typedSum = 0;
+      for (const i of tradable) typedSum += assets[i].weight;
+      const typed = (i: number) => (typedSum > 0 ? assets[i].weight / typedSum : 0);
+      let usdtW = typed(usdtIndex);
+      for (const i of coins) if (!hot.includes(i)) usdtW += typed(i);
+      const risk = Math.max(0, 1 - usdtW);
+      raw[usdtIndex] = usdtW;
+      if (hot.length === 1) raw[hot[0]] = risk;
+      else {
+        const rest = (1 - leaderWeight) / (hot.length - 1);
+        for (const i of hot) raw[i] = risk * (i === leader ? leaderWeight : rest);
+      }
+    } else {
+      const share = hot.length === 1 ? 1 : leaderWeight;
+      const rest = hot.length === 1 ? 0 : (1 - share) / (hot.length - 1);
+      for (const i of hot) raw[i] = i === leader ? share : rest;
+    }
     return allocate(assets, raw);
-  };
+  }
 
   if (usdtIndex >= 0) {
     if (qualifying.length === 0 || best < 0) {
