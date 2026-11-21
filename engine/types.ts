@@ -31,7 +31,11 @@ export interface IntelligentSpec {
   leaderWeight: number;
   /** vsbtc: strength against bitcoin. absolute: strength in USDT. */
   score: "vsbtc" | "absolute";
-  /** What to do when no coin is in an uptrend. */
+  /**
+   * What to do when no selected coin qualifies.
+   * stay keeps the current mix. equal returns to the typed weights.
+   * btc is accepted from older books and means equal. Bitcoin is never added.
+   */
   defense: IntelligentDefense;
 }
 
