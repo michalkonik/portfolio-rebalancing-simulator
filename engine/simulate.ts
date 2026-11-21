@@ -1,3 +1,4 @@
+import { intelligentTargets } from "./intelligent.ts";
 import { pathStats } from "./metrics.ts";
 import type {
   AssetSpec,
@@ -202,9 +203,21 @@ function clock(value: number | undefined, min: number, max: number, fallback: nu
 }
 
 /** Calendar slot. Weekly and biweekly advance on the chosen UTC weekday. Monthly advances on the chosen day. */
-function periodIndex(t: number, frequency: Frequency, weekday: number, monthDay: number): number {
+function periodIndex(
+  t: number,
+  frequency: Frequency,
+  weekday: number,
+  monthDay: number,
+  everyDays = 30,
+  originMs = 0,
+): number {
   if (frequency === "none") return 0;
   const dayIndex = Math.floor(t / DAY);
+  if (frequency === "custom") {
+    const span = Math.max(1, Math.round(everyDays));
+    const origin = originMs > 0 ? Math.floor(originMs / DAY) : 0;
+    return Math.floor((dayIndex - origin) / span);
+  }
   if (frequency === "daily") return dayIndex;
   if (frequency === "weekly" || frequency === "biweekly") {
     // 1970-01-01 was a Thursday, so dayIndex 0 is weekday 4.
@@ -469,10 +482,6 @@ function buyReserved(
   return { spent: spend, fee: spend * rate };
 }
 
-function cloneBook(book: Book): Book {
-  return { qty: book.qty.slice(), usdt: book.usdt };
-}
-
 function btcPriceAt(btc: CandleSeries | null | undefined, t: number, cache: { idx: number }): number | null {
   if (!btc || btc.t.length === 0) return null;
   let idx = cache.idx;
@@ -586,6 +595,8 @@ export function simulate(input: SimInput): SimResult {
   const bars = built;
   const weekday = clock(input.weekday, 0, 6, 1);
   const monthDay = clock(input.monthDay, 1, 31, 1);
+  const everyDays = clock(input.everyDays, 1, 365, 30);
+  const intelligent = input.intelligent?.enabled === true ? input.intelligent : null;
   const warnings: string[] = [];
   if (bars[0].t > input.startMs + HOUR4) {
     warnings.push(
@@ -607,11 +618,20 @@ export function simulate(input: SimInput): SimResult {
     }
   }
 
-  const opened = enter(normalized, bars[0].price, input.initialUsdt, cost);
-  const strategy = opened.book;
-  const hold = cloneBook(opened.book);
-  const holdReserved = opened.reserved.slice();
-  let fees = opened.fee;
+  const holdOpened = enter(normalized, bars[0].price, input.initialUsdt, cost);
+  const hold = holdOpened.book;
+  const holdReserved = holdOpened.reserved.slice();
+  const openingTargets = intelligent
+    ? intelligentTargets(normalized, input.series, input.btc, bars[0].t, bars[0].price, intelligent)
+    : null;
+  const strategyOpened = enter(
+    openingTargets && openingTargets !== "stay" ? openingTargets : normalized,
+    bars[0].price,
+    input.initialUsdt,
+    cost,
+  );
+  const strategy = strategyOpened.book;
+  let fees = strategyOpened.fee;
 
   const btcCache = { idx: 0 };
   const firstBtc = btcPriceAt(input.btc, bars[0].t, btcCache);
@@ -620,7 +640,7 @@ export function simulate(input: SimInput): SimResult {
   const points: Point[] = [];
   const events: RebalanceEvent[] = [];
   const anchor = bars[0].t;
-  let prevPeriod = periodIndex(anchor, input.frequency, weekday, monthDay);
+  let prevPeriod = periodIndex(anchor, input.frequency, weekday, monthDay, everyDays, anchor);
   let listed = bars[0].price.map((price) => priced(price));
 
   const equities: number[] = [];
@@ -635,24 +655,27 @@ export function simulate(input: SimInput): SimResult {
         if (!nowListed[a] || !(holdReserved[a] > EPS)) continue;
         const bought = buyReserved(hold, a, normalized[a].symbol, holdReserved[a], bar.price[a], cost);
         holdReserved[a] = Math.max(0, holdReserved[a] - bought.spent);
-        if (input.frequency === "none") {
+        if (input.frequency === "none" && !intelligent) {
           const strategyBuy = buyReserved(strategy, a, normalized[a].symbol, bought.spent, bar.price[a], cost);
           fees += strategyBuy.fee;
         }
       }
     }
     if (i > 0 && input.frequency !== "none") {
-      const period = periodIndex(bar.t, input.frequency, weekday, monthDay);
+      const period = periodIndex(bar.t, input.frequency, weekday, monthDay, everyDays, anchor);
       if (period > prevPeriod || newly) {
-        const planned = planRebalance(
-          normalized,
+        const targets = intelligent
+          ? intelligentTargets(normalized, input.series, input.btc, bar.t, bar.price, intelligent)
+          : normalized;
+        const planned = targets === "stay" ? null : planRebalance(
+          targets,
           strategy,
           bar,
           cost,
-          input.band,
-          input.fraction,
-          input.trend.enabled,
-          input.blockedBuyPolicy,
+          intelligent ? 0 : input.band,
+          intelligent ? 1 : input.fraction,
+          intelligent ? false : input.trend.enabled,
+          intelligent ? "park_usdt" : input.blockedBuyPolicy,
         );
         if (planned && (planned.sells.length > 0 || planned.buys.length > 0)) {
           const applied = applyPlan(strategy, bar, planned, cost, input.series);
@@ -756,12 +779,14 @@ export function simulateNaive(input: SimInput): SimResult {
     fraction: 1,
     trend: { enabled: false, smaDays: input.trend.smaDays },
     blockedBuyPolicy: "keep_winners",
+    intelligent: input.intelligent ? { ...input.intelligent, enabled: false } : undefined,
     assets: input.assets.map((asset) => ({ ...asset, sellLocked: false })),
   });
 }
 
 export function guardsAreActive(input: SimInput): boolean {
   return (
+    input.intelligent?.enabled === true ||
     input.band > 0 ||
     input.fraction < 1 - 1e-9 ||
     input.trend.enabled ||

@@ -412,3 +412,23 @@ test("monthly rebalance uses the chosen day of month", () => {
   });
   assert.deepEqual(result.events.map((event) => event.t), [day15, Date.UTC(2024, 1, 15)]);
 });
+
+test("a custom interval rebalances every N days from the start", () => {
+  const start = Date.UTC(2024, 0, 1);
+  const closes = Array.from({ length: 25 }, (_, i) => 100 + i);
+  const result = run({
+    frequency: "custom",
+    everyDays: 10,
+    startMs: start,
+    endMs: start + 24 * DAY,
+    assets: [
+      { symbol: "AAA", weight: 50 },
+      { symbol: "BBB", weight: 50 },
+    ],
+    series: {
+      AAA: series("AAA", start, DAY, closes),
+      BBB: series("BBB", start, DAY, closes.map(() => 100)),
+    },
+  });
+  assert.deepEqual(result.events.map((event) => event.t), [start + 10 * DAY, start + 20 * DAY]);
+});

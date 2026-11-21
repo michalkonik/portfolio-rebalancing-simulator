@@ -16,7 +16,24 @@ export interface AssetSpec {
   sellLocked?: boolean;
 }
 
-export type Frequency = "none" | "daily" | "weekly" | "biweekly" | "monthly";
+export type Frequency = "none" | "daily" | "weekly" | "biweekly" | "monthly" | "custom";
+
+export type IntelligentDefense = "stay" | "equal" | "btc";
+
+/** Causal tilt. Uses only prices up to the current bar. */
+export interface IntelligentSpec {
+  enabled: boolean;
+  /** Trailing window for relative strength, in days. */
+  momentumDays: number;
+  /** A coin can lead only while its price is above this daily average. */
+  trendDays: number;
+  /** Share of the book given to the leader. The rest is split across the other coins that already trade. */
+  leaderWeight: number;
+  /** vsbtc: strength against bitcoin. absolute: strength in USDT. */
+  score: "vsbtc" | "absolute";
+  /** What to do when no coin is in an uptrend. */
+  defense: IntelligentDefense;
+}
 
 export type BlockedBuyPolicy = "keep_winners" | "park_usdt";
 
@@ -45,6 +62,10 @@ export interface SimInput {
    * A shorter month uses its last day. Omitted means the 1st.
    */
   monthDay?: number;
+  /** Used when frequency is "custom". Rebalance this many UTC days after the previous check. */
+  everyDays?: number;
+  /** Optional tilt that replaces a fixed-weight rebalance while it is enabled. */
+  intelligent?: IntelligentSpec;
   /**
    * Minimum absolute weight gap that must exist before a scheduled rebalance trades.
    * 0.05 means 5 percentage points (a 33% target trades outside 28–38%).
