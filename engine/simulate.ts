@@ -613,7 +613,7 @@ export function simulate(input: SimInput): SimResult {
     const first = input.series[asset.symbol]?.t[0];
     if (first != null && first > bars[0].t + HOUR4) {
       warnings.push(
-        `${asset.symbol} has no price until ${new Date(first).toISOString().slice(0, 10)}. Until then its weight stays in USDT. A plain rebalance buys it on the next scheduled check after it lists. The chart still starts with the coins that already trade.`,
+        `${asset.symbol} has no price until ${new Date(first).toISOString().slice(0, 10)}. A plain rebalance holds that share as USDT until the next check after it lists. Intelligent rebalancing spreads that share across the selected coins that already trade, and only then gives ${asset.symbol} a weight. The chart still starts with the coins that already trade.`,
       );
     }
   }

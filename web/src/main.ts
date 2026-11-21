@@ -300,7 +300,6 @@ function renderSimulator(): void {
   }
   const defense = el("select") as HTMLSelectElement;
   for (const [value, text] of [
-    ["btc", "Hold bitcoin"],
     ["equal", "Go back to your weights"],
     ["stay", "Leave the book as it is"],
   ] as const) {
@@ -309,6 +308,7 @@ function renderSimulator(): void {
     option.textContent = text;
     defense.append(option);
   }
+  defense.value = "equal";
   const protect = el("input") as HTMLInputElement;
   protect.type = "checkbox";
   protect.checked = false;
@@ -316,16 +316,16 @@ function renderSimulator(): void {
   const switchRow = el("label", "switch");
   switchRow.append(protect, document.createTextNode("Intelligent rebalancing"));
   switchRow.append(infoControl(
-    "Off, this is a plain rebalance: on the schedule you picked, sell what is above your weight and buy what is below. That is the default. On, the book does not stay at those weights. Each check uses only prices already printed. A coin can be the leader only if its price is above its trailing daily average and its return over the strength window is positive. That leader gets the leader share. The rest is split evenly across the other coins that already trade, including ones below their average. If bitcoin is in the book, above its own average, and no other coin qualifies, bitcoin gets the leader share. If nothing qualifies, the default moves the whole book to bitcoin when bitcoin is in the book, even if bitcoin is below its average. To do this yourself: on that same schedule, compute each coin's average and its return, then buy and sell on the exchange until the account matches. This page does not send orders. The default settings were checked on five equal-weight books from 1 Jan 2023 through 20 Nov 2026, with a 10 bps fee and 5 bps of slippage, rebalanced every 14 days. They finished ahead of buy-and-hold on BTC/ETH, BTC/ZEC, BTC/UNI, TAO/NEAR, and SUI/PENDLE/UNI. TAO, SUI, and PENDLE only join when their Binance history starts. That is one historical path, not a forecast.",
+    "Off, this is a plain rebalance back to the weights you typed. That is the default. On, the book still holds only the coins you added. Bitcoin is not added unless you added it. The tilt runs only while bitcoin itself is above its 200-day average of earlier closes. That average is a switch, not a holding. While bitcoin is below it, the check is skipped and the coins you already hold are left alone, so a downtrend does not sell a winner into something weaker. While bitcoin is above it, a selected coin can take the leader share only if its price is above the average below and its return over the strength window is positive. If USDT is one of the coins, a coin that fails that test is sold into USDT. If USDT is not in the book, the check only changes the split among the coins you picked. On 138 mixes this lost to holding about as often as it won. It is not a rule that wins every bear. This page does not send orders.",
   ));
   const guardBody = el("div", "guard-body");
   guardBody.hidden = true;
   guardBody.append(
     field("Strength window, days", momentumDays, "How far back the return is measured. 30 uses the close about 30 days ago. Only past closes are used."),
-    field("Must be above this average, days", trendDays, "Daily average of earlier closes. A coin at or below this average cannot be the one we add to. 50 days is the default that beat hold on the five test books."),
-    field("Leader share, %", leaderPct, "How much of the book goes to the leading coin. 80 leaves 20 percent to be split across the others. 100 puts the whole book in the leader."),
+    field("Must be above this average, days", trendDays, "Daily average of earlier closes for each selected coin. A coin at or below this average cannot be the one we add to. This is not the bitcoin switch: that one is fixed at 200 days."),
+    field("Leader share, %", leaderPct, "How much of the coin sleeve goes to the leading coin. 80 leaves 20 percent for the other coins that still qualify. 100 puts that sleeve in the leader. If USDT is in the book, coins that fail their average are not part of this sleeve: their share sits in USDT."),
     field("How strength is measured", score, "Strongest in USDT uses each coin's own dollar return. Strongest against BTC uses the coin's return versus bitcoin, which is the rotation Ben Cowen watches. The default is the USDT return, because that one beat hold by more on the five test books."),
-    field("If nothing qualifies", defense, "Hold bitcoin: if BTC is in the book and no coin qualifies as leader, the whole book moves to bitcoin, even when bitcoin is below its average. If BTC is not in the book, this uses the weights you typed. A separate case: when bitcoin is above its average and no other coin beats it, bitcoin gets the leader share rather than the whole book. Go back to your weights: return to the mix you entered. Leave the book as it is: skip the check."),
+    field("If nothing qualifies", defense, "If USDT is in the book, a downtrend moves the book into USDT. If bitcoin is in the book and USDT is not, the book shifts to bitcoin. Otherwise, go back to your weights, or leave the book as it is. Nothing here adds a coin you left out."),
   );
   protect.addEventListener("change", () => {
     guardBody.hidden = !protect.checked;
@@ -409,7 +409,7 @@ function renderSimulator(): void {
       trendDays: trendDays.value,
       leaderPct: leaderPct.value,
       score: score.value === "vsbtc" ? "vsbtc" : "absolute",
-      defense: defense.value === "equal" || defense.value === "stay" ? defense.value : "btc",
+      defense: defense.value === "stay" ? "stay" : "equal",
     };
     writeBooks([book, ...readBooks().filter((item) => item.name !== name)]);
     bookName.value = "";
@@ -434,7 +434,7 @@ function renderSimulator(): void {
     trendDays.value = book.trendDays ?? "50";
     leaderPct.value = book.leaderPct ?? "80";
     score.value = book.score === "vsbtc" ? "vsbtc" : "absolute";
-    defense.value = book.defense === "equal" || book.defense === "stay" ? book.defense : "btc";
+    defense.value = book.defense === "stay" ? "stay" : "equal";
     syncSchedule();
     drawHoldings();
     void run();
@@ -572,7 +572,7 @@ function buildInput(
     weight: Number(row.weight),
     sellLocked: row.sellLocked,
   }));
-  const defenseValue = defense.value === "equal" || defense.value === "stay" ? defense.value : "btc";
+  const defenseValue = defense.value === "stay" ? "stay" : "equal";
   return {
     symbols: assets.map((asset) => asset.symbol),
     input: {
@@ -597,6 +597,8 @@ function buildInput(
         leaderWeight: Number(leaderPct.value) / 100,
         score: score.value === "vsbtc" ? "vsbtc" : "absolute",
         defense: defenseValue,
+        regime: "btc-stay",
+        regimeDays: 200,
       },
     },
   };

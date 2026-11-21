@@ -31,8 +31,23 @@ export interface IntelligentSpec {
   leaderWeight: number;
   /** vsbtc: strength against bitcoin. absolute: strength in USDT. */
   score: "vsbtc" | "absolute";
-  /** What to do when no coin is in an uptrend. */
+  /**
+   * What to do when no selected coin qualifies.
+   * stay keeps the current mix. equal returns to the typed weights.
+   * btc is accepted from older books and means equal. Bitcoin is never added.
+   */
   defense: IntelligentDefense;
+  /**
+   * Optional overlay. Omitted means the leader rule.
+   * down-*: majority of selected coins are at or below their average.
+   * alldown-*: every selected coin is.
+   * btc-*: bitcoin's own average, used only as a switch. Bitcoin is not added to the book.
+   * mix returns to the typed weights. stay skips the check.
+   * above-only holds a coin only while it is above its average.
+   */
+  regime?: "down-mix" | "down-stay" | "alldown-mix" | "alldown-stay" | "btc-mix" | "btc-stay" | "above-only";
+  /** Average length for the regime switch. Omitted uses trendDays. */
+  regimeDays?: number;
 }
 
 export type BlockedBuyPolicy = "keep_winners" | "park_usdt";
