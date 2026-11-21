@@ -1,4 +1,16 @@
-import { day } from "./format.ts";
+import {
+  ColorType,
+  CrosshairMode,
+  LineSeries,
+  LineStyle,
+  PriceScaleMode,
+  createChart,
+  type IChartApi,
+  type ISeriesApi,
+  type LineData,
+  type UTCTimestamp,
+  type WhitespaceData,
+} from "lightweight-charts";
 
 export interface ChartLine {
   name: string;
@@ -16,29 +28,46 @@ export interface ChartScaleNames {
   right: string;
 }
 
-const PAD_L = 76;
-const PAD_T = 22;
-const PAD_B = 32;
+export type ValueScale = "usd" | "pct";
+
+interface ChartHost extends HTMLElement {
+  __chart?: IChartApi;
+}
+
+type LinePoint = LineData<UTCTimestamp> | WhitespaceData<UTCTimestamp>;
 
 function finite(values: Array<number | null>): number[] {
   return values.filter((value): value is number => value != null && Number.isFinite(value));
 }
 
-function domain(lines: ChartLine[]): { min: number; max: number } | null {
-  const all = lines.flatMap((line) => finite(line.values));
-  if (all.length === 0) return null;
-  let min = Math.min(...all);
-  let max = Math.max(...all);
-  if (min === max) {
-    const bump = Math.abs(min) * 0.04 || 1;
-    return { min: min - bump, max: max + bump };
-  }
-  const pad = (max - min) * 0.08;
-  return { min: min - pad, max: max + pad };
+function stamp(ms: number): UTCTimestamp {
+  return Math.floor(ms / 1000) as UTCTimestamp;
 }
 
-function yFor(span: { min: number; max: number }, value: number, innerH: number): number {
-  return PAD_T + (1 - (value - span.min) / (span.max - span.min)) * innerH;
+/** Drop leading empties so a coin that lists later does not start at zero and break the percent scale. */
+function pointsFor(times: number[], values: Array<number | null>, fromMs?: number): LinePoint[] {
+  const out: LinePoint[] = [];
+  let started = false;
+  for (let i = 0; i < times.length; i++) {
+    const value = values[i];
+    const time = stamp(times[i] ?? 0);
+    if (!started) {
+      if (value == null || !Number.isFinite(value)) continue;
+      started = true;
+    }
+    if (value == null || !Number.isFinite(value)) {
+      out.push({ time });
+      continue;
+    }
+    const prev = out[out.length - 1];
+    if (prev && prev.time === time) continue;
+    out.push({ time, value });
+  }
+  if (out.length === 0) return out;
+  if (fromMs != null && stamp(fromMs) < out[0].time) {
+    out.unshift({ time: stamp(fromMs) });
+  }
+  return out;
 }
 
 export function renderLineChart(
@@ -46,172 +75,164 @@ export function renderLineChart(
   times: number[],
   lines: ChartLine[],
   names: ChartScaleNames = { left: "USDT", right: "BTC price" },
+  options: { scale?: ValueScale; fromMs?: number; toMs?: number } = {},
 ): void {
+  const box = host as ChartHost;
+  box.__chart?.remove();
+  box.__chart = undefined;
   host.replaceChildren();
   const drawable = lines.filter((line) => finite(line.values).length > 0);
   if (drawable.length === 0 || times.length < 2) {
     host.textContent = "Turn a line on to draw the chart.";
     return;
   }
-  const width = Math.max(360, host.clientWidth || 760);
-  const height = 440;
-  const dual = drawable.some((line) => line.axis === "left") && drawable.some((line) => line.axis === "right");
-  const padR = dual ? 78 : 16;
-  const innerW = width - PAD_L - padR;
-  const innerH = height - PAD_T - PAD_B;
-  const leftDomain = domain(dual ? drawable.filter((line) => line.axis === "left") : drawable);
-  const rightDomain = dual ? domain(drawable.filter((line) => line.axis === "right")) : null;
-  if (!leftDomain) {
-    host.textContent = "Turn a line on to draw the chart.";
-    return;
-  }
-  const x = (i: number) => PAD_L + (i / (times.length - 1)) * innerW;
-  const yOf = (line: ChartLine, value: number) =>
-    yFor(dual && line.axis === "right" && rightDomain ? rightDomain : leftDomain, value, innerH);
+  const scale = options.scale ?? "usd";
+  const percent = scale === "pct";
+  const hasRight = drawable.some((line) => line.axis === "right");
+  const chart = createChart(host, {
+    autoSize: true,
+    height: 480,
+    layout: {
+      background: { type: ColorType.Solid, color: "#ffffff" },
+      textColor: "#65748b",
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontSize: 12,
+    },
+    grid: {
+      vertLines: { color: "#eef1f6" },
+      horzLines: { color: "#eef1f6" },
+    },
+    crosshair: {
+      mode: CrosshairMode.Normal,
+      vertLine: { color: "#0069d9", width: 1, style: LineStyle.Dashed, labelBackgroundColor: "#121828" },
+      horzLine: { color: "#0069d9", width: 1, style: LineStyle.Dashed, labelBackgroundColor: "#121828" },
+    },
+    rightPriceScale: {
+      borderColor: "#e6e8f0",
+      visible: true,
+      mode: percent ? PriceScaleMode.Percentage : PriceScaleMode.Normal,
+      scaleMargins: { top: 0.08, bottom: 0.08 },
+    },
+    leftPriceScale: {
+      borderColor: "#e6e8f0",
+      visible: !percent && hasRight,
+      mode: PriceScaleMode.Normal,
+      scaleMargins: { top: 0.08, bottom: 0.08 },
+    },
+    timeScale: {
+      borderColor: "#e6e8f0",
+      timeVisible: true,
+      secondsVisible: false,
+      rightOffset: 6,
+      minBarSpacing: 0.02,
+    },
+    handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false },
+    handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true },
+    kineticScroll: { touch: true, mouse: false },
+    localization: {
+      priceFormatter: (price: number) => formatUsd(price),
+    },
+  });
+  box.__chart = chart;
 
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-  svg.setAttribute("role", "img");
-  svg.setAttribute(
-    "aria-label",
-    dual ? `${names.left} and ${names.right} on a linear scale` : `${names.left} on a linear scale`,
-  );
-
-  const ticks = [0, 0.25, 0.5, 0.75, 1];
-  for (const tick of ticks) {
-    const yy = PAD_T + tick * innerH;
-    const grid = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    grid.setAttribute("x1", String(PAD_L));
-    grid.setAttribute("x2", String(width - padR));
-    grid.setAttribute("y1", String(yy));
-    grid.setAttribute("y2", String(yy));
-    grid.setAttribute("class", "grid");
-    svg.append(grid);
-    const left = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    left.setAttribute("x", "8");
-    left.setAttribute("y", String(yy + 4));
-    left.setAttribute("class", "axis");
-    left.textContent = compact(leftDomain.min + (leftDomain.max - leftDomain.min) * (1 - tick));
-    svg.append(left);
-    if (dual && rightDomain) {
-      const right = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      right.setAttribute("x", String(width - 8));
-      right.setAttribute("y", String(yy + 4));
-      right.setAttribute("text-anchor", "end");
-      right.setAttribute("class", "axis");
-      right.textContent = compact(rightDomain.min + (rightDomain.max - rightDomain.min) * (1 - tick));
-      svg.append(right);
-    }
-  }
-
-  const leftTitle = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  leftTitle.setAttribute("x", "8");
-  leftTitle.setAttribute("y", "14");
-  leftTitle.setAttribute("class", "axis-title");
-  leftTitle.textContent = dual ? names.left : drawable.some((line) => line.axis === "right") && !drawable.some((line) => line.axis === "left") ? names.right : names.left;
-  svg.append(leftTitle);
-  if (dual) {
-    const rightTitle = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    rightTitle.setAttribute("x", String(width - 8));
-    rightTitle.setAttribute("y", "14");
-    rightTitle.setAttribute("text-anchor", "end");
-    rightTitle.setAttribute("class", "axis-title");
-    rightTitle.textContent = names.right;
-    svg.append(rightTitle);
-  }
-
-  for (const index of [0, Math.floor(times.length / 2), times.length - 1]) {
-    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    label.setAttribute("x", String(x(index)));
-    label.setAttribute("y", String(height - 8));
-    label.setAttribute("class", "axis");
-    label.setAttribute("text-anchor", index === 0 ? "start" : index === times.length - 1 ? "end" : "middle");
-    label.textContent = day(times[index] ?? 0);
-    svg.append(label);
-  }
-
+  const seriesByName = new Map<string, { series: ISeriesApi<"Line">; label: (value: number) => string; color: string }>();
   for (const line of drawable) {
-    let d = "";
-    let pen = false;
-    line.values.forEach((value, index) => {
-      if (value == null || !Number.isFinite(value)) {
-        pen = false;
-        return;
-      }
-      d += `${pen ? "L" : "M"}${x(index).toFixed(1)},${yOf(line, value).toFixed(1)} `;
-      pen = true;
+    const data = pointsFor(times, line.values, options.fromMs);
+    if (data.length === 0) continue;
+    const onRight = percent || line.axis !== "right";
+    const series = chart.addSeries(LineSeries, {
+      color: line.color,
+      lineWidth: (line.width != null && line.width >= 2 ? 3 : 2),
+      lineStyle: line.dash ? LineStyle.Dashed : LineStyle.Solid,
+      priceScaleId: onRight ? "right" : "left",
+      priceLineVisible: line.width != null && line.width >= 2,
+      lastValueVisible: true,
+      crosshairMarkerVisible: true,
+      title: line.name,
     });
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", d.trim());
-    path.setAttribute("fill", "none");
-    path.setAttribute("stroke", line.color);
-    path.setAttribute("stroke-width", String(line.width ?? 1.6));
-    path.setAttribute("stroke-linejoin", "round");
-    path.setAttribute("stroke-linecap", "round");
-    if (line.dash) path.setAttribute("stroke-dasharray", line.dash);
-    svg.append(path);
+    series.setData(data);
+    seriesByName.set(line.name, { series, label: line.label, color: line.color });
   }
 
-  const occupied: number[] = [];
-  for (const line of drawable) {
-    let y: number | null = null;
-    for (let index = line.values.length - 1; index >= 0; index -= 1) {
-      const value = line.values[index];
-      if (value == null || !Number.isFinite(value)) continue;
-      y = yOf(line, value);
-      break;
-    }
-    if (y == null || y < PAD_T || y > height - PAD_B) continue;
-    if (occupied.some((used) => Math.abs(used - y) < 13)) continue;
-    occupied.push(y);
-    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text.setAttribute("x", String(width - padR - 6));
-    text.setAttribute("y", String(y));
-    text.setAttribute("text-anchor", "end");
-    text.setAttribute("class", "line-label");
-    text.setAttribute("fill", line.color);
-    text.textContent = line.name;
-    svg.append(text);
-  }
-
-  const hover = document.createElementNS("http://www.w3.org/2000/svg", "line");
-  hover.setAttribute("class", "hover");
-  hover.setAttribute("y1", String(PAD_T));
-  hover.setAttribute("y2", String(height - PAD_B));
-  hover.setAttribute("visibility", "hidden");
-  svg.append(hover);
-  const tip = document.createElement("div");
-  tip.className = "tip";
-  tip.hidden = true;
-  host.append(svg, tip);
-
-  svg.addEventListener("pointermove", (event) => {
-    const rect = svg.getBoundingClientRect();
-    const rel = (event.clientX - rect.left) / rect.width;
-    const index = Math.max(0, Math.min(times.length - 1, Math.round((rel * width - PAD_L) / innerW * (times.length - 1))));
-    hover.setAttribute("x1", String(x(index)));
-    hover.setAttribute("x2", String(x(index)));
-    hover.setAttribute("visibility", "visible");
-    tip.hidden = false;
-    tip.replaceChildren();
+  const legend = document.createElement("div");
+  legend.className = "tv-legend";
+  host.append(legend);
+  const paintLegend = (time: number | null, rows: Array<{ name: string; color: string; text: string }>) => {
+    legend.replaceChildren();
     const title = document.createElement("strong");
-    title.textContent = day(times[index] ?? 0);
-    tip.append(title);
-    for (const line of drawable) {
-      const row = document.createElement("span");
-      const swatch = document.createElement("i");
-      swatch.style.background = line.color;
-      const value = line.values[index];
-      row.append(swatch, document.createTextNode(`${line.name}  ${value == null ? "—" : line.label(value)}`));
-      tip.append(row);
+    title.textContent = time == null ? (percent ? "% from first visible point" : names.left) : formatTime(time);
+    legend.append(title);
+    if (time == null) {
+      const note = document.createElement("span");
+      note.textContent = percent
+        ? "Each line is its own percent change, like TradingView. Scroll rebases to the first point on screen."
+        : `${names.left} on the right. ${hasRight ? `${names.right} on the left.` : ""}`.trim();
+      legend.append(note);
     }
-    const left = Math.min(rect.width - 220, Math.max(8, event.clientX - rect.left + 14));
-    tip.style.left = `${left}px`;
+    for (const row of rows) {
+      const item = document.createElement("span");
+      const swatch = document.createElement("i");
+      swatch.style.background = row.color;
+      item.append(swatch, document.createTextNode(`${row.name}  ${row.text}`));
+      legend.append(item);
+    }
+  };
+  chart.subscribeCrosshairMove((param) => {
+    if (!param.time || !param.point) {
+      paintLegend(null, []);
+      return;
+    }
+    const rows: Array<{ name: string; color: string; text: string }> = [];
+    for (const [name, item] of seriesByName) {
+      const raw = param.seriesData.get(item.series);
+      const value = raw && "value" in raw ? raw.value : null;
+      let text = "—";
+      if (value != null && Number.isFinite(value)) {
+        text = percent ? formatPercent(value, firstVisible(chart, item.series)) : item.label(value);
+      }
+      rows.push({ name, color: item.color, text });
+    }
+    const ms = typeof param.time === "number" ? param.time * 1000 : Date.parse(String(param.time));
+    paintLegend(Number.isFinite(ms) ? ms : null, rows);
   });
-  svg.addEventListener("pointerleave", () => {
-    hover.setAttribute("visibility", "hidden");
-    tip.hidden = true;
-  });
+  paintLegend(null, []);
+
+  chart.timeScale().fitContent();
+  if (options.fromMs != null && options.toMs != null && options.toMs > options.fromMs) {
+    try {
+      chart.timeScale().setVisibleRange({ from: stamp(options.fromMs), to: stamp(options.toMs) });
+    } catch {
+      chart.timeScale().fitContent();
+    }
+  }
+}
+
+/** Same base TradingView uses: the first visible point of this line. */
+function firstVisible(chart: IChartApi, series: ISeriesApi<"Line">): number | null {
+  const range = chart.timeScale().getVisibleRange();
+  const from = range?.from;
+  for (const row of series.data()) {
+    if (!("value" in row) || !Number.isFinite(row.value) || row.value === 0) continue;
+    if (from == null || row.time >= from) return row.value;
+  }
+  return null;
+}
+
+function formatPercent(value: number, base: number | null): string {
+  if (base == null || base === 0) return formatUsd(value);
+  const change = (100 * (value - base)) / Math.abs(base);
+  const sign = change > 0 ? "+" : "";
+  return `${sign}${change.toFixed(2)}%`;
+}
+
+function formatUsd(value: number): string {
+  const abs = Math.abs(value);
+  const digits = abs >= 1000 ? 0 : abs >= 1 ? 2 : 4;
+  return new Intl.NumberFormat("en-US", { maximumFractionDigits: digits }).format(value);
+}
+
+function formatTime(ms: number): string {
+  return new Date(ms).toISOString().replace("T", " ").slice(0, 16) + " UTC";
 }
 
 export function renderStack(
@@ -222,7 +243,7 @@ export function renderStack(
   host.replaceChildren();
   const width = Math.max(320, host.clientWidth || 720);
   const height = 180;
-  const pad = { l: 76, r: 16, t: 16, b: 28 };
+  const pad = { l: 8, r: 8, t: 8, b: 8 };
   const innerW = width - pad.l - pad.r;
   const innerH = height - pad.t - pad.b;
   if (times.length < 2 || series.length === 0) return;
@@ -246,16 +267,10 @@ export function renderStack(
     const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
     path.setAttribute("d", `M${top.join(" L")} L${bottom.reverse().join(" L")} Z`);
     path.setAttribute("fill", series[s].color);
-    path.setAttribute("fill-opacity", "0.85");
+    path.setAttribute("fill-opacity", "0.9");
     svg.append(path);
   }
   host.append(svg);
-}
-
-function compact(value: number): string {
-  const abs = Math.abs(value);
-  const digits = abs >= 1000 ? 0 : abs >= 10 ? 1 : 2;
-  return new Intl.NumberFormat("en-US", { maximumFractionDigits: digits }).format(value);
 }
 
 /** Plot the extremes of the first line in each bucket so drawdowns survive downsampling. */

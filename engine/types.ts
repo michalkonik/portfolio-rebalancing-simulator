@@ -36,6 +36,16 @@ export interface SimInput {
   slippageBps: number;
   frequency: Frequency;
   /**
+   * UTC weekday for weekly and biweekly clocks. 0 is Sunday, 1 is Monday.
+   * Omitted means Monday.
+   */
+  weekday?: number;
+  /**
+   * UTC day of month for the monthly clock, 1–31.
+   * A shorter month uses its last day. Omitted means the 1st.
+   */
+  monthDay?: number;
+  /**
    * Minimum absolute weight gap that must exist before a scheduled rebalance trades.
    * 0.05 means 5 percentage points (a 33% target trades outside 28–38%).
    */

@@ -155,14 +155,15 @@ function buildBars(
   }
   const grid = [...times].sort((a, b) => a - b);
   if (grid.length < 2) {
-    return "Not enough overlapping candles in that date range. Widen the range or pick coins with longer history.";
+    return "Not enough candles in that date range. Widen the range or pick coins with longer history.";
   }
   const cursors = indexed.map(() => 0);
+  const lastPrice = new Array<number>(assets.length).fill(Number.NaN);
   const bars: Bar[] = [];
   for (const ts of grid) {
     const price = new Array<number>(assets.length);
     const sma = new Array<number | null>(assets.length).fill(null);
-    let ok = true;
+    let fresh = false;
     for (let a = 0; a < assets.length; a++) {
       if (assets[a].symbol === "USDT") {
         price[a] = 1;
@@ -174,31 +175,56 @@ function buildBars(
       while (cursor + 1 < candles.t.length && candles.t[cursor + 1] <= ts) cursor += 1;
       cursors[a] = cursor;
       const known = candles.t[cursor] <= ts ? cursor : -1;
-      if (known < 0 || ts - candles.t[known] > MAX_GAP || !(candles.c[known] > 0)) {
-        ok = false;
-        break;
+      if (known >= 0 && candles.c[known] > 0) {
+        lastPrice[a] = candles.c[known];
+        const raw = smas[a][known];
+        sma[a] = raw == null || Number.isNaN(raw) ? null : raw;
+        if (ts - candles.t[known] <= MAX_GAP) fresh = true;
       }
-      price[a] = candles.c[known];
-      const raw = smas[a][known];
-      sma[a] = raw == null || Number.isNaN(raw) ? null : raw;
+      // NaN until the first candle. After that, carry the last close so a gap does not zero the book.
+      price[a] = lastPrice[a];
     }
-    if (ok) bars.push({ t: ts, price, sma });
+    if (fresh) bars.push({ t: ts, price, sma });
   }
   if (bars.length < 2) {
-    return "Those coins do not share enough 4h history in the selected dates.";
+    return "Not enough candles in that date range. Widen the range or pick coins with longer history.";
   }
   return bars;
 }
 
-function periodIndex(t: number, anchor: number, frequency: Frequency): number {
+function priced(value: number): boolean {
+  return value > 0 && Number.isFinite(value);
+}
+
+function clock(value: number | undefined, min: number, max: number, fallback: number): number {
+  if (value == null || !Number.isFinite(value)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(value)));
+}
+
+/** Calendar slot. Weekly and biweekly advance on the chosen UTC weekday. Monthly advances on the chosen day. */
+function periodIndex(t: number, frequency: Frequency, weekday: number, monthDay: number): number {
   if (frequency === "none") return 0;
-  if (frequency === "monthly") {
-    const d = new Date(t);
-    const a = new Date(anchor);
-    return (d.getUTCFullYear() - a.getUTCFullYear()) * 12 + (d.getUTCMonth() - a.getUTCMonth());
+  const dayIndex = Math.floor(t / DAY);
+  if (frequency === "daily") return dayIndex;
+  if (frequency === "weekly" || frequency === "biweekly") {
+    // 1970-01-01 was a Thursday, so dayIndex 0 is weekday 4.
+    const offset = (weekday - 4 + 7) % 7;
+    const week = Math.floor((dayIndex - offset) / 7);
+    return frequency === "weekly" ? week : Math.floor(week / 2);
   }
-  const span = frequency === "daily" ? DAY : frequency === "weekly" ? 7 * DAY : 14 * DAY;
-  return Math.floor((t - anchor) / span);
+  const date = new Date(t);
+  let year = date.getUTCFullYear();
+  let month = date.getUTCMonth();
+  const last = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  const target = Math.min(monthDay, last);
+  if (date.getUTCDate() < target) {
+    month -= 1;
+    if (month < 0) {
+      month = 11;
+      year -= 1;
+    }
+  }
+  return year * 12 + month;
 }
 
 function tradeCost(symbol: string, cost: number): number {
@@ -234,20 +260,27 @@ function planRebalance(
   const n = assets.length;
   let equity = book.usdt;
   const current = new Array<number>(n);
+  const tradable = new Array<boolean>(n);
   for (let i = 0; i < n; i++) {
-    current[i] = book.qty[i] * bar.price[i];
+    tradable[i] = priced(bar.price[i]);
+    current[i] = tradable[i] ? book.qty[i] * bar.price[i] : 0;
     equity += current[i];
   }
   if (!(equity > EPS)) return null;
 
   let maxGap = 0;
   for (let i = 0; i < n; i++) {
+    if (!tradable[i]) continue;
     maxGap = Math.max(maxGap, Math.abs(current[i] / equity - assets[i].weight));
   }
   if (band > 0 && maxGap + 1e-12 < band) return null;
 
   const desired = new Array<number>(n);
   for (let i = 0; i < n; i++) {
+    if (!tradable[i]) {
+      desired[i] = current[i];
+      continue;
+    }
     const target = equity * assets[i].weight;
     desired[i] = current[i] + fraction * (target - current[i]);
     if (assets[i].sellLocked && desired[i] < current[i]) desired[i] = current[i];
@@ -385,7 +418,7 @@ function mark(assets: NormAsset[], book: Book, price: number[]): { equity: numbe
   let equity = book.usdt;
   const values = new Array<number>(assets.length);
   for (let i = 0; i < assets.length; i++) {
-    values[i] = book.qty[i] * price[i];
+    values[i] = priced(price[i]) ? book.qty[i] * price[i] : 0;
     equity += values[i];
   }
   const weights = values.map((value) => (equity > 0 ? value / equity : 0));
@@ -397,12 +430,17 @@ function enter(
   price: number[],
   cash: number,
   cost: number,
-): { book: Book; fee: number } {
+): { book: Book; fee: number; reserved: number[] } {
   const book: Book = { qty: new Array<number>(assets.length).fill(0), usdt: 0 };
+  const reserved = new Array<number>(assets.length).fill(0);
   let fee = 0;
   let left = cash;
   for (let i = 0; i < assets.length; i++) {
     const spend = cash * assets[i].weight;
+    if (!priced(price[i])) {
+      reserved[i] = spend;
+      continue;
+    }
     const rate = tradeCost(assets[i].symbol, cost);
     const received = spend * (1 - rate);
     book.qty[i] = received / price[i];
@@ -410,7 +448,25 @@ function enter(
     fee += spend * rate;
   }
   book.usdt = left;
-  return { book, fee };
+  return { book, fee, reserved };
+}
+
+/** Spend earmarked cash on a coin that just listed. This is the initial fill, not a rebalance. */
+function buyReserved(
+  book: Book,
+  index: number,
+  symbol: string,
+  budget: number,
+  price: number,
+  cost: number,
+): { spent: number; fee: number } {
+  if (!(budget > EPS) || !priced(price)) return { spent: 0, fee: 0 };
+  const rate = tradeCost(symbol, cost);
+  const spend = Math.min(book.usdt, budget);
+  if (!(spend > EPS)) return { spent: 0, fee: 0 };
+  book.qty[index] += (spend * (1 - rate)) / price;
+  book.usdt -= spend;
+  return { spent: spend, fee: spend * rate };
 }
 
 function cloneBook(book: Book): Book {
@@ -440,11 +496,13 @@ function dragUsdt(events: RebalanceEvent[], assets: NormAsset[], last: number[])
     if (!(cashIn > EPS)) continue;
     const parked = Math.max(0, cashIn - cashOut);
     for (const sell of sells) {
-      const soldEnd = endPrice.get(sell.symbol) ?? sell.price;
+      const soldEndRaw = endPrice.get(sell.symbol);
+      const soldEnd = soldEndRaw != null && priced(soldEndRaw) ? soldEndRaw : sell.price;
       const retSold = soldEnd / sell.price - 1;
       for (const buy of buys) {
         const share = (sell.cash / cashIn) * buy.cash;
-        const boughtEnd = endPrice.get(buy.symbol) ?? buy.price;
+        const boughtEndRaw = endPrice.get(buy.symbol);
+        const boughtEnd = boughtEndRaw != null && priced(boughtEndRaw) ? boughtEndRaw : buy.price;
         const retBought = boughtEnd / buy.price - 1;
         drag += share * (retSold - retBought);
       }
@@ -526,6 +584,8 @@ export function simulate(input: SimInput): SimResult {
   );
   if (typeof built === "string") return { ok: false, error: built };
   const bars = built;
+  const weekday = clock(input.weekday, 0, 6, 1);
+  const monthDay = clock(input.monthDay, 1, 31, 1);
   const warnings: string[] = [];
   if (bars[0].t > input.startMs + HOUR4) {
     warnings.push(
@@ -537,10 +597,20 @@ export function simulate(input: SimInput): SimResult {
       `History for this mix ends ${new Date(bars[bars.length - 1].t).toISOString().slice(0, 10)}.`,
     );
   }
+  for (const asset of normalized) {
+    if (asset.symbol === "USDT") continue;
+    const first = input.series[asset.symbol]?.t[0];
+    if (first != null && first > bars[0].t + HOUR4) {
+      warnings.push(
+        `${asset.symbol} has no price until ${new Date(first).toISOString().slice(0, 10)}. Until then its weight stays in USDT. A plain rebalance buys it on the next scheduled check after it lists. The chart still starts with the coins that already trade.`,
+      );
+    }
+  }
 
   const opened = enter(normalized, bars[0].price, input.initialUsdt, cost);
   const strategy = opened.book;
   const hold = cloneBook(opened.book);
+  const holdReserved = opened.reserved.slice();
   let fees = opened.fee;
 
   const btcCache = { idx: 0 };
@@ -550,16 +620,30 @@ export function simulate(input: SimInput): SimResult {
   const points: Point[] = [];
   const events: RebalanceEvent[] = [];
   const anchor = bars[0].t;
-  let prevPeriod = 0;
+  let prevPeriod = periodIndex(anchor, input.frequency, weekday, monthDay);
+  let listed = bars[0].price.map((price) => priced(price));
 
   const equities: number[] = [];
   const times: number[] = [];
 
   for (let i = 0; i < bars.length; i++) {
     const bar = bars[i];
+    const nowListed = bar.price.map((price) => priced(price));
+    const newly = nowListed.some((ok, index) => ok && !listed[index]);
+    if (newly) {
+      for (let a = 0; a < normalized.length; a++) {
+        if (!nowListed[a] || !(holdReserved[a] > EPS)) continue;
+        const bought = buyReserved(hold, a, normalized[a].symbol, holdReserved[a], bar.price[a], cost);
+        holdReserved[a] = Math.max(0, holdReserved[a] - bought.spent);
+        if (input.frequency === "none") {
+          const strategyBuy = buyReserved(strategy, a, normalized[a].symbol, bought.spent, bar.price[a], cost);
+          fees += strategyBuy.fee;
+        }
+      }
+    }
     if (i > 0 && input.frequency !== "none") {
-      const period = periodIndex(bar.t, anchor, input.frequency);
-      if (period > prevPeriod) {
+      const period = periodIndex(bar.t, input.frequency, weekday, monthDay);
+      if (period > prevPeriod || newly) {
         const planned = planRebalance(
           normalized,
           strategy,
@@ -584,6 +668,7 @@ export function simulate(input: SimInput): SimResult {
       }
       prevPeriod = period;
     }
+    listed = nowListed;
 
     const marked = mark(normalized, strategy, bar.price);
     const held = mark(normalized, hold, bar.price);
