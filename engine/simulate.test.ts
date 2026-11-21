@@ -324,3 +324,22 @@ test("csv parser keeps ascending positive closes", () => {
   assert.deepEqual(parsed.t, [10, 20]);
   assert.deepEqual(parsed.c, [2, 4]);
 });
+
+test("every bar carries each coin's USDT value and the BTC price", () => {
+  const start = Date.UTC(2024, 0, 1);
+  const result = run({
+    frequency: "none",
+    startMs: start,
+    endMs: start + 2 * DAY,
+    assets: [{ symbol: "AAA", weight: 1 }],
+    series: {
+      AAA: series("AAA", start, DAY, [5, 10, 20]),
+    },
+    btc: series("BTC", start, DAY, [100, 110, 140]),
+  });
+  assert.deepEqual(result.points.map((point) => point.btcPrice), [100, 110, 140]);
+  assert.ok(Math.abs(result.points[0].values[0] - 1000) < 1e-6);
+  assert.ok(Math.abs(result.points[2].values[0] - 4000) < 1e-6);
+  assert.ok(Math.abs(result.points[2].values[0] - result.points[2].qty[0] * 20) < 1e-6);
+  assert.ok(Math.abs((result.points[2].btc ?? 0) / (result.points[0].btc ?? 1) - 1.4) < 1e-9);
+});

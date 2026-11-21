@@ -17,9 +17,9 @@ The question it is built to answer is whether a rules-based rebalance helps, or 
 - A per-coin lock that never sells that coin.
 - USDT as a cash sleeve. Its price is 1. It is not a candle file.
 - Correlation of daily log returns for the selected dates, including the same correlation on days Bitcoin rose and on days it fell.
-- CSV export of the value path and of every fill.
+- CSV export of the value path and of every fill. The path includes the portfolio, each coin's USDT value, the quantity held, and the BTC price.
 
-Buy-and-hold of the same weights, and buy-and-hold Bitcoin, are always on the chart. If a guard is on, the plain rebalance is drawn too, and the page reports the USDT gap.
+The chart is one linear plot. Each coin is the USDT value of the coins the book is holding, the portfolio total is on that same left axis, and the BTC price is on the right axis. Every line can be switched off, and the axes rescale to what remains. Hold, USDT cash, and the unguarded rebalance are on the same chart but start switched off. A table under the chart lists the same numbers by day, week, month, or every 4-hour bar.
 
 ## How a rebalance is filled
 

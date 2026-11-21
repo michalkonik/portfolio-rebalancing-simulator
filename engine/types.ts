@@ -75,9 +75,14 @@ export interface Point {
   t: number;
   equity: number;
   hold: number;
+  /** Buy-and-hold BTC equity, in USDT. Null when BTC has no price yet. */
   btc: number | null;
+  /** Spot BTC close at this bar. Null when BTC has no price yet. */
+  btcPrice: number | null;
   /** Quantities in asset order. */
   qty: number[];
+  /** Mark-to-market USDT value of each asset, same order as qty. */
+  values: number[];
   usdt: number;
   /** Portfolio weights in asset order. Residual USDT is 1 - sum. */
   weights: number[];

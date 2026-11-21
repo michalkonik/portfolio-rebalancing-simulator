@@ -381,7 +381,7 @@ function applyPlan(
   return { trades, fee };
 }
 
-function mark(assets: NormAsset[], book: Book, price: number[]): { equity: number; weights: number[] } {
+function mark(assets: NormAsset[], book: Book, price: number[]): { equity: number; weights: number[]; values: number[] } {
   let equity = book.usdt;
   const values = new Array<number>(assets.length);
   for (let i = 0; i < assets.length; i++) {
@@ -389,7 +389,7 @@ function mark(assets: NormAsset[], book: Book, price: number[]): { equity: numbe
     equity += values[i];
   }
   const weights = values.map((value) => (equity > 0 ? value / equity : 0));
-  return { equity, weights };
+  return { equity, weights, values };
 }
 
 function enter(
@@ -594,7 +594,9 @@ export function simulate(input: SimInput): SimResult {
       equity: marked.equity,
       hold: held.equity,
       btc: btcEq,
+      btcPrice: btcPx,
       qty: strategy.qty.slice(),
+      values: marked.values.slice(),
       usdt: strategy.usdt,
       weights: marked.weights,
     });
