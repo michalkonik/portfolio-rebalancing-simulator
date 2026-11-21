@@ -36,7 +36,7 @@ interface Holding {
 }
 
 const BASE = import.meta.env.BASE_URL;
-const PALETTE = ["#8fb3ae", "#c4846a", "#9cbe86", "#d07a8a", "#8aa0c8", "#cbbf70", "#b9a0c4", "#7f9a78", "#e0b07a", "#6fbfc4"];
+const PALETTE = ["#0d7680", "#0f5499", "#c04a1a", "#067647", "#5c3d8a", "#8c4a12", "#1b4f72", "#9b2c5a", "#3e5c1a", "#6e2c3a"];
 
 interface ChartSpec {
   id: string;
@@ -525,7 +525,7 @@ function paintResults(
     {
       id: "equity",
       name: "Portfolio",
-      color: "#d7a35a",
+      color: "#990f3d",
       width: 2.6,
       axis: "left",
       on: true,
@@ -549,7 +549,7 @@ function paintResults(
     specs.push({
       id: "cash",
       name: "USDT cash",
-      color: "#8a8476",
+      color: "#6b5e53",
       width: 1.4,
       axis: "left",
       on: false,
@@ -560,7 +560,7 @@ function paintResults(
   specs.push({
     id: "hold",
     name: "Hold",
-    color: "#6f8f9a",
+    color: "#0f5499",
     dash: "3 3",
     width: 1.5,
     axis: "left",
@@ -573,7 +573,7 @@ function paintResults(
     specs.push({
       id: "unguarded",
       name: "Unguarded",
-      color: "#e08b78",
+      color: "#c04a1a",
       dash: "6 4",
       width: 1.5,
       axis: "left",
@@ -586,7 +586,7 @@ function paintResults(
     specs.push({
       id: "btc-price",
       name: "BTC price",
-      color: "#f2efe4",
+      color: "#262a33",
       dash: "5 3",
       width: 1.8,
       axis: "right",
@@ -637,7 +637,7 @@ function paintResults(
     }));
     const residual = sample.map((point) => Math.max(0, 1 - point.weights.reduce((sum, value) => sum + value, 0)));
     if (residual.some((value) => value > 0.01)) {
-      stack.push({ name: "USDT", color: "#3c4336", values: residual });
+      stack.push({ name: "USDT", color: "#c4b2a2", values: residual });
     }
     renderStack(weights, sample.map((point) => point.t), stack);
   };
@@ -958,7 +958,7 @@ function heatTable(symbols: string[], values: Array<Array<number | null>>, title
       const value = values[i][j];
       const cell = el("td", "", value == null ? "—" : value.toFixed(2));
       cell.style.background = corrColor(value);
-      cell.style.color = value != null && Math.abs(value) > 0.65 ? "#1a140c" : "var(--text)";
+      cell.style.color = value != null && Math.abs(value) > 0.55 ? "#fff1e5" : "#33302e";
       tr.append(cell);
     });
     table.append(tr);
@@ -1106,10 +1106,10 @@ function coinInfo(symbol: string): CoinInfo | undefined {
 }
 
 function corrColor(value: number | null): string {
-  if (value == null || !Number.isFinite(value)) return "#2a2e26";
+  if (value == null || !Number.isFinite(value)) return "#f2dfce";
   const clamped = Math.max(-1, Math.min(1, value));
-  if (clamped >= 0) return mix("#2a2e26", "#d7a35a", clamped);
-  return mix("#2a2e26", "#6f8ea8", -clamped);
+  if (clamped >= 0) return mix("#fff1e5", "#990f3d", clamped);
+  return mix("#fff1e5", "#0d7680", -clamped);
 }
 
 function mix(from: string, to: string, t: number): string {
