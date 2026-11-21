@@ -637,7 +637,7 @@ function paintResults(
     }));
     const residual = sample.map((point) => Math.max(0, 1 - point.weights.reduce((sum, value) => sum + value, 0)));
     if (residual.some((value) => value > 0.01)) {
-      stack.push({ name: "USDT", color: "#c4b2a2", values: residual });
+      stack.push({ name: "USDT", color: "#6b5e53", values: residual });
     }
     renderStack(weights, sample.map((point) => point.t), stack);
   };
