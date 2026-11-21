@@ -1269,6 +1269,8 @@ function labeled(text: string, control: HTMLElement, hint?: string): HTMLElement
   return wrapLabel;
 }
 
+let openTip: { anchor: HTMLElement; pop: HTMLElement } | null = null;
+
 function infoControl(text: string): HTMLElement {
   const wrap = el("span", "info-wrap");
   const button = el("button", "info");
@@ -1278,24 +1280,58 @@ function infoControl(text: string): HTMLElement {
   const pop = el("div", "pop");
   pop.hidden = true;
   pop.textContent = text;
+  pop.setAttribute("role", "tooltip");
   button.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();
     const opening = pop.hidden;
-    document.querySelectorAll<HTMLElement>(".pop").forEach((item) => {
-      item.hidden = true;
-    });
-    pop.hidden = !opening;
+    closeTips();
+    if (!opening) return;
+    document.body.append(pop);
+    pop.hidden = false;
+    openTip = { anchor: button, pop };
+    placeTip(button, pop);
   });
-  wrap.append(button, pop);
+  wrap.append(button);
   return wrap;
 }
 
-document.addEventListener("click", () => {
+function placeTip(anchor: HTMLElement, pop: HTMLElement): void {
+  const margin = 8;
+  const width = Math.min(320, window.innerWidth - margin * 2);
+  pop.style.width = `${width}px`;
+  const rect = anchor.getBoundingClientRect();
+  const box = pop.getBoundingClientRect();
+  let left = rect.left;
+  let top = rect.bottom + 8;
+  if (left + box.width > window.innerWidth - margin) left = window.innerWidth - margin - box.width;
+  if (left < margin) left = margin;
+  if (top + box.height > window.innerHeight - margin) {
+    const above = rect.top - 8 - box.height;
+    top = above >= margin ? above : margin;
+  }
+  pop.style.left = `${Math.round(left)}px`;
+  pop.style.top = `${Math.round(top)}px`;
+}
+
+function closeTips(): void {
   document.querySelectorAll<HTMLElement>(".pop").forEach((item) => {
     item.hidden = true;
   });
+  openTip = null;
+}
+
+document.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target instanceof Element && target.closest(".pop, .info")) return;
+  closeTips();
 });
+window.addEventListener("resize", () => {
+  if (openTip && !openTip.pop.hidden) placeTip(openTip.anchor, openTip.pop);
+});
+window.addEventListener("scroll", () => {
+  if (openTip && !openTip.pop.hidden) placeTip(openTip.anchor, openTip.pop);
+}, true);
 
 function input(type: string, value: string): HTMLInputElement {
   const node = el("input") as HTMLInputElement;
