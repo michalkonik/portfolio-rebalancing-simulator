@@ -84,7 +84,8 @@ h3 { font-size: 0.95rem; }
   position: sticky;
   top: 12px;
   max-height: calc(100vh - 24px);
-  overflow: auto;
+  overflow-x: clip;
+  overflow-y: auto;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -123,12 +124,26 @@ input:focus, select:focus { outline: 2px solid rgba(0, 105, 217, 0.35); outline-
 .suggest small { color: var(--muted); }
 .coin-row {
   display: grid;
-  grid-template-columns: 1fr 72px auto auto;
+  grid-template-columns: minmax(0, 1fr) 5.75rem auto auto;
   gap: 6px;
   align-items: center;
   margin-bottom: 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--line);
+}
+.coin-row input[type="number"] {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 8px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.coin-row input[type="number"]::-webkit-outer-spin-button,
+.coin-row input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .coin-row .meta { display: flex; flex-direction: column; min-width: 0; }
 .coin-row strong { font-weight: 650; }
@@ -186,11 +201,11 @@ input:focus, select:focus { outline: 2px solid rgba(0, 105, 217, 0.35); outline-
 }
 .info-wrap { position: relative; display: inline-flex; }
 .pop {
-  position: absolute;
-  z-index: 20;
-  left: 0;
-  top: 22px;
-  width: min(280px, 70vw);
+  position: fixed;
+  z-index: 4000;
+  width: min(320px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  overflow: auto;
   background: var(--primary-deep);
   color: #fff;
   border-radius: var(--radius);
