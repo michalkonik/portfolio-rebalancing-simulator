@@ -343,3 +343,72 @@ test("every bar carries each coin's USDT value and the BTC price", () => {
   assert.ok(Math.abs(result.points[2].values[0] - result.points[2].qty[0] * 20) < 1e-6);
   assert.ok(Math.abs((result.points[2].btc ?? 0) / (result.points[0].btc ?? 1) - 1.4) < 1e-9);
 });
+
+test("a later listing does not clip the earlier coin off the chart", () => {
+  const start = Date.UTC(2023, 10, 1);
+  const late = start + 10 * DAY;
+  const end = start + 14 * DAY;
+  const early = series("AAA", start, DAY, Array.from({ length: 15 }, () => 10));
+  const listed = series("BBB", late, DAY, Array.from({ length: 5 }, () => 20));
+  const result = run({
+    frequency: "daily",
+    startMs: start,
+    endMs: end,
+    assets: [
+      { symbol: "AAA", weight: 50 },
+      { symbol: "BBB", weight: 50 },
+    ],
+    series: { AAA: early, BBB: listed },
+  });
+  assert.equal(result.points[0].t, start);
+  assert.equal(result.points[0].qty[1], 0);
+  assert.ok(result.points[0].usdt > 400);
+  const bought = result.events.find((event) => event.t === late && event.trades.some((trade) => trade.symbol === "BBB" && trade.side === "buy"));
+  assert.ok(bought, "BBB is bought on the first bar it has a price");
+  assert.ok(result.summary.endingQty.BBB > 0);
+  assert.ok(result.warnings.some((warning) => warning.includes("BBB")));
+});
+
+test("weekly rebalance waits for the chosen weekday", () => {
+  const monday = Date.UTC(2024, 0, 1);
+  const wednesday = Date.UTC(2024, 0, 3);
+  const closes = Array.from({ length: 16 }, (_, i) => 100 + i);
+  const result = run({
+    frequency: "weekly",
+    weekday: 1,
+    startMs: wednesday,
+    endMs: wednesday + 14 * DAY,
+    assets: [
+      { symbol: "AAA", weight: 50 },
+      { symbol: "BBB", weight: 50 },
+    ],
+    series: {
+      AAA: series("AAA", wednesday, DAY, closes),
+      BBB: series("BBB", wednesday, DAY, closes.map(() => 100)),
+    },
+  });
+  assert.ok(result.events.length >= 1);
+  assert.ok(result.events.every((event) => new Date(event.t).getUTCDay() === 1));
+  assert.equal(result.events[0].t, monday + 7 * DAY);
+});
+
+test("monthly rebalance uses the chosen day of month", () => {
+  const start = Date.UTC(2024, 0, 1);
+  const day15 = Date.UTC(2024, 0, 15);
+  const closes = Array.from({ length: 50 }, (_, i) => 100 + i);
+  const result = run({
+    frequency: "monthly",
+    monthDay: 15,
+    startMs: start,
+    endMs: start + 49 * DAY,
+    assets: [
+      { symbol: "AAA", weight: 50 },
+      { symbol: "BBB", weight: 50 },
+    ],
+    series: {
+      AAA: series("AAA", start, DAY, closes),
+      BBB: series("BBB", start, DAY, closes.map(() => 100)),
+    },
+  });
+  assert.deepEqual(result.events.map((event) => event.t), [day15, Date.UTC(2024, 1, 15)]);
+});

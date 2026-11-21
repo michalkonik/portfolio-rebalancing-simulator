@@ -1,7 +1,7 @@
 import { correlationMatrix } from "@engine/correlation.ts";
 import { guardsAreActive, simulate, simulateNaive } from "@engine/simulate.ts";
 import type { CandleSeries, Frequency, SimInput, SimSuccess } from "@engine/types.ts";
-import { envelope, renderLineChart, renderStack, type ChartLine } from "./chart.ts";
+import { renderLineChart, renderStack, type ChartLine, type ValueScale } from "./chart.ts";
 import { cls, day, num, parseDayEnd, parseDayStart, pct, qty, quote, usdt } from "./format.ts";
 import { loadCandles } from "./load.ts";
 
@@ -36,7 +36,7 @@ interface Holding {
 }
 
 const BASE = import.meta.env.BASE_URL;
-const PALETTE = ["#0d7680", "#0f5499", "#c04a1a", "#067647", "#5c3d8a", "#8c4a12", "#1b4f72", "#9b2c5a", "#3e5c1a", "#6e2c3a"];
+const PALETTE = ["#2196f3", "#ff5656", "#ff9800", "#00cf0a", "#9c27b0", "#14b8a6", "#0069d9", "#d14343", "#65748b", "#ffb020"];
 
 interface ChartSpec {
   id: string;
@@ -53,47 +53,37 @@ interface ChartSpec {
 type PathStep = "day" | "week" | "month" | "bar";
 const FREQUENCIES: Frequency[] = ["none", "daily", "weekly", "biweekly", "monthly"];
 
-const PRESETS: Array<{ id: string; name: string; frequency: Frequency; holdings: Holding[] }> = [
-  { id: "btc", name: "BTC untouched", frequency: "none", holdings: [{ symbol: "BTC", weight: "100", sellLocked: true }] },
-  {
-    id: "chat",
-    name: "TAO PENDLE HBAR",
-    frequency: "weekly",
-    holdings: [
-      { symbol: "TAO", weight: "33", sellLocked: false },
-      { symbol: "PENDLE", weight: "33", sellLocked: false },
-      { symbol: "HBAR", weight: "34", sellLocked: false },
-    ],
-  },
-  {
-    id: "sheet-a",
-    name: "TAO ZEC PENDLE",
-    frequency: "weekly",
-    holdings: [
-      { symbol: "TAO", weight: "33", sellLocked: false },
-      { symbol: "ZEC", weight: "33", sellLocked: false },
-      { symbol: "PENDLE", weight: "34", sellLocked: false },
-    ],
-  },
-  {
-    id: "sheet-b",
-    name: "TAO UNI ENA",
-    frequency: "weekly",
-    holdings: [
-      { symbol: "TAO", weight: "33", sellLocked: false },
-      { symbol: "UNI", weight: "33", sellLocked: false },
-      { symbol: "ENA", weight: "34", sellLocked: false },
-    ],
-  },
-];
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const BOOKS_KEY = "firehorse.portfolio-books.v1";
+
+interface SavedBook {
+  id: string;
+  name: string;
+  holdings: Holding[];
+  frequency: Frequency;
+  weekday: number;
+  monthDay: number;
+  capital: string;
+  start: string;
+  end: string;
+  fee: string;
+  slip: string;
+  protect: boolean;
+  band: string;
+  fraction: string;
+  trend: boolean;
+  sma: string;
+  policy: string;
+}
 
 const app = document.querySelector<HTMLElement>("#app");
 if (!app) throw new Error("Missing app root");
 
 let manifest: Manifest | null = null;
-let holdings: Holding[] = PRESETS[1].holdings.map((row) => ({ ...row }));
+let holdings: Holding[] = [];
 let lastDraw: (() => void) | null = null;
-let applyBook: ((rows: Holding[], frequency: Frequency, start: string, end: string) => void) | null = null;
+let scaleMode: ValueScale = "usd";
+let loadSaved: ((book: SavedBook) => void) | null = null;
 
 const ui = {
   sim: el("section", "sim"),
@@ -130,7 +120,6 @@ async function boot(): Promise<void> {
   renderSimulator();
   renderData();
   renderCorrelationShell();
-  await run();
 }
 
 function renderSimulator(): void {
@@ -146,27 +135,37 @@ function renderSimulator(): void {
     void run();
   });
 
-  const presetRow = el("div", "presets");
-  for (const preset of PRESETS) {
-    const button = el("button");
-    button.type = "button";
-    button.textContent = preset.name;
-    button.addEventListener("click", () => {
-      holdings = preset.holdings.map((row) => ({ ...row }));
-      frequency.value = preset.frequency;
-      drawHoldings();
-      void run();
-    });
-    presetRow.append(button);
-  }
-  form.append(presetRow);
+  const booksHost = el("div", "books");
+  const bookName = input("text", "");
+  bookName.placeholder = "Name this book";
+  bookName.maxLength = 60;
+  const saveBook = el("button", "btn ghost");
+  saveBook.type = "button";
+  saveBook.textContent = "Save";
+  const bookSave = el("div", "book-save");
+  bookSave.append(bookName, saveBook);
+  form.append(
+    field(
+      "Your books",
+      bookSave,
+      "Nothing is saved until you save it. A book stores this mix, the weights, the calendar, the fees, and whether winner protection is on. Books stay in this browser only. There are no built-in books.",
+    ),
+    booksHost,
+  );
 
   const search = el("input") as HTMLInputElement;
   search.placeholder = "Add a coin — BTC, TAO, or TON";
   search.autocomplete = "off";
   const suggest = el("div", "suggest");
   search.addEventListener("input", () => fillSuggest(suggest, search.value));
-  form.append(field("Coins", search), suggest);
+  form.append(
+    field(
+      "Coins",
+      search,
+      "Search the stored Binance USDT markets. Add 1 to 10 coins. USDT is cash at a price of 1 and can be a sleeve. TON selects GRAM, which is Toncoin after Binance renamed the market.",
+    ),
+    suggest,
+  );
 
   const holdingHost = el("div");
   holdingHost.id = "holdings";
@@ -205,18 +204,64 @@ function renderSimulator(): void {
     frequency.append(option);
   }
   frequency.value = "weekly";
+  const weekday = el("select") as HTMLSelectElement;
+  WEEKDAYS.forEach((name, index) => {
+    const option = el("option");
+    option.value = String(index);
+    option.textContent = name;
+    weekday.append(option);
+  });
+  weekday.value = "1";
+  const monthDay = input("number", "1");
+  monthDay.min = "1";
+  monthDay.max = "31";
+  monthDay.step = "1";
   const fee = input("number", "10");
   fee.min = "0";
   fee.step = "1";
   const slip = input("number", "5");
   slip.min = "0";
   slip.step = "1";
+  const weekdayField = labeled(
+    "Day of week, UTC",
+    weekday,
+    "Weekly and every-two-weeks runs trade on this UTC weekday, on the first 4-hour close of that day. Pick the same weekday you will actually trade.",
+  );
+  const monthField = labeled(
+    "Day of month, UTC",
+    monthDay,
+    "Monthly runs trade on this UTC day. 1 is the first of the month. If the month is shorter than the day you pick, the run uses the last day of that month.",
+  );
+  const syncSchedule = () => {
+    const value = frequency.value;
+    weekdayField.hidden = value !== "weekly" && value !== "biweekly";
+    monthField.hidden = value !== "monthly";
+  };
+  frequency.addEventListener("change", syncSchedule);
+  syncSchedule();
 
   const dates = el("div", "field row");
-  dates.append(labeled("Start, UTC", start), labeled("End, UTC", end));
+  dates.append(
+    labeled("Start, UTC", start, "First day of the test. Coins that already trade are bought that day. A coin with no price yet stays as USDT until it lists, and the chart still starts here."),
+    labeled("End, UTC", end, "Last day included. The last 4-hour close on or before the end of this UTC day is the final mark."),
+  );
   const costs = el("div", "field row");
-  costs.append(labeled("Fee, bps", fee), labeled("Slippage, bps", slip));
-  form.append(field("Starting capital", capital), dates, field("How often to look", frequency), costs);
+  costs.append(
+    labeled("Fee, bps", fee, "Exchange fee in basis points. 10 bps is 0.10% of the coin value, charged on the way out and on the way in. USDT transfers are free. 100 bps = 1%."),
+    labeled("Slippage, bps", slip, "Extra haircut, in basis points, for crossing the spread and moving the price. It is added to the fee. 5 bps is 0.05%."),
+  );
+  form.append(
+    field("Starting capital", capital, "USDT you start with. Weights are applied to this amount on the first bar."),
+    dates,
+    field(
+      "How often to look",
+      frequency,
+      "Plain rebalance is the default. On each scheduled check the book trades back to your weights. Daily uses the first 4-hour bar of each UTC day. Weekly and every two weeks use the weekday below. Monthly uses the day of the month below. Never means buy once and hold.",
+    ),
+    weekdayField,
+    monthField,
+    costs,
+  );
 
   const band = input("number", "5");
   band.min = "0";
@@ -242,57 +287,146 @@ function renderSimulator(): void {
     option.textContent = text;
     policy.append(option);
   }
-
+  const protect = el("input") as HTMLInputElement;
+  protect.type = "checkbox";
+  protect.checked = false;
   const guard = el("div", "guard");
-  guard.append(el("h3", "", "Don't sell a winner into a loser"));
-  guard.append(
-    el(
-      "p",
-      "hint",
-      "A plain rebalance sells what went up and buys what went down. These controls refuse that trade unless you explicitly allow it.",
-    ),
-  );
-  guard.append(field("Drift band, percentage points", band));
-  guard.append(el("p", "hint", "A 33% target and a band of 5 trades only outside 28–38%."));
-  guard.append(field("How much of the gap to close, %", fraction));
+  const switchRow = el("label", "switch");
+  switchRow.append(protect, document.createTextNode("Protect winners"));
+  switchRow.append(infoControl(
+    "Off, this is a plain rebalance: on the weekday or day of month you picked, sell what is above its weight and buy what is below, until the book matches your ratios. That is the default. On, the book refuses to sell a coin that is working just to buy one that is not, unless the rules below allow it. To do this live: on that same weekday or day of month, look at each coin's share of the account. Trade only if a coin is outside the drift band. Close only the percent of the gap you set. If a coin is below its moving average, do not buy it. If a buy is blocked, either leave that cash in the coins you would have sold, or sell them and hold USDT, matching the setting here. Place those trades yourself. This page does not send orders.",
+  ));
+  const guardBody = el("div", "guard-body");
+  guardBody.hidden = true;
+  guardBody.append(field(
+    "Drift band, percentage points",
+    band,
+    "How far a coin must drift, in percentage points of the book, before a protected rebalance trades. A 33% target and a band of 5 trades only when that coin is outside 28–38%. 0 trades on every scheduled check.",
+  ));
+  guardBody.append(field(
+    "How much of the gap to close, %",
+    fraction,
+    "100% snaps the coin back to its target. 50% closes half the gap, so a winner is only partly sold. This applies only while Protect winners is on.",
+  ));
   const trendRow = el("label", "check");
   trendRow.append(trend, document.createTextNode("Do not buy a coin below its moving average"));
-  guard.append(trendRow, field("Moving average, days", sma), field("If a buy is blocked", policy));
-  const protect = el("button", "btn ghost");
-  protect.type = "button";
-  protect.textContent = "Protect winners";
-  protect.addEventListener("click", () => {
-    band.value = "5";
-    fraction.value = "50";
-    trend.checked = true;
-    sma.value = "60";
-    policy.value = "keep_winners";
-    void run();
-  });
-  const naiveBtn = el("button", "btn ghost");
-  naiveBtn.type = "button";
-  naiveBtn.textContent = "Plain rebalance";
-  naiveBtn.addEventListener("click", () => {
-    band.value = "0";
-    fraction.value = "100";
-    trend.checked = false;
-    policy.value = "keep_winners";
-    void run();
+  trendRow.append(infoControl(
+    "Uses the daily closes from earlier UTC days only, so today's close is not in the average. A coin below that average is not bought. It can still be sold if it is above its weight.",
+  ));
+  guardBody.append(
+    trendRow,
+    field("Moving average, days", sma, "Length of the trailing daily average used by the buy block. 60 means about two months of daily closes, not including the current day."),
+    field(
+      "If a buy is blocked",
+      policy,
+      "Leave it in the winners: sell only enough to fund buys the trend rule allows, so a blocked buy does not force you to sell a winner. Park it in USDT: sell the overweight coins anyway and hold the unused cash in USDT until a later check allows the buy.",
+    ),
+  );
+  protect.addEventListener("change", () => {
+    guardBody.hidden = !protect.checked;
   });
   const actions = el("div", "actions");
   const runBtn = el("button", "btn primary");
   runBtn.type = "submit";
   runBtn.textContent = "Run";
-  actions.append(runBtn, protect, naiveBtn);
-  guard.append(actions);
+  actions.append(runBtn);
+  guard.append(switchRow, guardBody, actions);
   form.append(guard);
 
   const results = el("div", "results");
   results.id = "results";
+  results.append(el("p", "muted", "Add one or more coins, set the weights and the calendar, then run. The default run is a plain rebalance. Nothing is loaded for you."));
   layout.append(form, results);
-  const studyHost = el("div", "study");
-  ui.sim.replaceChildren(studyHost, layout);
-  void loadStudy(studyHost);
+  ui.sim.replaceChildren(layout);
+
+  function readBooks(): SavedBook[] {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(BOOKS_KEY) ?? "[]") as SavedBook[];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  function writeBooks(books: SavedBook[]): void {
+    localStorage.setItem(BOOKS_KEY, JSON.stringify(books));
+  }
+  function paintBooks(): void {
+    booksHost.replaceChildren();
+    const books = readBooks();
+    if (books.length === 0) {
+      booksHost.append(el("p", "empty-books", "No saved books yet."));
+      return;
+    }
+    for (const book of books) {
+      const row = el("div", "book-row");
+      const open = el("button");
+      open.type = "button";
+      open.textContent = "Load";
+      open.addEventListener("click", () => loadSaved?.(book));
+      const remove = el("button");
+      remove.type = "button";
+      remove.textContent = "Delete";
+      remove.addEventListener("click", () => {
+        writeBooks(readBooks().filter((item) => item.id !== book.id));
+        paintBooks();
+      });
+      row.append(el("span", "", book.name), open, remove);
+      booksHost.append(row);
+    }
+  }
+  saveBook.addEventListener("click", () => {
+    const name = bookName.value.trim();
+    if (!name) {
+      bookName.focus();
+      return;
+    }
+    if (holdings.length < 1) return;
+    const book: SavedBook = {
+      id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+      name,
+      holdings: holdings.map((row) => ({ ...row })),
+      frequency: frequency.value as Frequency,
+      weekday: Number(weekday.value),
+      monthDay: Number(monthDay.value),
+      capital: capital.value,
+      start: start.value,
+      end: end.value,
+      fee: fee.value,
+      slip: slip.value,
+      protect: protect.checked,
+      band: band.value,
+      fraction: fraction.value,
+      trend: trend.checked,
+      sma: sma.value,
+      policy: policy.value,
+    };
+    writeBooks([book, ...readBooks().filter((item) => item.name !== name)]);
+    bookName.value = "";
+    paintBooks();
+  });
+  paintBooks();
+
+  loadSaved = (book) => {
+    holdings = book.holdings.map((row) => ({ ...row }));
+    frequency.value = book.frequency;
+    weekday.value = String(book.weekday ?? 1);
+    monthDay.value = String(book.monthDay ?? 1);
+    capital.value = book.capital;
+    start.value = book.start;
+    end.value = book.end;
+    fee.value = book.fee;
+    slip.value = book.slip;
+    protect.checked = book.protect;
+    guardBody.hidden = !book.protect;
+    band.value = book.band;
+    fraction.value = book.fraction;
+    trend.checked = book.trend;
+    sma.value = book.sma;
+    policy.value = book.policy;
+    syncSchedule();
+    drawHoldings();
+    void run();
+  };
 
   function drawHoldings(): void {
     holdingHost.replaceChildren();
@@ -316,6 +450,7 @@ function renderSimulator(): void {
       box.addEventListener("change", () => {
         holding.sellLocked = box.checked;
       });
+      box.title = "Never sell this coin. It can still be bought. Ignored unless Protect winners is on.";
       lock.append(box, document.createTextNode("Lock"));
       const remove = el("button");
       remove.type = "button";
@@ -367,19 +502,11 @@ function renderSimulator(): void {
   }
 
   drawHoldings();
-  applyBook = (rows, freq, startValue, endValue) => {
-    holdings = rows.map((row) => ({ ...row }));
-    frequency.value = freq;
-    start.value = startValue;
-    end.value = endValue;
-    drawHoldings();
-    void run();
-  };
 
   async function run(): Promise<void> {
     if (!manifest) return;
     results.replaceChildren(el("p", "muted", "Running…"));
-    const built = buildInput(capital, start, end, frequency, fee, slip, band, fraction, trend, sma, policy);
+    const built = buildInput(capital, start, end, frequency, weekday, monthDay, fee, slip, protect, band, fraction, trend, sma, policy);
     if (typeof built === "string") {
       results.replaceChildren(el("p", "neg", built));
       return;
@@ -403,12 +530,6 @@ function renderSimulator(): void {
     }
   }
 
-  (window as unknown as { __run?: () => Promise<void> }).__run = run;
-}
-
-async function run(): Promise<void> {
-  const runner = (window as unknown as { __run?: () => Promise<void> }).__run;
-  if (runner) await runner();
 }
 
 function buildInput(
@@ -416,20 +537,24 @@ function buildInput(
   start: HTMLInputElement,
   end: HTMLInputElement,
   frequency: HTMLSelectElement,
+  weekday: HTMLSelectElement,
+  monthDay: HTMLInputElement,
   fee: HTMLInputElement,
   slip: HTMLInputElement,
+  protect: HTMLInputElement,
   band: HTMLInputElement,
   fraction: HTMLInputElement,
   trend: HTMLInputElement,
   sma: HTMLInputElement,
   policy: HTMLSelectElement,
 ): { symbols: string[]; input: Omit<SimInput, "series" | "btc"> } | string {
-  if (holdings.length < 1 || holdings.length > 10) return "Choose between 1 and 10 coins.";
+  if (holdings.length < 1 || holdings.length > 10) return "Add between 1 and 10 coins, then run.";
   if (holdings.every((row) => row.symbol === "USDT")) return "USDT alone has no price history. Pair it with a coin.";
   const initialUsdt = Number(capital.value);
   const startMs = parseDayStart(start.value);
   const endMs = parseDayEnd(end.value);
   if (!Number.isFinite(startMs) || !Number.isFinite(endMs)) return "Enter a start and an end date.";
+  const guarded = protect.checked;
   const assets = holdings.map((row) => ({
     symbol: row.symbol,
     weight: Number(row.weight),
@@ -445,10 +570,12 @@ function buildInput(
       feeBps: Number(fee.value),
       slippageBps: Number(slip.value),
       frequency: frequency.value as Frequency,
-      band: Number(band.value) / 100,
-      fraction: Number(fraction.value) / 100,
-      trend: { enabled: trend.checked, smaDays: Number(sma.value) },
-      blockedBuyPolicy: policy.value === "park_usdt" ? "park_usdt" : "keep_winners",
+      weekday: Number(weekday.value),
+      monthDay: Number(monthDay.value),
+      band: guarded ? Number(band.value) / 100 : 0,
+      fraction: guarded ? Number(fraction.value) / 100 : 1,
+      trend: { enabled: guarded && trend.checked, smaDays: Number(sma.value) },
+      blockedBuyPolicy: guarded && policy.value === "park_usdt" ? "park_usdt" : "keep_winners",
     },
   };
 }
@@ -501,12 +628,21 @@ function paintResults(
   host.append(stats);
 
   const chartCard = el("div", "chart-card");
-  chartCard.append(el("h2", "", "Value over time"));
-  chartCard.append(el(
-    "p",
-    "hint",
-    "Linear scale. Coin lines are the USDT value of the coins this book is holding. The left axis is USDT. BTC price uses the right axis, so a high bitcoin price does not flatten the book. Hide any line and the chart rescales.",
+  const chartHead = el("div", "chart-head");
+  const chartTitle = el("div");
+  chartTitle.append(el("h2", "", "Value over time"));
+  const scaleToggle = el("div", "scale-toggle");
+  const usdBtn = el("button");
+  usdBtn.type = "button";
+  usdBtn.textContent = "$";
+  const pctBtn = el("button");
+  pctBtn.type = "button";
+  pctBtn.textContent = "%";
+  scaleToggle.append(usdBtn, pctBtn, infoControl(
+    "Dollar shows USDT value. Portfolio and coin lines use the right axis. Bitcoin's price uses the left axis, so a high BTC price does not flatten the book. Percent uses TradingView's percent scale: each line is the change from its own first visible point, and the axis updates as you scroll or zoom. Drag to pan, scroll to zoom, double-click the chart to reset.",
   ));
+  chartHead.append(chartTitle, scaleToggle);
+  chartCard.append(chartHead);
   const chart = el("div", "chart");
   const legend = el("div", "legend");
   chartCard.append(chart, legend);
@@ -514,7 +650,7 @@ function paintResults(
 
   const weightCard = el("div", "chart-card");
   weightCard.append(el("h2", "", "Weights"));
-  const weights = el("div", "chart");
+  const weights = el("div", "chart stack-chart");
   weightCard.append(weights);
   host.append(weightCard);
 
@@ -525,7 +661,7 @@ function paintResults(
     {
       id: "equity",
       name: "Portfolio",
-      color: "#990f3d",
+      color: "#0069d9",
       width: 2.6,
       axis: "left",
       on: true,
@@ -549,7 +685,7 @@ function paintResults(
     specs.push({
       id: "cash",
       name: "USDT cash",
-      color: "#6b5e53",
+      color: "#65748b",
       width: 1.4,
       axis: "left",
       on: false,
@@ -572,8 +708,8 @@ function paintResults(
     const naiveAt = new Map(naive.points.map((point) => [point.t, point.equity]));
     specs.push({
       id: "unguarded",
-      name: "Unguarded",
-      color: "#c04a1a",
+      name: "Plain",
+      color: "#ff9800",
       dash: "6 4",
       width: 1.5,
       axis: "left",
@@ -586,7 +722,7 @@ function paintResults(
     specs.push({
       id: "btc-price",
       name: "BTC price",
-      color: "#262a33",
+      color: "#121828",
       dash: "5 3",
       width: 1.8,
       axis: "right",
@@ -626,8 +762,13 @@ function paintResults(
         values: spec.values,
         label: spec.label,
       }));
-    const packed = lines.length > 0 ? envelope(times, lines, 720) : { times, lines };
-    renderLineChart(chart, packed.times, packed.lines, { left: "USDT", right: "BTC price" });
+    usdBtn.classList.toggle("on", scaleMode === "usd");
+    pctBtn.classList.toggle("on", scaleMode === "pct");
+    renderLineChart(chart, times, lines, { left: "USDT", right: "BTC price" }, {
+      scale: scaleMode,
+      fromMs: result.startMs,
+      toMs: result.endMs,
+    });
     const stride = Math.max(1, Math.floor(result.points.length / 300));
     const sample = result.points.filter((_, index) => index % stride === 0 || index === result.points.length - 1);
     const stack = result.assets.map((asset, index) => ({
@@ -637,10 +778,18 @@ function paintResults(
     }));
     const residual = sample.map((point) => Math.max(0, 1 - point.weights.reduce((sum, value) => sum + value, 0)));
     if (residual.some((value) => value > 0.01)) {
-      stack.push({ name: "USDT", color: "#6b5e53", values: residual });
+      stack.push({ name: "USDT", color: "#c5cedd", values: residual });
     }
     renderStack(weights, sample.map((point) => point.t), stack);
   };
+  usdBtn.addEventListener("click", () => {
+    scaleMode = "usd";
+    paint();
+  });
+  pctBtn.addEventListener("click", () => {
+    scaleMode = "pct";
+    paint();
+  });
   lastDraw = paint;
   paint();
 
@@ -958,7 +1107,7 @@ function heatTable(symbols: string[], values: Array<Array<number | null>>, title
       const value = values[i][j];
       const cell = el("td", "", value == null ? "—" : value.toFixed(2));
       cell.style.background = corrColor(value);
-      cell.style.color = value != null && Math.abs(value) > 0.55 ? "#fff1e5" : "#33302e";
+      cell.style.color = value != null && Math.abs(value) > 0.55 ? "#ffffff" : "#121828";
       tr.append(cell);
     });
     table.append(tr);
@@ -1003,113 +1152,15 @@ function renderData(): void {
   ui.data.replaceChildren(panel);
 }
 
-async function loadStudy(host: HTMLElement): Promise<void> {
-  let payload: StudyFile;
-  try {
-    const response = await fetch(`${BASE}data/preset_study.json`, { cache: "no-cache" });
-    if (!response.ok) return;
-    payload = (await response.json()) as StudyFile;
-  } catch {
-    return;
-  }
-  if (!payload.drafts?.length) return;
-  const card = el("div", "table-card");
-  card.append(el("h2", "", "Draft books on the stored history"));
-  card.append(el("p", "hint", payload.note));
-  card.append(el("p", "hint", `Guard used in the second column: ${payload.guard}. Fee ${payload.fee_bps} bps plus ${payload.slippage_bps} bps slippage, on ${usdt(payload.capital_usdt)}.`));
-  const table = el("table");
-  table.append(row("th", ["Book", "Clock", "Window", "Plain", "Guarded", "Hold", "BTC", "Plain drag"]));
-  for (const draft of payload.drafts) {
-    const tr = el("tr");
-    const name = el("td");
-    const button = el("button");
-    button.type = "button";
-    button.textContent = draft.name;
-    button.className = "btn ghost";
-    button.addEventListener("click", () => {
-      applyBook?.(
-        draft.symbols.map((symbol, index) => ({
-          symbol,
-          weight: String(draft.weights[index] ?? 1),
-          sellLocked: symbol === "BTC" && draft.symbols.length === 1,
-        })),
-        draft.frequency,
-        draft.start,
-        draft.end,
-      );
-    });
-    name.append(button);
-    tr.append(name);
-    for (const cell of [
-      labelFrequency(draft.frequency),
-      `${draft.start} → ${draft.end}`,
-      `${draft.plain.multiple.toFixed(2)}×`,
-      `${draft.guarded.multiple.toFixed(2)}×`,
-      `${draft.holdMultiple.toFixed(2)}×`,
-      draft.btcMultiple == null ? "—" : `${draft.btcMultiple.toFixed(2)}×`,
-      usdt(draft.plain.dragUsdt),
-    ]) {
-      tr.append(el("td", "", cell));
-    }
-    table.append(tr);
-  }
-  card.append(wrap(table));
-  if (payload.scan?.lowestCorrelation?.length) {
-    card.append(el("h3", "", "Lowest correlations in the scan universe"));
-    const pairs = el("p", "hint");
-    pairs.textContent = payload.scan.lowestCorrelation
-      .map((pair) => `${pair.a}/${pair.b} ${pair.all.toFixed(2)} (up ${num(pair.btcUp)} / down ${num(pair.btcDown)})`)
-      .join(" · ");
-    card.append(pairs);
-  }
-  if (payload.scan?.bestGuardedSharpe?.length) {
-    card.append(el("h3", "", "Highest guarded Sharpe in the equal-weight monthly scan"));
-    const best = el("p", "hint");
-    best.textContent = payload.scan.bestGuardedSharpe
-      .map((row) => `${row.symbols.join(" ")} Sharpe ${row.sharpe.toFixed(2)}, ${row.multiple.toFixed(2)}× vs hold ${row.holdMultiple.toFixed(2)}×`)
-      .join(" · ");
-    card.append(best);
-  }
-  host.append(card);
-}
-
-interface StudyStat {
-  multiple: number;
-  dragUsdt: number;
-}
-interface StudyFile {
-  note: string;
-  guard: string;
-  fee_bps: number;
-  slippage_bps: number;
-  capital_usdt: number;
-  drafts: Array<{
-    name: string;
-    symbols: string[];
-    weights: number[];
-    frequency: Frequency;
-    start: string;
-    end: string;
-    plain: StudyStat;
-    guarded: StudyStat;
-    holdMultiple: number;
-    btcMultiple: number | null;
-  }>;
-  scan?: {
-    lowestCorrelation?: Array<{ a: string; b: string; all: number; btcUp: number | null; btcDown: number | null }>;
-    bestGuardedSharpe?: Array<{ symbols: string[]; sharpe: number; multiple: number; holdMultiple: number }>;
-  };
-}
-
 function coinInfo(symbol: string): CoinInfo | undefined {
   return manifest?.coins.find((coin) => coin.symbol === symbol);
 }
 
 function corrColor(value: number | null): string {
-  if (value == null || !Number.isFinite(value)) return "#f2dfce";
+  if (value == null || !Number.isFinite(value)) return "#f3f4f6";
   const clamped = Math.max(-1, Math.min(1, value));
-  if (clamped >= 0) return mix("#fff1e5", "#990f3d", clamped);
-  return mix("#fff1e5", "#0d7680", -clamped);
+  if (clamped >= 0) return mix("#f9fafc", "#0069d9", clamped);
+  return mix("#f9fafc", "#14b8a6", -clamped);
 }
 
 function mix(from: string, to: string, t: number): string {
@@ -1205,15 +1256,46 @@ function wrap(table: HTMLTableElement): HTMLElement {
   return scroller;
 }
 
-function field(label: string, control: HTMLElement): HTMLElement {
-  return labeled(label, control);
+function field(label: string, control: HTMLElement, hint?: string): HTMLElement {
+  return labeled(label, control, hint);
 }
 
-function labeled(text: string, control: HTMLElement): HTMLElement {
+function labeled(text: string, control: HTMLElement, hint?: string): HTMLElement {
   const wrapLabel = el("label", "field");
-  wrapLabel.append(el("span", "label", text), control);
+  const head = el("span", "label-line");
+  head.append(el("span", "label", text));
+  if (hint) head.append(infoControl(hint));
+  wrapLabel.append(head, control);
   return wrapLabel;
 }
+
+function infoControl(text: string): HTMLElement {
+  const wrap = el("span", "info-wrap");
+  const button = el("button", "info");
+  button.type = "button";
+  button.textContent = "i";
+  button.setAttribute("aria-label", "About this setting");
+  const pop = el("div", "pop");
+  pop.hidden = true;
+  pop.textContent = text;
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const opening = pop.hidden;
+    document.querySelectorAll<HTMLElement>(".pop").forEach((item) => {
+      item.hidden = true;
+    });
+    pop.hidden = !opening;
+  });
+  wrap.append(button, pop);
+  return wrap;
+}
+
+document.addEventListener("click", () => {
+  document.querySelectorAll<HTMLElement>(".pop").forEach((item) => {
+    item.hidden = true;
+  });
+});
 
 function input(type: string, value: string): HTMLInputElement {
   const node = el("input") as HTMLInputElement;

@@ -8,7 +8,8 @@ The question it is built to answer is whether a rules-based rebalance helps, or 
 
 - Any mix of the stored markets, including a single coin such as untouched BTC.
 - Weights in any positive numbers. They are normalized to 100% and the applied weights are shown.
-- Clocks: hold, daily, weekly, every two weeks, monthly. The same book is also compared across those clocks.
+- Clocks: hold, daily, weekly, every two weeks, monthly. Weekly and every-two-weeks runs trade on a chosen UTC weekday. Monthly runs trade on a chosen UTC day of the month. The same book is also compared across those clocks.
+- The page opens empty. Save a mix as a book in this browser if you want it again. There are no built-in books on the page.
 - A fee and a slippage haircut, in basis points. The default is 10 bps plus 5 bps.
 - A drift band, in percentage points. A 33% target with a band of 5 trades only when that coin leaves 28–38%.
 - A partial rebalance. 50% closes half the gap, so a winner is only partly sold.
@@ -19,7 +20,9 @@ The question it is built to answer is whether a rules-based rebalance helps, or 
 - Correlation of daily log returns for the selected dates, including the same correlation on days Bitcoin rose and on days it fell.
 - CSV export of the value path and of every fill. The path includes the portfolio, each coin's USDT value, the quantity held, and the BTC price.
 
-The chart is one linear plot. Each coin is the USDT value of the coins the book is holding, the portfolio total is on that same left axis, and the BTC price is on the right axis. Every line can be switched off, and the axes rescale to what remains. Hold, USDT cash, and the unguarded rebalance are on the same chart but start switched off. A table under the chart lists the same numbers by day, week, month, or every 4-hour bar.
+The chart is TradingView Lightweight Charts. Dollar mode plots USDT value, with Bitcoin's price on its own axis. Percent mode is TradingView's percent scale: each line is the change from its own first visible point, and scrolling rebases it. Drag to pan and scroll to zoom. Every line can be switched off. Hold, USDT cash, and the plain rebalance start switched off. A table under the chart lists the same numbers by day, week, month, or every 4-hour bar.
+
+The default run is a plain rebalance back to the weights you set. Protect winners is off until you turn it on. A coin with no price yet does not delay the other coins: its weight stays in USDT until it lists, then the next scheduled rebalance buys it. The time axis still covers the dates you picked.
 
 ## How a rebalance is filled
 
@@ -67,7 +70,7 @@ node --experimental-strip-types scripts/build_study.ts
 
 Or run the **Update market data** GitHub Action. It commits new candles to `main`. Reload the site after it finishes. No API key is required; the endpoints are public.
 
-`docs/data/preset_study.json` is a measured replay of the draft books and an equal-weight monthly scan. The page shows it. Treat it as one historical window with the default fee, not as a ranking of what to buy.
+`docs/data/preset_study.json` is a measured replay of old draft books and an equal-weight monthly scan. The page does not load it. Treat it as one historical window with the default fee, not as a ranking of what to buy.
 
 ## Develop
 
@@ -82,4 +85,4 @@ The dev server and the production build both use the base path `/portfolio-rebal
 
 ## Limits
 
-Closes are not an order book. There is no market impact, no missed fill, and no tax. Coins that do not share history cannot be marked, and the run starts when the last selected coin lists. A rebalance premium in one window often reverses when the coins are highly correlated or the fee is higher. Nothing here is a forecast or a recommendation.
+Closes are not an order book. There is no market impact, no missed fill, and no tax. A coin is not marked before its first candle; until then its target weight sits in USDT. A rebalance premium in one window often reverses when the coins are highly correlated or the fee is higher. Nothing here is a forecast or a recommendation.

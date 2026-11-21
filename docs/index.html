@@ -3,30 +3,33 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Portfolio rebalancing simulator</title>
+    <title>Portfolio Rebalancing Simulator</title>
     <meta
       name="description"
-      content="Simulate crypto portfolio rebalancing on 4h history. Any coins, any weights, and guards against selling winners into laggards."
+      content="Simulate crypto portfolio rebalancing on 4h history. Pick coins and weights, save your own books, and compare a plain rebalance with a winner-protection rule."
     />
+    <link rel="icon" href="./firehorse-mark.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,560;6..72,650&family=Public+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="/portfolio-rebalancing-simulator/assets/index-Rjgv_HCw.js"></script>
-    <link rel="stylesheet" crossorigin href="/portfolio-rebalancing-simulator/assets/index-BFwCb9G0.css">
+    <script type="module" crossorigin src="/portfolio-rebalancing-simulator/assets/index-CVl6bplP.js"></script>
+    <link rel="stylesheet" crossorigin href="/portfolio-rebalancing-simulator/assets/index-skuZZELs.css">
   </head>
   <body>
     <div class="wrap">
-      <header>
-        <p class="edition">Markets desk · 4-hour Binance history · not advice</p>
-        <div class="nameplate">
-          <h1>Portfolio rebalancing simulator</h1>
-          <p class="lede">
-            Test any mix of the stored coins, at any weights, on 4-hour Binance history.
-            See the USDT result and the coins you would have held. Stop the book from selling a winner to buy a laggard.
-          </p>
+      <header class="topbar">
+        <div class="brand">
+          <img class="logo" src="./firehorse-mark.png" alt="firehorse IT" />
+          <div>
+            <p class="brand-name">firehorse IT</p>
+            <h1>Portfolio Rebalancing Simulator</h1>
+            <p class="lede">
+              Build a mix, rebalance it on a calendar you choose, and save the books you want to keep.
+            </p>
+          </div>
         </div>
         <nav class="tabs" aria-label="Sections">
           <button type="button" class="tab on" data-tab="sim">Simulate</button>
@@ -39,7 +42,7 @@
         <p>
           Educational simulator. Not a forecast, not advice, and not an offer to trade.
           Fills use 4h closes, a flat fee and slippage haircut, and no order-book depth.
-          Past rebalancing premia disappear when the coins move together and the fees are real.
+          Past rebalancing results disappear when the coins move together and the fees are real.
         </p>
       </footer>
     </div>
