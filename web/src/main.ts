@@ -51,7 +51,7 @@ interface ChartSpec {
 }
 
 type PathStep = "day" | "week" | "month" | "bar";
-const FREQUENCIES: Frequency[] = ["none", "daily", "weekly", "biweekly", "monthly"];
+const FREQUENCIES: Frequency[] = ["none", "daily", "weekly", "biweekly", "monthly", "custom"];
 
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const BOOKS_KEY = "firehorse.portfolio-books.v1";
@@ -68,12 +68,14 @@ interface SavedBook {
   end: string;
   fee: string;
   slip: string;
-  protect: boolean;
-  band: string;
-  fraction: string;
-  trend: boolean;
-  sma: string;
-  policy: string;
+  everyDays?: number;
+  intelligent?: boolean;
+  momentumDays?: string;
+  trendDays?: string;
+  leaderPct?: string;
+  score?: "absolute" | "vsbtc";
+  defense?: "stay" | "equal" | "btc";
+  protect?: boolean;
 }
 
 const app = document.querySelector<HTMLElement>("#app");
@@ -216,6 +218,10 @@ function renderSimulator(): void {
   monthDay.min = "1";
   monthDay.max = "31";
   monthDay.step = "1";
+  const everyDays = input("number", "14");
+  everyDays.min = "1";
+  everyDays.max = "365";
+  everyDays.step = "1";
   const fee = input("number", "10");
   fee.min = "0";
   fee.step = "1";
@@ -232,10 +238,16 @@ function renderSimulator(): void {
     monthDay,
     "Monthly runs trade on this UTC day. 1 is the first of the month. If the month is shorter than the day you pick, the run uses the last day of that month.",
   );
+  const daysField = labeled(
+    "Every, days",
+    everyDays,
+    "How many UTC days between checks. 14 looks again on the first 4-hour close 14 days after the previous check. 1 is the same as daily.",
+  );
   const syncSchedule = () => {
     const value = frequency.value;
     weekdayField.hidden = value !== "weekly" && value !== "biweekly";
     monthField.hidden = value !== "monthly";
+    daysField.hidden = value !== "custom";
   };
   frequency.addEventListener("change", syncSchedule);
   syncSchedule();
@@ -256,74 +268,72 @@ function renderSimulator(): void {
     field(
       "How often to look",
       frequency,
-      "Plain rebalance is the default. On each scheduled check the book trades back to your weights. Daily uses the first 4-hour bar of each UTC day. Weekly and every two weeks use the weekday below. Monthly uses the day of the month below. Never means buy once and hold.",
+      "Plain rebalance is the default. On each scheduled check the book trades back to your weights. Daily uses the first 4-hour bar of each UTC day. Weekly and every two weeks use the weekday below. Monthly uses the day of the month below. Every N days uses the number below. Never means buy once and hold.",
     ),
     weekdayField,
     monthField,
+    daysField,
     costs,
   );
 
-  const band = input("number", "5");
-  band.min = "0";
-  band.max = "80";
-  band.step = "0.5";
-  const fraction = input("number", "50");
-  fraction.min = "10";
-  fraction.max = "100";
-  fraction.step = "5";
-  const trend = el("input") as HTMLInputElement;
-  trend.type = "checkbox";
-  trend.checked = true;
-  const sma = input("number", "60");
-  sma.min = "2";
-  sma.max = "400";
-  const policy = el("select") as HTMLSelectElement;
+  const momentumDays = input("number", "30");
+  momentumDays.min = "5";
+  momentumDays.max = "400";
+  momentumDays.step = "1";
+  const trendDays = input("number", "50");
+  trendDays.min = "5";
+  trendDays.max = "400";
+  trendDays.step = "1";
+  const leaderPct = input("number", "80");
+  leaderPct.min = "50";
+  leaderPct.max = "100";
+  leaderPct.step = "5";
+  const score = el("select") as HTMLSelectElement;
   for (const [value, text] of [
-    ["keep_winners", "Leave it in the winners"],
-    ["park_usdt", "Park it in USDT"],
+    ["absolute", "Strongest in USDT"],
+    ["vsbtc", "Strongest against BTC"],
   ] as const) {
     const option = el("option");
     option.value = value;
     option.textContent = text;
-    policy.append(option);
+    score.append(option);
+  }
+  const defense = el("select") as HTMLSelectElement;
+  for (const [value, text] of [
+    ["btc", "Hold bitcoin"],
+    ["equal", "Go back to your weights"],
+    ["stay", "Leave the book as it is"],
+  ] as const) {
+    const option = el("option");
+    option.value = value;
+    option.textContent = text;
+    defense.append(option);
   }
   const protect = el("input") as HTMLInputElement;
   protect.type = "checkbox";
   protect.checked = false;
   const guard = el("div", "guard");
   const switchRow = el("label", "switch");
-  switchRow.append(protect, document.createTextNode("Protect winners"));
+  switchRow.append(protect, document.createTextNode("Intelligent rebalancing"));
   switchRow.append(infoControl(
-    "Off, this is a plain rebalance: on the weekday or day of month you picked, sell what is above its weight and buy what is below, until the book matches your ratios. That is the default. On, the book refuses to sell a coin that is working just to buy one that is not, unless the rules below allow it. To do this live: on that same weekday or day of month, look at each coin's share of the account. Trade only if a coin is outside the drift band. Close only the percent of the gap you set. If a coin is below its moving average, do not buy it. If a buy is blocked, either leave that cash in the coins you would have sold, or sell them and hold USDT, matching the setting here. Place those trades yourself. This page does not send orders.",
+    "Off, this is a plain rebalance: on the schedule you picked, sell what is above your weight and buy what is below. That is the default. On, the book does not stay at those weights. Each check uses only prices already printed. A coin can be the leader only if its price is above its trailing daily average and its return over the strength window is positive. That leader gets the leader share. The rest is split evenly across the other coins that already trade, including ones below their average. If bitcoin is in the book, above its own average, and no other coin qualifies, bitcoin gets the leader share. If nothing qualifies, the default moves the whole book to bitcoin when bitcoin is in the book, even if bitcoin is below its average. To do this yourself: on that same schedule, compute each coin's average and its return, then buy and sell on the exchange until the account matches. This page does not send orders. The default settings were checked on five equal-weight books from 1 Jan 2023 through 20 Nov 2026, with a 10 bps fee and 5 bps of slippage, rebalanced every 14 days. They finished ahead of buy-and-hold on BTC/ETH, BTC/ZEC, BTC/UNI, TAO/NEAR, and SUI/PENDLE/UNI. TAO, SUI, and PENDLE only join when their Binance history starts. That is one historical path, not a forecast.",
   ));
   const guardBody = el("div", "guard-body");
   guardBody.hidden = true;
-  guardBody.append(field(
-    "Drift band, percentage points",
-    band,
-    "How far a coin must drift, in percentage points of the book, before a protected rebalance trades. A 33% target and a band of 5 trades only when that coin is outside 28–38%. 0 trades on every scheduled check.",
-  ));
-  guardBody.append(field(
-    "How much of the gap to close, %",
-    fraction,
-    "100% snaps the coin back to its target. 50% closes half the gap, so a winner is only partly sold. This applies only while Protect winners is on.",
-  ));
-  const trendRow = el("label", "check");
-  trendRow.append(trend, document.createTextNode("Do not buy a coin below its moving average"));
-  trendRow.append(infoControl(
-    "Uses the daily closes from earlier UTC days only, so today's close is not in the average. A coin below that average is not bought. It can still be sold if it is above its weight.",
-  ));
   guardBody.append(
-    trendRow,
-    field("Moving average, days", sma, "Length of the trailing daily average used by the buy block. 60 means about two months of daily closes, not including the current day."),
-    field(
-      "If a buy is blocked",
-      policy,
-      "Leave it in the winners: sell only enough to fund buys the trend rule allows, so a blocked buy does not force you to sell a winner. Park it in USDT: sell the overweight coins anyway and hold the unused cash in USDT until a later check allows the buy.",
-    ),
+    field("Strength window, days", momentumDays, "How far back the return is measured. 30 uses the close about 30 days ago. Only past closes are used."),
+    field("Must be above this average, days", trendDays, "Daily average of earlier closes. A coin at or below this average cannot be the one we add to. 50 days is the default that beat hold on the five test books."),
+    field("Leader share, %", leaderPct, "How much of the book goes to the leading coin. 80 leaves 20 percent to be split across the others. 100 puts the whole book in the leader."),
+    field("How strength is measured", score, "Strongest in USDT uses each coin's own dollar return. Strongest against BTC uses the coin's return versus bitcoin, which is the rotation Ben Cowen watches. The default is the USDT return, because that one beat hold by more on the five test books."),
+    field("If nothing qualifies", defense, "Hold bitcoin: if BTC is in the book and no coin qualifies as leader, the whole book moves to bitcoin, even when bitcoin is below its average. If BTC is not in the book, this uses the weights you typed. A separate case: when bitcoin is above its average and no other coin beats it, bitcoin gets the leader share rather than the whole book. Go back to your weights: return to the mix you entered. Leave the book as it is: skip the check."),
   );
   protect.addEventListener("change", () => {
     guardBody.hidden = !protect.checked;
+    if (protect.checked) {
+      frequency.value = "custom";
+      everyDays.value = "14";
+      syncSchedule();
+    }
   });
   const actions = el("div", "actions");
   const runBtn = el("button", "btn primary");
@@ -393,12 +403,13 @@ function renderSimulator(): void {
       end: end.value,
       fee: fee.value,
       slip: slip.value,
-      protect: protect.checked,
-      band: band.value,
-      fraction: fraction.value,
-      trend: trend.checked,
-      sma: sma.value,
-      policy: policy.value,
+      everyDays: Number(everyDays.value),
+      intelligent: protect.checked,
+      momentumDays: momentumDays.value,
+      trendDays: trendDays.value,
+      leaderPct: leaderPct.value,
+      score: score.value === "vsbtc" ? "vsbtc" : "absolute",
+      defense: defense.value === "equal" || defense.value === "stay" ? defense.value : "btc",
     };
     writeBooks([book, ...readBooks().filter((item) => item.name !== name)]);
     bookName.value = "";
@@ -416,13 +427,14 @@ function renderSimulator(): void {
     end.value = book.end;
     fee.value = book.fee;
     slip.value = book.slip;
-    protect.checked = book.protect;
-    guardBody.hidden = !book.protect;
-    band.value = book.band;
-    fraction.value = book.fraction;
-    trend.checked = book.trend;
-    sma.value = book.sma;
-    policy.value = book.policy;
+    everyDays.value = String(book.everyDays ?? 14);
+    protect.checked = book.intelligent === true;
+    guardBody.hidden = !protect.checked;
+    momentumDays.value = book.momentumDays ?? "30";
+    trendDays.value = book.trendDays ?? "50";
+    leaderPct.value = book.leaderPct ?? "80";
+    score.value = book.score === "vsbtc" ? "vsbtc" : "absolute";
+    defense.value = book.defense === "equal" || book.defense === "stay" ? book.defense : "btc";
     syncSchedule();
     drawHoldings();
     void run();
@@ -450,7 +462,7 @@ function renderSimulator(): void {
       box.addEventListener("change", () => {
         holding.sellLocked = box.checked;
       });
-      box.title = "Never sell this coin. It can still be bought. Ignored unless Protect winners is on.";
+      box.title = "Never sell this coin on a plain rebalance. Intelligent rebalancing follows the leader rule instead.";
       lock.append(box, document.createTextNode("Lock"));
       const remove = el("button");
       remove.type = "button";
@@ -506,7 +518,7 @@ function renderSimulator(): void {
   async function run(): Promise<void> {
     if (!manifest) return;
     results.replaceChildren(el("p", "muted", "Running…"));
-    const built = buildInput(capital, start, end, frequency, weekday, monthDay, fee, slip, protect, band, fraction, trend, sma, policy);
+    const built = buildInput(capital, start, end, frequency, weekday, monthDay, everyDays, fee, slip, protect, momentumDays, trendDays, leaderPct, score, defense);
     if (typeof built === "string") {
       results.replaceChildren(el("p", "neg", built));
       return;
@@ -539,14 +551,15 @@ function buildInput(
   frequency: HTMLSelectElement,
   weekday: HTMLSelectElement,
   monthDay: HTMLInputElement,
+  everyDays: HTMLInputElement,
   fee: HTMLInputElement,
   slip: HTMLInputElement,
-  protect: HTMLInputElement,
-  band: HTMLInputElement,
-  fraction: HTMLInputElement,
-  trend: HTMLInputElement,
-  sma: HTMLInputElement,
-  policy: HTMLSelectElement,
+  intelligentOn: HTMLInputElement,
+  momentumDays: HTMLInputElement,
+  trendDays: HTMLInputElement,
+  leaderPct: HTMLInputElement,
+  score: HTMLSelectElement,
+  defense: HTMLSelectElement,
 ): { symbols: string[]; input: Omit<SimInput, "series" | "btc"> } | string {
   if (holdings.length < 1 || holdings.length > 10) return "Add between 1 and 10 coins, then run.";
   if (holdings.every((row) => row.symbol === "USDT")) return "USDT alone has no price history. Pair it with a coin.";
@@ -554,12 +567,12 @@ function buildInput(
   const startMs = parseDayStart(start.value);
   const endMs = parseDayEnd(end.value);
   if (!Number.isFinite(startMs) || !Number.isFinite(endMs)) return "Enter a start and an end date.";
-  const guarded = protect.checked;
   const assets = holdings.map((row) => ({
     symbol: row.symbol,
     weight: Number(row.weight),
     sellLocked: row.sellLocked,
   }));
+  const defenseValue = defense.value === "equal" || defense.value === "stay" ? defense.value : "btc";
   return {
     symbols: assets.map((asset) => asset.symbol),
     input: {
@@ -572,10 +585,19 @@ function buildInput(
       frequency: frequency.value as Frequency,
       weekday: Number(weekday.value),
       monthDay: Number(monthDay.value),
-      band: guarded ? Number(band.value) / 100 : 0,
-      fraction: guarded ? Number(fraction.value) / 100 : 1,
-      trend: { enabled: guarded && trend.checked, smaDays: Number(sma.value) },
-      blockedBuyPolicy: guarded && policy.value === "park_usdt" ? "park_usdt" : "keep_winners",
+      everyDays: Number(everyDays.value),
+      band: 0,
+      fraction: 1,
+      trend: { enabled: false, smaDays: 50 },
+      blockedBuyPolicy: "keep_winners",
+      intelligent: {
+        enabled: intelligentOn.checked,
+        momentumDays: Number(momentumDays.value),
+        trendDays: Number(trendDays.value),
+        leaderWeight: Number(leaderPct.value) / 100,
+        score: score.value === "vsbtc" ? "vsbtc" : "absolute",
+        defense: defenseValue,
+      },
     },
   };
 }
@@ -837,7 +859,7 @@ function narrative(result: SimSuccess, naive: SimSuccess | null): HTMLElement {
   if (naive) {
     const delta = s.finalEquity - naive.summary.finalEquity;
     parts.push(
-      `A plain rebalance of this book finished at ${usdt(naive.summary.finalEquity)}. The guards changed that by ${usdt(delta)}.`,
+      `A plain rebalance on the same clock finished at ${usdt(naive.summary.finalEquity)}. This run differs by ${usdt(delta)}.`,
     );
     parts.push(dragSentence(naive.summary.trapEvents, naive.summary.dragUsdt));
   } else {
@@ -1241,6 +1263,7 @@ function labelFrequency(value: Frequency): string {
   if (value === "daily") return "Daily";
   if (value === "weekly") return "Weekly";
   if (value === "biweekly") return "Every 2 weeks";
+  if (value === "custom") return "Every N days";
   return "Monthly";
 }
 
