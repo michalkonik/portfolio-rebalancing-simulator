@@ -115,6 +115,37 @@ test("Cowen band holds bitcoin when the weekly close is under the band", () => {
   assert.ok(ethWeight >= 0.2 - 1e-9);
 });
 
+test("Cowen band can tilt to ether when dominance history is missing and ether is leading", () => {
+  const start = Date.UTC(2019, 0, 1);
+  const btcCloses = Array.from({ length: 220 }, (_, i) => 100 + i);
+  const ethCloses = Array.from({ length: 220 }, (_, i) => 1 + i * 0.2);
+  const decision = start + 219 * DAY;
+  const btc = series("BTC", start, btcCloses);
+  const eth = series("ETH", start, ethCloses);
+  const targets = intelligentTargets(
+    [
+      { symbol: "BTC", weight: 1 },
+      { symbol: "ETH", weight: 1 },
+    ],
+    { BTC: btc, ETH: eth },
+    btc,
+    decision,
+    [btcCloses[btcCloses.length - 1], ethCloses[ethCloses.length - 1]],
+    {
+      ...DEFAULTS,
+      regime: "cowen-band",
+      bandWeeks: 20,
+      bandEmaWeeks: 21,
+      dominanceTrendDays: 90,
+      pairMaDays: 140,
+    },
+  );
+  assert.notEqual(targets, "stay");
+  if (targets === "stay") return;
+  const ethWeight = targets.find((row) => row.symbol === "ETH")?.weight ?? 0;
+  assert.ok(ethWeight > 0.5);
+});
+
 test("USDT takes the book when every selected coin is in a downtrend", () => {
   const start = Date.UTC(2024, 0, 1);
   const down = Array.from({ length: 80 }, (_, i) => 100 - i);

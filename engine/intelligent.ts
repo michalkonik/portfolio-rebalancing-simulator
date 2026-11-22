@@ -156,7 +156,13 @@ function cowenBand(
   const dominance = series.BTCD;
   const domNow = closeAt(dominance, t);
   const domThen = closeAt(dominance, t - trendDays * DAY);
-  const dominanceFalling = domNow != null && domThen != null && domNow < domThen;
+  // The stored dominance basket gains coins as they list, so a fall before 2022
+  // is often a new listing, not capital leaving bitcoin. Cowen's own alt index
+  // for this pair is ETH/BTC, which is used below for the whole history.
+  // From 2022 the basket is fixed, and a rise in it blocks the tilt.
+  const dominanceUsable = t >= Date.UTC(2022, 0, 1);
+  const dominanceKnown = dominanceUsable && domNow != null && domThen != null;
+  const dominanceBlocks = dominanceKnown && !(domNow < domThen);
   let altsRising = false;
   let counted = 0;
   let rose = 0;
@@ -188,7 +194,7 @@ function cowenBand(
       if (n < pairDays || !(price[i] > 0) || price[i] / bNow <= sum / n) pairOk = false;
     }
   }
-  if (dominanceFalling && altsRising && pairOk) return "leader";
+  if (!dominanceBlocks && altsRising && pairOk) return "leader";
   if (btcIndex >= 0) return holdBtc();
   return "stay";
 }

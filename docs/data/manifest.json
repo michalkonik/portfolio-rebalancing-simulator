@@ -20,9 +20,9 @@
       "coingecko_id": "bitcoin",
       "market_cap_rank": 1,
       "market_cap": 1188114585487,
-      "candles": 20280,
+      "candles": 20292,
       "start": "2017-08-17T04:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/BTC.csv.gz"
     },
     {
@@ -32,9 +32,9 @@
       "coingecko_id": "ethereum",
       "market_cap_rank": 2,
       "market_cap": 198291707874,
-      "candles": 20280,
+      "candles": 20292,
       "start": "2017-08-17T04:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ETH.csv.gz"
     },
     {
@@ -44,9 +44,9 @@
       "coingecko_id": "binancecoin",
       "market_cap_rank": 4,
       "market_cap": 71070256811,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 19807,
+      "start": "2017-11-06T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/BNB.csv.gz"
     },
     {
@@ -56,9 +56,9 @@
       "coingecko_id": "ripple",
       "market_cap_rank": 6,
       "market_cap": 57999473595,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 18738,
+      "start": "2018-05-04T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/XRP.csv.gz"
     },
     {
@@ -68,9 +68,9 @@
       "coingecko_id": "solana",
       "market_cap_rank": 7,
       "market_cap": 40968225009,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13768,
+      "start": "2020-08-11T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SOL.csv.gz"
     },
     {
@@ -80,9 +80,9 @@
       "coingecko_id": "tron",
       "market_cap_rank": 8,
       "market_cap": 28681038789,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 18510,
+      "start": "2018-06-11T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/TRX.csv.gz"
     },
     {
@@ -92,9 +92,9 @@
       "coingecko_id": "hyperliquid",
       "market_cap_rank": 10,
       "market_cap": 14597667791,
-      "candles": 345,
+      "candles": 357,
       "start": "2026-09-24T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/HYPE.csv.gz"
     },
     {
@@ -104,9 +104,9 @@
       "coingecko_id": "zcash",
       "market_cap_rank": 11,
       "market_cap": 12721895895,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16818,
+      "start": "2019-03-21T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ZEC.csv.gz"
     },
     {
@@ -116,9 +116,9 @@
       "coingecko_id": "dogecoin",
       "market_cap_rank": 12,
       "market_cap": 8525428754,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16182,
+      "start": "2019-07-05T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/DOGE.csv.gz"
     },
     {
@@ -128,9 +128,9 @@
       "coingecko_id": "chainlink",
       "market_cap_rank": 16,
       "market_cap": 6563635297,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 17200,
+      "start": "2019-01-16T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/LINK.csv.gz"
     },
     {
@@ -140,9 +140,9 @@
       "coingecko_id": "cardano",
       "market_cap_rank": 18,
       "market_cap": 5386211852,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 18841,
+      "start": "2018-04-17T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ADA.csv.gz"
     },
     {
@@ -152,9 +152,9 @@
       "coingecko_id": "stellar",
       "market_cap_rank": 20,
       "market_cap": 4561171028,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 18576,
+      "start": "2018-05-31T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/XLM.csv.gz"
     },
     {
@@ -164,9 +164,9 @@
       "coingecko_id": "bitcoin-cash",
       "market_cap_rank": 22,
       "market_cap": 3904207789,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 15308,
+      "start": "2019-11-28T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/BCH.csv.gz"
     },
     {
@@ -176,9 +176,9 @@
       "coingecko_id": "near",
       "market_cap_rank": 23,
       "market_cap": 3767498896,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13384,
+      "start": "2020-10-14T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/NEAR.csv.gz"
     },
     {
@@ -188,9 +188,9 @@
       "coingecko_id": "litecoin",
       "market_cap_rank": 24,
       "market_cap": 3161286139,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 19585,
+      "start": "2017-12-13T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/LTC.csv.gz"
     },
     {
@@ -200,9 +200,9 @@
       "coingecko_id": "avalanche-2",
       "market_cap_rank": 26,
       "market_cap": 2934758644,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13516,
+      "start": "2020-09-22T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/AVAX.csv.gz"
     },
     {
@@ -212,9 +212,9 @@
       "coingecko_id": "tether-gold",
       "market_cap_rank": 29,
       "market_cap": 2855973748,
-      "candles": 1436,
+      "candles": 1448,
       "start": "2026-03-26T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/XAUT.csv.gz"
     },
     {
@@ -224,9 +224,9 @@
       "coingecko_id": "the-open-network",
       "market_cap_rank": 30,
       "market_cap": 2817492860,
-      "candles": 4994,
+      "candles": 5006,
       "start": "2024-08-08T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GRAM.csv.gz",
       "history_note": "TONUSDT candles are prepended up to the Binance rename. The 2026 rename was 1:1."
     },
@@ -237,9 +237,9 @@
       "coingecko_id": "sui",
       "market_cap_rank": 31,
       "market_cap": 2709547189,
-      "candles": 7784,
+      "candles": 7796,
       "start": "2023-05-03T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SUI.csv.gz"
     },
     {
@@ -249,9 +249,9 @@
       "coingecko_id": "uniswap",
       "market_cap_rank": 32,
       "market_cap": 2697158080,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13547,
+      "start": "2020-09-17T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/UNI.csv.gz"
     },
     {
@@ -261,9 +261,9 @@
       "coingecko_id": "hedera-hashgraph",
       "market_cap_rank": 37,
       "market_cap": 2290501599,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 15669,
+      "start": "2019-09-29T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/HBAR.csv.gz"
     },
     {
@@ -273,9 +273,9 @@
       "coingecko_id": "shiba-inu",
       "market_cap_rank": 38,
       "market_cap": 2114441241,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12135,
+      "start": "2021-05-10T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SHIB.csv.gz"
     },
     {
@@ -285,9 +285,9 @@
       "coingecko_id": "bittensor",
       "market_cap_rank": 39,
       "market_cap": 2112119924,
-      "candles": 5720,
+      "candles": 5732,
       "start": "2024-04-11T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/TAO.csv.gz"
     },
     {
@@ -297,9 +297,9 @@
       "coingecko_id": "quant-network",
       "market_cap_rank": 43,
       "market_cap": 2016211571,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 11656,
+      "start": "2021-07-29T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/QNT.csv.gz"
     },
     {
@@ -309,9 +309,9 @@
       "coingecko_id": "united-stables",
       "market_cap_rank": 47,
       "market_cap": 1639593783,
-      "candles": 1869,
+      "candles": 1881,
       "start": "2026-01-13T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/U.csv.gz"
     },
     {
@@ -321,9 +321,9 @@
       "coingecko_id": "pax-gold",
       "market_cap_rank": 48,
       "market_cap": 1579548674,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13664,
+      "start": "2020-08-28T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/PAXG.csv.gz"
     },
     {
@@ -333,9 +333,9 @@
       "coingecko_id": "aave",
       "market_cap_rank": 50,
       "market_cap": 1500842478,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13379,
+      "start": "2020-10-15T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/AAVE.csv.gz"
     },
     {
@@ -345,9 +345,9 @@
       "coingecko_id": "pepe",
       "market_cap_rank": 51,
       "market_cap": 1450123711,
-      "candles": 7771,
+      "candles": 7783,
       "start": "2023-05-05T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/PEPE.csv.gz"
     },
     {
@@ -357,9 +357,9 @@
       "coingecko_id": "world-liberty-financial",
       "market_cap_rank": 53,
       "market_cap": 1392973766,
-      "candles": 2672,
+      "candles": 2684,
       "start": "2025-09-01T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/WLFI.csv.gz"
     },
     {
@@ -369,9 +369,9 @@
       "coingecko_id": "ondo-finance",
       "market_cap_rank": 54,
       "market_cap": 1377995420,
-      "candles": 3530,
+      "candles": 3542,
       "start": "2025-04-11T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ONDO.csv.gz"
     },
     {
@@ -381,9 +381,9 @@
       "coingecko_id": "ethena",
       "market_cap_rank": 55,
       "market_cap": 1326346194,
-      "candles": 5775,
+      "candles": 5787,
       "start": "2024-04-02T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ENA.csv.gz"
     },
     {
@@ -393,9 +393,9 @@
       "coingecko_id": "aster-2",
       "market_cap_rank": 58,
       "market_cap": 1297147196,
-      "candles": 2462,
+      "candles": 2474,
       "start": "2025-10-06T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ASTER.csv.gz"
     },
     {
@@ -405,9 +405,9 @@
       "coingecko_id": "just",
       "market_cap_rank": 60,
       "market_cap": 1150329720,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13768,
+      "start": "2020-08-11T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/JST.csv.gz"
     },
     {
@@ -417,9 +417,9 @@
       "coingecko_id": "polkadot",
       "market_cap_rank": 61,
       "market_cap": 1148354150,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13722,
+      "start": "2020-08-18T20:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/DOT.csv.gz"
     },
     {
@@ -429,9 +429,9 @@
       "coingecko_id": "internet-computer",
       "market_cap_rank": 62,
       "market_cap": 1137179934,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12131,
+      "start": "2021-05-11T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ICP.csv.gz"
     },
     {
@@ -441,9 +441,9 @@
       "coingecko_id": "morpho",
       "market_cap_rank": 64,
       "market_cap": 1074911714,
-      "candles": 2480,
+      "candles": 2492,
       "start": "2025-10-03T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/MORPHO.csv.gz"
     },
     {
@@ -453,9 +453,9 @@
       "coingecko_id": "sky",
       "market_cap_rank": 65,
       "market_cap": 1025502870,
-      "candles": 2577,
+      "candles": 2589,
       "start": "2025-09-17T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SKY.csv.gz"
     },
     {
@@ -465,9 +465,9 @@
       "coingecko_id": "worldcoin-wld",
       "market_cap_rank": 70,
       "market_cap": 874859441,
-      "candles": 7293,
+      "candles": 7305,
       "start": "2023-07-24T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/WLD.csv.gz"
     },
     {
@@ -477,9 +477,9 @@
       "coingecko_id": "ethereum-classic",
       "market_cap_rank": 71,
       "market_cap": 871622663,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 18506,
+      "start": "2018-06-12T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ETC.csv.gz"
     },
     {
@@ -489,9 +489,9 @@
       "coingecko_id": "pump-fun",
       "market_cap_rank": 72,
       "market_cap": 852319777,
-      "candles": 2612,
+      "candles": 2624,
       "start": "2025-09-11T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/PUMP.csv.gz"
     },
     {
@@ -501,9 +501,9 @@
       "coingecko_id": "polygon-ecosystem-token",
       "market_cap_rank": 75,
       "market_cap": 809081509,
-      "candles": 4791,
+      "candles": 4803,
       "start": "2024-09-13T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/POL.csv.gz"
     },
     {
@@ -513,9 +513,9 @@
       "coingecko_id": "arbitrum",
       "market_cap_rank": 76,
       "market_cap": 799348554,
-      "candles": 8030,
+      "candles": 8042,
       "start": "2023-03-23T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ARB.csv.gz"
     },
     {
@@ -525,9 +525,9 @@
       "coingecko_id": "render-token",
       "market_cap_rank": 80,
       "market_cap": 711092931,
-      "candles": 5085,
+      "candles": 5097,
       "start": "2024-07-26T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/RENDER.csv.gz"
     },
     {
@@ -537,9 +537,9 @@
       "coingecko_id": "midnight-3",
       "market_cap_rank": 81,
       "market_cap": 706166242,
-      "candles": 1526,
+      "candles": 1538,
       "start": "2026-03-11T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/NIGHT.csv.gz"
     },
     {
@@ -549,9 +549,9 @@
       "coingecko_id": "cosmos",
       "market_cap_rank": 84,
       "market_cap": 667877646,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16584,
+      "start": "2019-04-29T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ATOM.csv.gz"
     },
     {
@@ -561,9 +561,9 @@
       "coingecko_id": "algorand",
       "market_cap_rank": 85,
       "market_cap": 667329461,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16263,
+      "start": "2019-06-22T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ALGO.csv.gz"
     },
     {
@@ -573,9 +573,9 @@
       "coingecko_id": "injective-protocol",
       "market_cap_rank": 87,
       "market_cap": 635541892,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13342,
+      "start": "2020-10-21T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/INJ.csv.gz"
     },
     {
@@ -585,9 +585,9 @@
       "coingecko_id": "nexo",
       "market_cap_rank": 88,
       "market_cap": 621140614,
-      "candles": 9998,
+      "candles": 10010,
       "start": "2022-04-29T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/NEXO.csv.gz"
     },
     {
@@ -597,9 +597,9 @@
       "coingecko_id": "pancakeswap-token",
       "market_cap_rank": 96,
       "market_cap": 493919797,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12616,
+      "start": "2021-02-19T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/CAKE.csv.gz"
     },
     {
@@ -609,9 +609,9 @@
       "coingecko_id": "layerzero",
       "market_cap_rank": 99,
       "market_cap": 465712621,
-      "candles": 5300,
+      "candles": 5312,
       "start": "2024-06-20T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ZRO.csv.gz"
     },
     {
@@ -621,9 +621,9 @@
       "coingecko_id": "blockstack",
       "market_cap_rank": 100,
       "market_cap": 461509663,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 15513,
+      "start": "2019-10-25T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/STX.csv.gz"
     },
     {
@@ -633,9 +633,9 @@
       "coingecko_id": "filecoin",
       "market_cap_rank": 101,
       "market_cap": 456469180,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13375,
+      "start": "2020-10-15T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/FIL.csv.gz"
     },
     {
@@ -645,9 +645,9 @@
       "coingecko_id": "ether-fi",
       "market_cap_rank": 102,
       "market_cap": 442087832,
-      "candles": 5864,
+      "candles": 5876,
       "start": "2024-03-18T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ETHFI.csv.gz"
     },
     {
@@ -657,9 +657,9 @@
       "coingecko_id": "dash",
       "market_cap_rank": 104,
       "market_cap": 428570596,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16776,
+      "start": "2019-03-28T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/DASH.csv.gz"
     },
     {
@@ -669,9 +669,9 @@
       "coingecko_id": "vechain",
       "market_cap_rank": 109,
       "market_cap": 386630444,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 18250,
+      "start": "2018-07-25T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/VET.csv.gz"
     },
     {
@@ -681,9 +681,9 @@
       "coingecko_id": "pyth-network",
       "market_cap_rank": 110,
       "market_cap": 379021990,
-      "candles": 6134,
+      "candles": 6146,
       "start": "2024-02-02T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/PYTH.csv.gz"
     },
     {
@@ -693,9 +693,9 @@
       "coingecko_id": "falcon-finance-ff",
       "market_cap_rank": 112,
       "market_cap": 363658564,
-      "candles": 2504,
+      "candles": 2516,
       "start": "2025-09-29T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/FF.csv.gz"
     },
     {
@@ -705,9 +705,9 @@
       "coingecko_id": "raydium",
       "market_cap_rank": 114,
       "market_cap": 348726695,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 11584,
+      "start": "2021-08-10T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/RAY.csv.gz"
     },
     {
@@ -717,9 +717,9 @@
       "coingecko_id": "kite-2",
       "market_cap_rank": 115,
       "market_cap": 332634944,
-      "candles": 2294,
+      "candles": 2306,
       "start": "2025-11-03T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/KITE.csv.gz"
     },
     {
@@ -729,9 +729,9 @@
       "coingecko_id": "aptos",
       "market_cap_rank": 116,
       "market_cap": 327361702,
-      "candles": 8963,
+      "candles": 8975,
       "start": "2022-10-19T00:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/APT.csv.gz"
     },
     {
@@ -741,9 +741,9 @@
       "coingecko_id": "celestia",
       "market_cap_rank": 117,
       "market_cap": 324086964,
-      "candles": 6697,
+      "candles": 6709,
       "start": "2023-10-31T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/TIA.csv.gz"
     },
     {
@@ -753,9 +753,9 @@
       "coingecko_id": "aero",
       "market_cap_rank": 121,
       "market_cap": 303926776,
-      "candles": 757,
+      "candles": 769,
       "start": "2026-07-17T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/AERO.csv.gz"
     },
     {
@@ -765,9 +765,9 @@
       "coingecko_id": "curve-dao-token",
       "market_cap_rank": 124,
       "market_cap": 281982329,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13744,
+      "start": "2020-08-15T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/CRV.csv.gz"
     },
     {
@@ -777,9 +777,9 @@
       "coingecko_id": "sun-token",
       "market_cap_rank": 125,
       "market_cap": 281476881,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13496,
+      "start": "2020-09-21T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SUN.csv.gz"
     },
     {
@@ -789,9 +789,9 @@
       "coingecko_id": "pudgy-penguins",
       "market_cap_rank": 127,
       "market_cap": 271375490,
-      "candles": 4220,
+      "candles": 4232,
       "start": "2024-12-17T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/PENGU.csv.gz"
     },
     {
@@ -801,9 +801,9 @@
       "coingecko_id": "fetch-ai",
       "market_cap_rank": 129,
       "market_cap": 266130103,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16942,
+      "start": "2019-02-28T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/FET.csv.gz"
     },
     {
@@ -813,9 +813,9 @@
       "coingecko_id": "virtual-protocol",
       "market_cap_rank": 133,
       "market_cap": 252205920,
-      "candles": 3530,
+      "candles": 3542,
       "start": "2025-04-11T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/VIRTUAL.csv.gz"
     },
     {
@@ -825,9 +825,9 @@
       "coingecko_id": "terra-luna",
       "market_cap_rank": 135,
       "market_cap": 248546129,
-      "candles": 9201,
+      "candles": 9213,
       "start": "2022-09-09T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/LUNC.csv.gz"
     },
     {
@@ -837,9 +837,9 @@
       "coingecko_id": "starknet",
       "market_cap_rank": 137,
       "market_cap": 240987938,
-      "candles": 6026,
+      "candles": 6038,
       "start": "2024-02-20T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/STRK.csv.gz"
     },
     {
@@ -849,9 +849,9 @@
       "coingecko_id": "gnosis",
       "market_cap_rank": 138,
       "market_cap": 240743294,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 11464,
+      "start": "2021-08-30T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GNO.csv.gz"
     },
     {
@@ -861,9 +861,9 @@
       "coingecko_id": "official-trump",
       "market_cap_rank": 139,
       "market_cap": 240053577,
-      "candles": 4023,
+      "candles": 4035,
       "start": "2025-01-19T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/TRUMP.csv.gz"
     },
     {
@@ -873,9 +873,9 @@
       "coingecko_id": "sei-network",
       "market_cap_rank": 140,
       "market_cap": 236102608,
-      "candles": 7160,
+      "candles": 7172,
       "start": "2023-08-15T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SEI.csv.gz"
     },
     {
@@ -885,9 +885,9 @@
       "coingecko_id": "pendle",
       "market_cap_rank": 143,
       "market_cap": 222044825,
-      "candles": 7419,
+      "candles": 7431,
       "start": "2023-07-03T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/PENDLE.csv.gz"
     },
     {
@@ -897,9 +897,9 @@
       "coingecko_id": "plasma",
       "market_cap_rank": 145,
       "market_cap": 217506900,
-      "candles": 2528,
+      "candles": 2540,
       "start": "2025-09-25T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/XPL.csv.gz"
     },
     {
@@ -909,9 +909,9 @@
       "coingecko_id": "tezos",
       "market_cap_rank": 147,
       "market_cap": 216892459,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 15698,
+      "start": "2019-09-24T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/XTZ.csv.gz"
     },
     {
@@ -921,9 +921,9 @@
       "coingecko_id": "lido-dao",
       "market_cap_rank": 149,
       "market_cap": 196331228,
-      "candles": 9939,
+      "candles": 9951,
       "start": "2022-05-09T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/LDO.csv.gz"
     },
     {
@@ -933,9 +933,9 @@
       "coingecko_id": "bonk",
       "market_cap_rank": 155,
       "market_cap": 185147119,
-      "candles": 6429,
+      "candles": 6441,
       "start": "2023-12-15T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/BONK.csv.gz"
     },
     {
@@ -945,9 +945,9 @@
       "coingecko_id": "kaia",
       "market_cap_rank": 157,
       "market_cap": 181740119,
-      "candles": 4503,
+      "candles": 4515,
       "start": "2024-10-31T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/KAIA.csv.gz"
     },
     {
@@ -957,9 +957,9 @@
       "coingecko_id": "decred",
       "market_cap_rank": 159,
       "market_cap": 179354716,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13840,
+      "start": "2020-07-30T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/DCR.csv.gz"
     },
     {
@@ -969,9 +969,9 @@
       "coingecko_id": "the-graph",
       "market_cap_rank": 161,
       "market_cap": 175974538,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12996,
+      "start": "2020-12-17T20:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GRT.csv.gz"
     },
     {
@@ -981,9 +981,9 @@
       "coingecko_id": "compound-governance-token",
       "market_cap_rank": 163,
       "market_cap": 169277953,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 14050,
+      "start": "2020-06-25T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/COMP.csv.gz"
     },
     {
@@ -993,9 +993,9 @@
       "coingecko_id": "optimism",
       "market_cap_rank": 168,
       "market_cap": 160761916,
-      "candles": 9801,
+      "candles": 9813,
       "start": "2022-06-01T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/OP.csv.gz"
     },
     {
@@ -1005,9 +1005,9 @@
       "coingecko_id": "thorchain",
       "market_cap_rank": 169,
       "market_cap": 160390116,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13624,
+      "start": "2020-09-04T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/RUNE.csv.gz"
     },
     {
@@ -1017,9 +1017,9 @@
       "coingecko_id": "conflux-token",
       "market_cap_rank": 170,
       "market_cap": 159390012,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12387,
+      "start": "2021-03-29T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/CFX.csv.gz"
     },
     {
@@ -1029,9 +1029,9 @@
       "coingecko_id": "floki",
       "market_cap_rank": 174,
       "market_cap": 155147970,
-      "candles": 7771,
+      "candles": 7783,
       "start": "2023-05-05T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/FLOKI.csv.gz"
     },
     {
@@ -1041,9 +1041,9 @@
       "coingecko_id": "ethereum-name-service",
       "market_cap_rank": 176,
       "market_cap": 152652877,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 11032,
+      "start": "2021-11-10T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ENS.csv.gz"
     },
     {
@@ -1053,9 +1053,9 @@
       "coingecko_id": "jasmycoin",
       "market_cap_rank": 177,
       "market_cap": 151644609,
-      "candles": 10946,
+      "candles": 10958,
       "start": "2021-11-22T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/JASMY.csv.gz"
     },
     {
@@ -1065,9 +1065,9 @@
       "coingecko_id": "sentient",
       "market_cap_rank": 180,
       "market_cap": 149537654,
-      "candles": 1814,
+      "candles": 1826,
       "start": "2026-01-22T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SENT.csv.gz"
     },
     {
@@ -1077,9 +1077,9 @@
       "coingecko_id": "iota",
       "market_cap_rank": 182,
       "market_cap": 145085877,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 18576,
+      "start": "2018-05-31T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/IOTA.csv.gz"
     },
     {
@@ -1089,9 +1089,9 @@
       "coingecko_id": "zama",
       "market_cap_rank": 183,
       "market_cap": 144803657,
-      "candles": 1748,
+      "candles": 1760,
       "start": "2026-02-02T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ZAMA.csv.gz"
     },
     {
@@ -1101,9 +1101,9 @@
       "coingecko_id": "arweave",
       "market_cap_rank": 184,
       "market_cap": 143935656,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12110,
+      "start": "2021-05-14T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/AR.csv.gz"
     },
     {
@@ -1113,9 +1113,9 @@
       "coingecko_id": "kamino",
       "market_cap_rank": 186,
       "market_cap": 143467709,
-      "candles": 3380,
+      "candles": 3392,
       "start": "2025-05-06T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/KMNO.csv.gz"
     },
     {
@@ -1125,9 +1125,9 @@
       "coingecko_id": "meteora",
       "market_cap_rank": 192,
       "market_cap": 135656691,
-      "candles": 2234,
+      "candles": 2246,
       "start": "2025-11-13T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/MET.csv.gz"
     },
     {
@@ -1137,9 +1137,9 @@
       "coingecko_id": "theta-token",
       "market_cap_rank": 199,
       "market_cap": 128195748,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16698,
+      "start": "2019-04-10T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/THETA.csv.gz"
     },
     {
@@ -1149,9 +1149,9 @@
       "coingecko_id": "trust-wallet-token",
       "market_cap_rank": 202,
       "market_cap": 127269947,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12753,
+      "start": "2021-01-27T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/TWT.csv.gz"
     },
     {
@@ -1161,9 +1161,9 @@
       "coingecko_id": "jito-governance-token",
       "market_cap_rank": 205,
       "market_cap": 123187929,
-      "candles": 6475,
+      "candles": 6487,
       "start": "2023-12-07T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/JTO.csv.gz"
     },
     {
@@ -1173,9 +1173,9 @@
       "coingecko_id": "basic-attention-token",
       "market_cap_rank": 206,
       "market_cap": 122366485,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16918,
+      "start": "2019-03-04T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/BAT.csv.gz"
     },
     {
@@ -1185,9 +1185,9 @@
       "coingecko_id": "dogwifcoin",
       "market_cap_rank": 208,
       "market_cap": 121374702,
-      "candles": 5942,
+      "candles": 5954,
       "start": "2024-03-05T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/WIF.csv.gz"
     },
     {
@@ -1197,9 +1197,9 @@
       "coingecko_id": "sonic-3",
       "market_cap_rank": 212,
       "market_cap": 118367054,
-      "candles": 4041,
+      "candles": 4053,
       "start": "2025-01-16T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/S.csv.gz"
     },
     {
@@ -1209,9 +1209,9 @@
       "coingecko_id": "eigenlayer",
       "market_cap_rank": 214,
       "market_cap": 116713658,
-      "candles": 4684,
+      "candles": 4696,
       "start": "2024-10-01T04:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/EIGEN.csv.gz"
     },
     {
@@ -1221,9 +1221,9 @@
       "coingecko_id": "convex-finance",
       "market_cap_rank": 225,
       "market_cap": 110969567,
-      "candles": 10760,
+      "candles": 10772,
       "start": "2021-12-23T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/CVX.csv.gz"
     },
     {
@@ -1233,9 +1233,9 @@
       "coingecko_id": "decentraland",
       "market_cap_rank": 226,
       "market_cap": 110191112,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13797,
+      "start": "2020-08-06T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/MANA.csv.gz"
     },
     {
@@ -1245,9 +1245,9 @@
       "coingecko_id": "axie-infinity",
       "market_cap_rank": 227,
       "market_cap": 108887785,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13256,
+      "start": "2020-11-04T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/AXS.csv.gz"
     },
     {
@@ -1257,9 +1257,9 @@
       "coingecko_id": "vaulta",
       "market_cap_rank": 230,
       "market_cap": 107426813,
-      "candles": 3249,
+      "candles": 3261,
       "start": "2025-05-28T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/A.csv.gz"
     },
     {
@@ -1269,9 +1269,9 @@
       "coingecko_id": "stp-network",
       "market_cap_rank": 231,
       "market_cap": 107382469,
-      "candles": 3291,
+      "candles": 3303,
       "start": "2025-05-21T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/AWE.csv.gz"
     },
     {
@@ -1281,9 +1281,9 @@
       "coingecko_id": "neo",
       "market_cap_rank": 232,
       "market_cap": 107323514,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 19723,
+      "start": "2017-11-20T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/NEO.csv.gz"
     },
     {
@@ -1293,9 +1293,9 @@
       "coingecko_id": "ecash",
       "market_cap_rank": 238,
       "market_cap": 100783916,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 11439,
+      "start": "2021-09-03T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/XEC.csv.gz"
     },
     {
@@ -1305,9 +1305,9 @@
       "coingecko_id": "genius-3",
       "market_cap_rank": 243,
       "market_cap": 99370893,
-      "candles": 1094,
+      "candles": 1106,
       "start": "2026-05-22T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GENIUS.csv.gz"
     },
     {
@@ -1317,9 +1317,9 @@
       "coingecko_id": "chiliz",
       "market_cap_rank": 244,
       "market_cap": 98632400,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 15807,
+      "start": "2019-09-06T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/CHZ.csv.gz"
     },
     {
@@ -1329,9 +1329,9 @@
       "coingecko_id": "the-sandbox",
       "market_cap_rank": 245,
       "market_cap": 98525234,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13748,
+      "start": "2020-08-14T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SAND.csv.gz"
     },
     {
@@ -1341,9 +1341,9 @@
       "coingecko_id": "havven",
       "market_cap_rank": 259,
       "market_cap": 86725283,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13964,
+      "start": "2020-07-09T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SNX.csv.gz"
     },
     {
@@ -1353,9 +1353,9 @@
       "coingecko_id": "golem",
       "market_cap_rank": 260,
       "market_cap": 86137615,
-      "candles": 8067,
+      "candles": 8079,
       "start": "2023-03-17T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GLM.csv.gz"
     },
     {
@@ -1365,9 +1365,9 @@
       "coingecko_id": "1inch",
       "market_cap_rank": 261,
       "market_cap": 85728765,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12952,
+      "start": "2020-12-25T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/1INCH.csv.gz"
     },
     {
@@ -1377,9 +1377,9 @@
       "coingecko_id": "doublezero",
       "market_cap_rank": 264,
       "market_cap": 84240431,
-      "candles": 2486,
+      "candles": 2498,
       "start": "2025-10-02T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/2Z.csv.gz"
     },
     {
@@ -1389,9 +1389,9 @@
       "coingecko_id": "prometeus",
       "market_cap_rank": 266,
       "market_cap": 83881496,
-      "candles": 8067,
+      "candles": 8079,
       "start": "2023-03-17T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/PROM.csv.gz"
     },
     {
@@ -1401,9 +1401,9 @@
       "coingecko_id": "cross-2",
       "market_cap_rank": 268,
       "market_cap": 82488777,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16388,
+      "start": "2019-06-01T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ONE.csv.gz"
     },
     {
@@ -1413,9 +1413,9 @@
       "coingecko_id": "immutable-x",
       "market_cap_rank": 269,
       "market_cap": 82189394,
-      "candles": 10653,
+      "candles": 10665,
       "start": "2022-01-10T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/IMX.csv.gz"
     },
     {
@@ -1425,9 +1425,9 @@
       "coingecko_id": "safepal",
       "market_cap_rank": 272,
       "market_cap": 81040019,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12680,
+      "start": "2021-02-08T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SFP.csv.gz"
     },
     {
@@ -1437,9 +1437,9 @@
       "coingecko_id": "zksync",
       "market_cap_rank": 278,
       "market_cap": 79292165,
-      "candles": 5319,
+      "candles": 5331,
       "start": "2024-06-17T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ZK.csv.gz"
     },
     {
@@ -1449,9 +1449,9 @@
       "coingecko_id": "reserve-rights-token",
       "market_cap_rank": 279,
       "market_cap": 78430620,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13672,
+      "start": "2020-08-27T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/RSR.csv.gz"
     },
     {
@@ -1461,9 +1461,9 @@
       "coingecko_id": "superfarm",
       "market_cap_rank": 286,
       "market_cap": 75746074,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12411,
+      "start": "2021-03-25T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/SUPER.csv.gz"
     },
     {
@@ -1473,9 +1473,9 @@
       "coingecko_id": "gmx",
       "market_cap_rank": 288,
       "market_cap": 75490528,
-      "candles": 9045,
+      "candles": 9057,
       "start": "2022-10-05T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GMX.csv.gz"
     },
     {
@@ -1485,9 +1485,9 @@
       "coingecko_id": "plume",
       "market_cap_rank": 291,
       "market_cap": 74938239,
-      "candles": 2756,
+      "candles": 2768,
       "start": "2025-08-18T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/PLUME.csv.gz"
     },
     {
@@ -1497,9 +1497,9 @@
       "coingecko_id": "apecoin",
       "market_cap_rank": 295,
       "market_cap": 74067542,
-      "candles": 10256,
+      "candles": 10268,
       "start": "2022-03-17T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/APE.csv.gz"
     },
     {
@@ -1509,9 +1509,9 @@
       "coingecko_id": "elrond-erd-2",
       "market_cap_rank": 302,
       "market_cap": 72120671,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13631,
+      "start": "2020-09-03T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/EGLD.csv.gz"
     },
     {
@@ -1521,9 +1521,9 @@
       "coingecko_id": "zero-gravity",
       "market_cap_rank": 315,
       "market_cap": 69226299,
-      "candles": 2547,
+      "candles": 2559,
       "start": "2025-09-22T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/0G.csv.gz"
     },
     {
@@ -1533,9 +1533,9 @@
       "coingecko_id": "zencash",
       "market_cap_rank": 320,
       "market_cap": 66584147,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13984,
+      "start": "2020-07-06T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ZEN.csv.gz"
     },
     {
@@ -1545,9 +1545,9 @@
       "coingecko_id": "orca",
       "market_cap_rank": 321,
       "market_cap": 66571472,
-      "candles": 4286,
+      "candles": 4298,
       "start": "2024-12-06T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ORCA.csv.gz"
     },
     {
@@ -1557,9 +1557,9 @@
       "coingecko_id": "gala",
       "market_cap_rank": 325,
       "market_cap": 65116956,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 11380,
+      "start": "2021-09-13T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GALA.csv.gz"
     },
     {
@@ -1569,9 +1569,9 @@
       "coingecko_id": "qtum",
       "market_cap_rank": 326,
       "market_cap": 64762909,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 19014,
+      "start": "2018-03-19T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/QTUM.csv.gz"
     },
     {
@@ -1581,9 +1581,9 @@
       "coingecko_id": "0x",
       "market_cap_rank": 333,
       "market_cap": 63126068,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16943,
+      "start": "2019-02-28T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ZRX.csv.gz"
     },
     {
@@ -1593,9 +1593,9 @@
       "coingecko_id": "holotoken",
       "market_cap_rank": 337,
       "market_cap": 62177942,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 17002,
+      "start": "2019-02-18T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/HOT.csv.gz"
     },
     {
@@ -1605,9 +1605,9 @@
       "coingecko_id": "dydx-chain",
       "market_cap_rank": 343,
       "market_cap": 60486638,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 11405,
+      "start": "2021-09-09T00:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/DYDX.csv.gz"
     },
     {
@@ -1617,9 +1617,9 @@
       "coingecko_id": "redstone-oracles",
       "market_cap_rank": 345,
       "market_cap": 60387602,
-      "candles": 3782,
+      "candles": 3794,
       "start": "2025-02-28T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/RED.csv.gz"
     },
     {
@@ -1629,9 +1629,9 @@
       "coingecko_id": "walrus-2",
       "market_cap_rank": 348,
       "market_cap": 59515290,
-      "candles": 2440,
+      "candles": 2452,
       "start": "2025-10-10T04:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/WAL.csv.gz"
     },
     {
@@ -1641,9 +1641,9 @@
       "coingecko_id": "gas",
       "market_cap_rank": 349,
       "market_cap": 58980856,
-      "candles": 8067,
+      "candles": 8079,
       "start": "2023-03-17T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GAS.csv.gz"
     },
     {
@@ -1653,9 +1653,9 @@
       "coingecko_id": "yearn-finance",
       "market_cap_rank": 355,
       "market_cap": 57819181,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13772,
+      "start": "2020-08-10T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/YFI.csv.gz"
     },
     {
@@ -1665,9 +1665,9 @@
       "coingecko_id": "arkham",
       "market_cap_rank": 356,
       "market_cap": 57416361,
-      "candles": 7328,
+      "candles": 7340,
       "start": "2023-07-18T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ARKM.csv.gz"
     },
     {
@@ -1677,9 +1677,9 @@
       "coingecko_id": "four",
       "market_cap_rank": 360,
       "market_cap": 55958238,
-      "candles": 3669,
+      "candles": 3681,
       "start": "2025-03-19T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/FORM.csv.gz"
     },
     {
@@ -1689,9 +1689,9 @@
       "coingecko_id": "wormhole",
       "market_cap_rank": 364,
       "market_cap": 54876526,
-      "candles": 5768,
+      "candles": 5780,
       "start": "2024-04-03T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/W.csv.gz"
     },
     {
@@ -1701,9 +1701,9 @@
       "coingecko_id": "megaeth",
       "market_cap_rank": 365,
       "market_cap": 54951090,
-      "candles": 1227,
+      "candles": 1239,
       "start": "2026-04-30T08:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/MEGA.csv.gz"
     },
     {
@@ -1713,9 +1713,9 @@
       "coingecko_id": "momentum-3",
       "market_cap_rank": 366,
       "market_cap": 54774142,
-      "candles": 2288,
+      "candles": 2300,
       "start": "2025-11-04T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/MMT.csv.gz"
     },
     {
@@ -1725,9 +1725,9 @@
       "coingecko_id": "mina-protocol",
       "market_cap_rank": 367,
       "market_cap": 54021107,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 11584,
+      "start": "2021-08-10T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/MINA.csv.gz"
     },
     {
@@ -1737,9 +1737,9 @@
       "coingecko_id": "allora",
       "market_cap_rank": 369,
       "market_cap": 53409836,
-      "candles": 2246,
+      "candles": 2258,
       "start": "2025-11-11T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ALLO.csv.gz"
     },
     {
@@ -1749,9 +1749,9 @@
       "coingecko_id": "numeraire",
       "market_cap_rank": 370,
       "market_cap": 53358380,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 13718,
+      "start": "2020-08-19T12:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/NMR.csv.gz"
     },
     {
@@ -1761,9 +1761,9 @@
       "coingecko_id": "goplus-security",
       "market_cap_rank": 371,
       "market_cap": 52908981,
-      "candles": 3758,
+      "candles": 3770,
       "start": "2025-03-04T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/GPS.csv.gz"
     },
     {
@@ -1773,9 +1773,9 @@
       "coingecko_id": "chip-2",
       "market_cap_rank": 372,
       "market_cap": 52673688,
-      "candles": 1280,
+      "candles": 1292,
       "start": "2026-04-21T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/CHIP.csv.gz"
     },
     {
@@ -1785,9 +1785,9 @@
       "coingecko_id": "ordinals",
       "market_cap_rank": 373,
       "market_cap": 52620639,
-      "candles": 6656,
+      "candles": 6668,
       "start": "2023-11-07T12:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/ORDI.csv.gz"
     },
     {
@@ -1797,9 +1797,9 @@
       "coingecko_id": "livepeer",
       "market_cap_rank": 383,
       "market_cap": 50608751,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 12028,
+      "start": "2021-05-28T04:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/LPT.csv.gz"
     },
     {
@@ -1809,9 +1809,9 @@
       "coingecko_id": "wink",
       "market_cap_rank": 385,
       "market_cap": 49833189,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
-      "end": "2026-11-20T16:00:00Z",
+      "candles": 16021,
+      "start": "2019-08-01T08:00:00Z",
+      "end": "2026-11-22T16:00:00Z",
       "path": "data/candles/WIN.csv.gz"
     }
   ]
