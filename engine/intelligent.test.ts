@@ -270,3 +270,37 @@ test("the bitcoin 200-day gate beats hold on the 2025 books it won in the sweep"
     assert.ok(ratio > 1, `${symbols.join("/")} ${ratio.toFixed(3)} is not ahead of hold`);
   }
 });
+
+test("Cowen gate tilts only while bitcoin is strong, dominance is below its average, and total cap is above its average", () => {
+  const start = Date.UTC(2024, 0, 1);
+  const n = 120;
+  const day = (i: number) => start + i * DAY;
+  const btc = series("BTC", start, Array.from({ length: n }, (_, i) => 100 + i));
+  const total = series("TOTAL", start, Array.from({ length: n }, (_, i) => 1000 + i * 10));
+  const dominance = series("BTCD", start, Array.from({ length: n }, (_, i) => 80 - i * 0.4));
+  const leader = series("AAA", start, Array.from({ length: n }, (_, i) => 50 + i * 2));
+  const other = series("BBB", start, Array.from({ length: n }, () => 40));
+  const spec: IntelligentSpec = {
+    ...DEFAULTS,
+    regime: "cowen",
+    btcMaDays: 20,
+    dominanceMaDays: 20,
+    totalMaDays: 20,
+    trendDays: 20,
+    momentumDays: 20,
+    leaderWeight: 0.8,
+    riskOff: "stay",
+  };
+  const assets = [
+    { symbol: "AAA", weight: 1 },
+    { symbol: "BBB", weight: 1 },
+  ];
+  const map = { AAA: leader, BBB: other, TOTAL: total, BTCD: dominance };
+  const on = intelligentTargets(assets, map, btc, day(n - 1), [50 + (n - 1) * 2, 40], spec);
+  assert.notEqual(on, "stay");
+  if (on === "stay") return;
+  assert.ok(on[0].weight > on[1].weight);
+  const risingDominance = series("BTCD", start, Array.from({ length: n }, (_, i) => 40 + i * 0.4));
+  const off = intelligentTargets(assets, { ...map, BTCD: risingDominance }, btc, day(n - 1), [50 + (n - 1) * 2, 40], spec);
+  assert.equal(off, "stay");
+});

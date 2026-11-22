@@ -105,7 +105,48 @@ export function intelligentTargets(
     if (average == null || !(px > 0)) return null;
     return px > average;
   };
-  if (spec.regime && spec.regime !== "above-only") {
+  if (spec.regime === "cowen") {
+    const slow = Math.round(spec.btcMaDays ?? 0);
+    const fast = Math.round(spec.btcFastMaDays ?? 0);
+    const domDays = Math.round(spec.dominanceMaDays ?? 0);
+    const totalDays = Math.round(spec.totalMaDays ?? 0);
+    const pxAbove = (seriesFor: CandleSeries | null | undefined, px: number | null, days: number): boolean | null => {
+      if (days < 2 || !seriesFor || px == null) return null;
+      const average = smaBefore(seriesFor, dayIndex, days);
+      if (average == null || !(px > 0)) return null;
+      return px > average;
+    };
+    let riskOn = true;
+    if (slow >= 2 || fast >= 2) {
+      const px = closeAt(btc, t);
+      if (slow >= 2 && pxAbove(btc, px, slow) !== true) riskOn = false;
+      if (fast >= 2 && pxAbove(btc, px, fast) !== true) riskOn = false;
+    }
+    if (totalDays >= 2 && pxAbove(series.TOTAL, closeAt(series.TOTAL, t), totalDays) !== true) riskOn = false;
+    if (domDays >= 2 && pxAbove(series.BTCD, closeAt(series.BTCD, t), domDays) !== false) riskOn = false;
+    if (!riskOn) {
+      if (spec.riskOff === "mix") return userMix();
+      if (spec.riskOff === "cash") {
+        if (spec.cashWhenWeak) {
+          let hot = false;
+          for (const i of coins) {
+            const average = smaBefore(series[assets[i].symbol], dayIndex, trendDays);
+            if (average != null && price[i] > average) {
+              hot = true;
+              break;
+            }
+          }
+          if (hot) {
+            // A selected coin is still trending, so the leader rule below keeps it.
+          } else {
+            return assets.map((asset) => ({ symbol: asset.symbol, weight: 0, sellLocked: false }));
+          }
+        } else {
+          return assets.map((asset) => ({ symbol: asset.symbol, weight: 0, sellLocked: false }));
+        }
+      } else return "stay";
+    } else if (spec.riskOn === "mix") return userMix();
+  } else if (spec.regime && spec.regime !== "above-only") {
     let down = false;
     if (spec.regime === "btc-mix" || spec.regime === "btc-stay") {
       const px = closeAt(btc, t);

@@ -45,9 +45,23 @@ export interface IntelligentSpec {
    * mix returns to the typed weights. stay skips the check.
    * above-only holds a coin only while it is above its average.
    */
-  regime?: "down-mix" | "down-stay" | "alldown-mix" | "alldown-stay" | "btc-mix" | "btc-stay" | "above-only";
+  regime?: "down-mix" | "down-stay" | "alldown-mix" | "alldown-stay" | "btc-mix" | "btc-stay" | "above-only" | "cowen";
   /** Average length for the regime switch. Omitted uses trendDays. */
   regimeDays?: number;
+  /** Cowen gate: bitcoin must close above this average. 0 or omitted leaves it out. */
+  btcMaDays?: number;
+  /** Second, shorter bitcoin average. Both must pass. 0 or omitted leaves it out. */
+  btcFastMaDays?: number;
+  /** Tilt only while BTC dominance is below this average. 0 or omitted leaves it out. */
+  dominanceMaDays?: number;
+  /** Tilt only while total market cap is above this average. 0 or omitted leaves it out. */
+  totalMaDays?: number;
+  /** What to do when a Cowen filter fails. stay skips the check. mix returns to the entered weights. cash sells the book into USDT. */
+  riskOff?: "stay" | "mix" | "cash";
+  /** With cash: park only when no selected coin is above its own average. A coin still in an uptrend keeps the leader rule. */
+  cashWhenWeak?: boolean;
+  /** What to do when every Cowen filter passes. leader is the momentum tilt. mix returns to the entered weights. */
+  riskOn?: "leader" | "mix";
 }
 
 export type BlockedBuyPolicy = "keep_winners" | "park_usdt";
