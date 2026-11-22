@@ -308,22 +308,29 @@ def select_universe(markets: list[dict], pairs: dict[str, dict], limit: int) -> 
     return chosen
 
 
-def coin_done(path: str, end_ms: int) -> bool:
+def coin_done(path: str, start_ms: int, end_ms: int) -> bool:
     if not os.path.exists(path):
         return False
-    _rows, last = read_existing(path)
-    return last > 0 and last >= end_ms - 2 * INTERVAL_MS
+    rows, last = read_existing(path)
+    if not rows or last <= 0 or last < end_ms - 2 * INTERVAL_MS:
+        return False
+    return int(rows[0][0]) <= start_ms + INTERVAL_MS
 
 
 def fetch_one(coin: dict, start_ms: int, end_ms: int, update: bool) -> dict:
     path = os.path.join(CANDLE_DIR, f"{coin['symbol']}.csv.gz")
-    if coin_done(path, end_ms) and not update:
+    if coin_done(path, start_ms, end_ms) and not update:
         rows, last = read_existing(path)
         print(f"skip {coin['symbol']} candles={len(rows)} through={day(last)}", flush=True)
     else:
-        existing, last = read_existing(path) if update else ([], 0)
+        existing, last = read_existing(path) if update or os.path.exists(path) else ([], 0)
+        fresh: list[list[str]] = []
+        first = int(existing[0][0]) if existing else 0
+        if first and first > start_ms + INTERVAL_MS:
+            fresh.extend(download_klines(coin["pair"], start_ms, first - 1))
         fetch_from = start_ms if last <= 0 else last + INTERVAL_MS
-        fresh = download_klines(coin["pair"], fetch_from, end_ms)
+        if last <= 0 or last < end_ms - 2 * INTERVAL_MS:
+            fresh.extend(download_klines(coin["pair"], fetch_from, end_ms))
         rows = merge_rows(existing, fresh) if existing else fresh
         # Drop the still-forming last candle if it is the current open bar.
         if rows and int(rows[-1][0]) + INTERVAL_MS > now_ms():
@@ -394,15 +401,23 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=150, help="How many top-cap coins to keep, before forced extras.")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--update", action="store_true", help="Refresh coins that already have files.")
+    parser.add_argument("--symbols", default="", help="Comma-separated bases to download. Leaves every other file in place.")
     args = parser.parse_args()
 
     end_ms = now_ms() - INTERVAL_MS
     start_ms = end_ms - int(args.years * 365.25 * 24 * 60 * 60 * 1000)
     print(f"range {day(start_ms)} -> {day(end_ms)} interval={INTERVAL}", flush=True)
+    wanted = {part.strip().upper() for part in args.symbols.split(",") if part.strip()}
 
-    markets = fetch_markets()
     pairs = fetch_binance_pairs()
-    universe = select_universe(markets, pairs, args.limit)
+    if wanted:
+        universe = [_coin_row(base, pairs, None) for base in sorted(wanted) if base in pairs]
+        missing = sorted(wanted - pairs.keys())
+        if missing:
+            print("no binance usdt market: " + ", ".join(missing), flush=True)
+    else:
+        markets = fetch_markets()
+        universe = select_universe(markets, pairs, args.limit)
     print(f"selected {len(universe)} coins", flush=True)
     missing_force = sorted(b for b in FORCE_BASES if b not in pairs)
     if missing_force:
@@ -416,9 +431,10 @@ def main() -> int:
                 results.append(fut.result())
             except Exception as exc:  # noqa: BLE001 — one market must not drop the rest
                 print(f"failed coin: {exc}", flush=True)
-    write_manifest(results, start_ms, end_ms)
+    if not wanted:
+        write_manifest(results, start_ms, end_ms)
     keep = {coin["symbol"] for coin in universe}
-    if os.path.isdir(CANDLE_DIR):
+    if not wanted and os.path.isdir(CANDLE_DIR):
         for name in os.listdir(CANDLE_DIR):
             if not name.endswith(".csv.gz"):
                 continue

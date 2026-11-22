@@ -20,8 +20,8 @@
       "coingecko_id": "bitcoin",
       "market_cap_rank": 1,
       "market_cap": 1188114585487,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
+      "candles": 20280,
+      "start": "2017-08-17T04:00:00Z",
       "end": "2026-11-20T16:00:00Z",
       "path": "data/candles/BTC.csv.gz"
     },
@@ -32,8 +32,8 @@
       "coingecko_id": "ethereum",
       "market_cap_rank": 2,
       "market_cap": 198291707874,
-      "candles": 10957,
-      "start": "2021-11-20T16:00:00Z",
+      "candles": 20280,
+      "start": "2017-08-17T04:00:00Z",
       "end": "2026-11-20T16:00:00Z",
       "path": "data/candles/ETH.csv.gz"
     },
