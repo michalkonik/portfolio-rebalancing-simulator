@@ -81,6 +81,40 @@ test("a coin floor keeps both coins when the defense would otherwise hold only b
   assert.ok(targets.every((row) => row.weight >= 0.2 - 1e-9));
 });
 
+test("Cowen band holds bitcoin when the weekly close is under the band", () => {
+  const start = Date.UTC(2020, 0, 6);
+  const closes = Array.from({ length: 200 }, (_, i) => 100 + i);
+  for (let i = 170; i < 200; i++) closes[i] = 120;
+  const decision = start + 199 * DAY;
+  const btc = series("BTC", start, closes);
+  const eth = series("ETH", start, closes.map(() => 10));
+  const targets = intelligentTargets(
+    [
+      { symbol: "BTC", weight: 1 },
+      { symbol: "ETH", weight: 1 },
+    ],
+    { BTC: btc, ETH: eth },
+    btc,
+    decision,
+    [closes[closes.length - 1], 10],
+    {
+      ...DEFAULTS,
+      regime: "cowen-band",
+      bandWeeks: 20,
+      bandEmaWeeks: 21,
+      dominanceTrendDays: 90,
+      pairMaDays: 40,
+      floorWeight: 0.2,
+    },
+  );
+  assert.notEqual(targets, "stay");
+  if (targets === "stay") return;
+  const btcWeight = targets.find((row) => row.symbol === "BTC")?.weight ?? 0;
+  const ethWeight = targets.find((row) => row.symbol === "ETH")?.weight ?? 0;
+  assert.ok(btcWeight > ethWeight);
+  assert.ok(ethWeight >= 0.2 - 1e-9);
+});
+
 test("USDT takes the book when every selected coin is in a downtrend", () => {
   const start = Date.UTC(2024, 0, 1);
   const down = Array.from({ length: 80 }, (_, i) => 100 - i);

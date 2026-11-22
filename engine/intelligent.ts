@@ -81,6 +81,118 @@ function allocate(assets: AssetSpec[], raw: number[], floor = 0): WeightTarget[]
   }));
 }
 
+const WEEK = 7 * DAY;
+
+/** Completed weekly closes strictly before `before`. The current week is not included. */
+function weeklyCloses(series: CandleSeries, before: number): number[] {
+  const closes: number[] = [];
+  let bucket = -1;
+  let last = 0;
+  for (let i = 0; i < series.t.length; i++) {
+    if (series.t[i] >= before) break;
+    const close = series.c[i];
+    if (!(close > 0)) continue;
+    const next = Math.floor(series.t[i] / WEEK);
+    if (bucket >= 0 && next !== bucket) closes.push(last);
+    bucket = next;
+    last = close;
+  }
+  if (bucket >= 0 && (bucket + 1) * WEEK <= before) closes.push(last);
+  return closes;
+}
+
+function smaLast(values: number[], n: number): number | null {
+  if (n < 2 || values.length < n) return null;
+  let sum = 0;
+  for (let i = values.length - n; i < values.length; i++) sum += values[i];
+  return sum / n;
+}
+
+function emaLast(values: number[], n: number): number | null {
+  if (n < 2 || values.length < n) return null;
+  let average = 0;
+  for (let i = 0; i < n; i++) average += values[i];
+  average /= n;
+  const k = 2 / (n + 1);
+  for (let i = n; i < values.length; i++) average = values[i] * k + average * (1 - k);
+  return average;
+}
+
+/**
+ * Cowen's public regime, reduced to prices we actually have.
+ * Bitcoin is in a bull only while its weekly close is above the 20-week average
+ * and the 21-week EMA. A tilt away from bitcoin also needs dominance to have
+ * fallen for months and the other coin to be rising in dollars and against bitcoin.
+ * Below the band, a book that holds bitcoin stays in bitcoin. It does not sell into USDT.
+ * "leader" means the ordinary momentum tilt may run.
+ */
+function cowenBand(
+  assets: AssetSpec[],
+  series: Record<string, CandleSeries>,
+  btc: CandleSeries | null | undefined,
+  t: number,
+  price: number[],
+  spec: IntelligentSpec,
+): WeightTarget[] | "stay" | "leader" {
+  if (!btc) return "stay";
+  const weeks = weeklyCloses(btc, t);
+  const slowN = Math.max(2, Math.round(spec.bandWeeks ?? 20));
+  const fastN = Math.max(2, Math.round(spec.bandEmaWeeks ?? 21));
+  const slow = smaLast(weeks, slowN);
+  const fast = emaLast(weeks, fastN);
+  const weekly = weeks.length ? weeks[weeks.length - 1] : null;
+  if (slow == null || fast == null || weekly == null) return "stay";
+  const above = weekly > slow && weekly > fast;
+  const floor = spec.floorWeight ?? 0;
+  const btcIndex = assets.findIndex((asset) => asset.symbol === "BTC");
+  const holdBtc = (): WeightTarget[] => {
+    const raw = assets.map(() => 0);
+    raw[btcIndex] = 1;
+    return allocate(assets, raw, floor);
+  };
+  if (!above) return btcIndex >= 0 ? holdBtc() : "stay";
+
+  const trendDays = Math.max(2, Math.round(spec.dominanceTrendDays ?? 90));
+  const dominance = series.BTCD;
+  const domNow = closeAt(dominance, t);
+  const domThen = closeAt(dominance, t - trendDays * DAY);
+  const dominanceFalling = domNow != null && domThen != null && domNow < domThen;
+  let altsRising = false;
+  let counted = 0;
+  let rose = 0;
+  for (let i = 0; i < assets.length; i++) {
+    if (assets[i].symbol === "USDT" || assets[i].symbol === "BTC") continue;
+    const then = closeAt(series[assets[i].symbol], t - trendDays * DAY);
+    if (then == null || !(price[i] > 0)) continue;
+    counted += 1;
+    if (price[i] > then) rose += 1;
+  }
+  altsRising = counted > 0 && rose === counted;
+  const pairDays = Math.max(2, Math.round(spec.pairMaDays ?? 140));
+  let pairOk = btcIndex >= 0;
+  const bNow = closeAt(btc, t);
+  const day = Math.floor(t / DAY);
+  if (btcIndex < 0 || bNow == null || !(bNow > 0)) pairOk = false;
+  else {
+    for (let i = 0; i < assets.length; i++) {
+      if (assets[i].symbol === "USDT" || assets[i].symbol === "BTC") continue;
+      let sum = 0;
+      let n = 0;
+      for (let back = 1; back <= pairDays; back++) {
+        const b = closeAt(btc, (day - back) * DAY);
+        const c = closeAt(series[assets[i].symbol], (day - back) * DAY);
+        if (b == null || c == null || !(b > 0)) continue;
+        sum += c / b;
+        n += 1;
+      }
+      if (n < pairDays || !(price[i] > 0) || price[i] / bNow <= sum / n) pairOk = false;
+    }
+  }
+  if (dominanceFalling && altsRising && pairOk) return "leader";
+  if (btcIndex >= 0) return holdBtc();
+  return "stay";
+}
+
 /**
  * Weights for one check. "stay" means keep the coins already held.
  * Every weight belongs to a coin the user selected. They sum to 1.
@@ -112,6 +224,10 @@ export function intelligentTargets(
   }
   const coins = tradable.filter((i) => assets[i].symbol !== "USDT");
   if (coins.length === 0) return "stay";
+  if (spec.regime === "cowen-band") {
+    const band = cowenBand(assets, series, btc, t, price, spec);
+    if (band !== "leader") return band;
+  }
 
   const userMix = (): WeightTarget[] => {
     const raw = assets.map(() => 0);

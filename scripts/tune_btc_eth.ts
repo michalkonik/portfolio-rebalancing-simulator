@@ -6,6 +6,7 @@ import type { CandleSeries, IntelligentSpec, SimSuccess } from "../engine/types.
 
 const btc = parseCandleCsv(gunzipSync(readFileSync("docs/data/candles/BTC.csv.gz")).toString("utf8"), "BTC");
 const eth = parseCandleCsv(gunzipSync(readFileSync("docs/data/candles/ETH.csv.gz")).toString("utf8"), "ETH");
+const btcd = parseCandleCsv(gunzipSync(readFileSync("docs/data/candles/BTCD.csv.gz")).toString("utf8"), "BTCD");
 
 function closeAt(series: CandleSeries, t: number): number | null {
   let lo = 0;
@@ -78,6 +79,24 @@ const specs: Array<[string, IntelligentSpec | null]> = [
   ["stay300-floor20", { ...base, regimeDays: 300, floorWeight: 0.2 }],
   ["stay300-floor30", { ...base, regimeDays: 300, floorWeight: 0.3 }],
   ["stay200-floor20", { ...base, regimeDays: 200, floorWeight: 0.2 }],
+  ["cowen-band", {
+    ...base,
+    regime: "cowen-band",
+    bandWeeks: 20,
+    bandEmaWeeks: 21,
+    dominanceTrendDays: 90,
+    pairMaDays: 140,
+    floorWeight: 0,
+  }],
+  ["cowen-band-floor20", {
+    ...base,
+    regime: "cowen-band",
+    bandWeeks: 20,
+    bandEmaWeeks: 21,
+    dominanceTrendDays: 90,
+    pairMaDays: 140,
+    floorWeight: 0.2,
+  }],
 ];
 
 function run(start: number, end: number, spec: IntelligentSpec | null): SimSuccess | null {
@@ -86,7 +105,7 @@ function run(start: number, end: number, spec: IntelligentSpec | null): SimSucce
       { symbol: "BTC", weight: 1 },
       { symbol: "ETH", weight: 1 },
     ],
-    series: { BTC: btc, ETH: eth },
+    series: { BTC: btc, ETH: eth, BTCD: btcd },
     btc,
     startMs: start,
     endMs: end,
