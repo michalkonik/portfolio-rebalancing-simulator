@@ -1,0 +1,172 @@
+"""Build the version ledger from the frozen validation files.
+
+Reads results that already exist. Does not rescore anything.
+"""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+RESULTS = ROOT / "results"
+OUT = RESULTS / "registry"
+
+
+def load(name: str):
+    return json.loads((RESULTS / name).read_text())
+
+
+def row(**fields) -> dict:
+    fields.setdefault("medianExcessHold", None)
+    fields.setdefault("meanExcessHold", None)
+    fields.setdefault("medianExcessPlain", None)
+    fields.setdefault("meanExcessPlain", None)
+    return fields
+
+
+def main() -> None:
+    validation = load("validation.json")
+    summary = load("alts-5000-summary.json")
+    champion = load("alts-champion.json")
+    trials = [json.loads(line) for line in (RESULTS / "alts-search-log.jsonl").read_text().splitlines() if line.strip()]
+
+    ledger: list[dict] = []
+    for version in validation["versions"]:
+        for book, algo in version["algos"].items():
+            ledger.append(row(
+                version=f"{version['id']}/{book}",
+                book=book,
+                family=version["id"],
+                status="rejected" if version["id"] == "v2" and book == "alts" else "recorded",
+                scope="calendar-6",
+                protocol="six named windows in results/validation.json, not the 5,000-window set",
+                n=algo.get("eligible"),
+                skipped=algo.get("skipped"),
+                bothRate=algo.get("beatBothRate"),
+                holdRate=algo.get("beatHoldRate"),
+                plainRate=algo.get("beatPlainRate"),
+                bullRate=None,
+                bearRate=None,
+                spec=algo.get("spec"),
+                everyDays=algo.get("everyDays"),
+                evaluatedAt=validation["generated"],
+                decision="superseded" if book == "alts" else "kept-for-that-book",
+                source="results/validation.json",
+                note=version["note"],
+            ))
+
+    ledger.append(row(
+        version="alts/cash-200-50-50",
+        book="alts",
+        family="cowen-cash",
+        status="champion",
+        scope="windows-5000-full",
+        protocol="550 alt lists by the frozen 5,000 windows",
+        n=summary["n"],
+        skipped=summary["skipped"],
+        bothRate=summary["bothRate"],
+        holdRate=summary["holdRate"],
+        plainRate=summary["plainRate"],
+        bullRate=summary["bullRate"],
+        bearRate=summary["bearRate"],
+        spec=champion["spec"],
+        everyDays=14,
+        evaluatedAt=summary["updated"],
+        decision="kept",
+        source="results/alts-5000-summary.json",
+        note="Best full pass. Beat-both rate only. Return size was not stored. Restore this if a later rule is worse.",
+    ))
+
+    for trial in trials:
+        name = trial["name"]
+        if name == "cash-200-50-50":
+            status, decision = "sample-of-champion", "same rule as the full-pass champion"
+        elif name == "oracle-best-of-4":
+            status, decision = "not-tradable", "hindsight ceiling, not a rule"
+        elif name == "btc0.2-dom0.02-basket0.1":
+            status, decision = "grid-best", "best of 45 thresholds on the same sample; not promoted"
+        elif trial.get("generation") == "g5-router":
+            status, decision = "grid", "one cell of the in-sample router grid; not a separate rule"
+        elif name == "equal-when-on":
+            status, decision = "rejected", "0.2 points above the cash sample, under the 0.5 point keep bar"
+        else:
+            status, decision = "rejected", "sample did not beat the kept cash rule by the keep bar"
+        ledger.append(row(
+            version=f"alts/{name}",
+            book="alts",
+            family=trial.get("generation"),
+            status=status,
+            scope="windows-5000-sample",
+            protocol="51 lists by every 25th window" if trial.get("n") == 9665 else "same sample, rows with a missing feature dropped",
+            n=trial.get("n"),
+            skipped=None,
+            bothRate=trial.get("bothRate"),
+            holdRate=trial.get("holdRate"),
+            plainRate=trial.get("plainRate"),
+            bullRate=trial.get("bullRate"),
+            bearRate=trial.get("bearRate"),
+            spec=trial.get("spec"),
+            everyDays=14,
+            evaluatedAt=trial.get("at"),
+            decision=decision,
+            source="results/alts-search-log.jsonl",
+            note=trial.get("note"),
+        ))
+
+    OUT.mkdir(exist_ok=True)
+    ledger_path = OUT / "ledger.jsonl"
+    ledger_path.write_text("".join(json.dumps(item, separators=(",", ":")) + "\n" for item in ledger))
+
+    def pct(value) -> str:
+        return "n/a" if value is None else f"{100 * value:.1f}%"
+
+    lines = [
+        "# Scored rebalance versions",
+        "",
+        "Generated by `scripts/build_version_ledger.py`. Do not edit the numbers by hand.",
+        "The line-level record is `ledger.jsonl`. Raw trial output remains `results/alts-search-log.jsonl`.",
+        "",
+        "Return size is empty for every row below. These runs stored only how often a book finished ahead, not by how much.",
+        "",
+        "## Champion",
+        "",
+        "Alt coins. Cash when bitcoin is under its 200-day average, or dominance is above its 50-day average, or total cap is under its 50-day average.",
+        f"Full pass {summary['updated']}: {summary['n']} scored tests, {summary['skipped']} skipped, {summary['books']} lists, {summary['windows']} windows.",
+        f"Beat both {pct(summary['bothRate'])}. Beat hold {pct(summary['holdRate'])}. Beat plain {pct(summary['plainRate'])}. Bitcoin-up {pct(summary['bullRate'])}. Bitcoin-down {pct(summary['bearRate'])}.",
+        "",
+        "## Earlier four-book check",
+        "",
+        "Different test. Six calendar windows, not the 5,000-window set. Do not compare these rates with the champion.",
+        "",
+        "| Version | Book | Tests | Beat both | Beat hold | Beat plain |",
+        "| --- | --- | ---: | ---: | ---: | ---: |",
+    ]
+    for item in ledger:
+        if item["scope"] != "calendar-6":
+            continue
+        lines.append(
+            f"| {item['version']} | {item['book']} | {item['n']} | {pct(item['bothRate'])} | {pct(item['holdRate'])} | {pct(item['plainRate'])} |"
+        )
+    lines += [
+        "",
+        "## Sample trials on the frozen 5,000-window draw",
+        "",
+        "A sample cannot replace the champion. The router grid is 45 looks at one sample; only its best row is listed here.",
+        "",
+        "| Version | Family | Tests | Beat both | Up | Down | Decision |",
+        "| --- | --- | ---: | ---: | ---: | ---: | --- |",
+    ]
+    for item in ledger:
+        if item["scope"] != "windows-5000-sample" or item["status"] == "grid":
+            continue
+        lines.append(
+            f"| {item['version']} | {item['family']} | {item['n']} | {pct(item['bothRate'])} | {pct(item['bullRate'])} | {pct(item['bearRate'])} | {item['decision']} |"
+        )
+    lines.append("")
+    (OUT / "VERSIONS.md").write_text("\n".join(lines))
+    print(f"{len(ledger)} rows -> {ledger_path}")
+
+
+if __name__ == "__main__":
+    main()

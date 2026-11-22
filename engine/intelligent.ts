@@ -110,22 +110,69 @@ export function intelligentTargets(
     const fast = Math.round(spec.btcFastMaDays ?? 0);
     const domDays = Math.round(spec.dominanceMaDays ?? 0);
     const totalDays = Math.round(spec.totalMaDays ?? 0);
-    const pxAbove = (seriesFor: CandleSeries | null | undefined, px: number | null, days: number): boolean | null => {
-      if (days < 2 || !seriesFor || px == null) return null;
-      const average = smaBefore(seriesFor, dayIndex, days);
-      if (average == null || !(px > 0)) return null;
-      return px > average;
+    const riskOnAt = (when: number): boolean => {
+      const day = Math.floor(when / DAY);
+      const aboveThen = (seriesFor: CandleSeries | null | undefined, px: number | null, days: number): boolean | null => {
+        if (days < 2 || !seriesFor || px == null) return null;
+        const average = smaBefore(seriesFor, day, days);
+        if (average == null || !(px > 0)) return null;
+        return px > average;
+      };
+      if (slow >= 2 || fast >= 2) {
+        const px = closeAt(btc, when);
+        if (slow >= 2 && aboveThen(btc, px, slow) !== true) return false;
+        if (fast >= 2 && aboveThen(btc, px, fast) !== true) return false;
+      }
+      if (totalDays >= 2 && aboveThen(series.TOTAL, closeAt(series.TOTAL, when), totalDays) !== true) return false;
+      if (domDays >= 2 && aboveThen(series.BTCD, closeAt(series.BTCD, when), domDays) !== false) return false;
+      return true;
     };
-    let riskOn = true;
-    if (slow >= 2 || fast >= 2) {
-      const px = closeAt(btc, t);
-      if (slow >= 2 && pxAbove(btc, px, slow) !== true) riskOn = false;
-      if (fast >= 2 && pxAbove(btc, px, fast) !== true) riskOn = false;
+    let riskOn = riskOnAt(t);
+    const confirmDays = Math.round(spec.cashConfirmDays ?? 0);
+    if (!riskOn && confirmDays >= 2 && spec.riskOff === "cash" && riskOnAt(t - confirmDays * DAY) !== false) {
+      return "stay";
     }
-    if (totalDays >= 2 && pxAbove(series.TOTAL, closeAt(series.TOTAL, t), totalDays) !== true) riskOn = false;
-    if (domDays >= 2 && pxAbove(series.BTCD, closeAt(series.BTCD, t), domDays) !== false) riskOn = false;
-    if (!riskOn) {
+    if (spec.cashOnBasketDown) {
+      const lookback = Math.max(2, Math.round(spec.basketDays ?? momentumDays));
+      const hurdle = spec.basketHurdle ?? 0;
+      let summed = 0;
+      let counted = 0;
+      for (const i of coins) {
+        const then = closeAt(series[assets[i].symbol], t - lookback * DAY);
+        const now = price[i];
+        if (then == null || !(then > 0) || !(now > 0)) continue;
+        summed += now / then - 1;
+        counted += 1;
+      }
+      const basket = counted > 0 ? summed / counted : 0;
+      if (counted > 0 && basket < hurdle) {
+        return assets.map((asset) => ({ symbol: asset.symbol, weight: 0, sellLocked: false }));
+      }
+      if (!riskOn) return userMix();
+    } else if (!riskOn) {
       if (spec.riskOff === "mix") return userMix();
+      if (spec.riskOff === "vsbtc") {
+        let best = -1;
+        let bestScore = -Infinity;
+        for (const i of coins) {
+          const now = price[i];
+          const then = closeAt(series[assets[i].symbol], t - momentumDays * DAY);
+          const btcNow = closeAt(btc, t);
+          const btcThen = closeAt(btc, t - momentumDays * DAY);
+          if (then == null || !(then > 0) || !(now > 0) || btcNow == null || btcThen == null || !(btcThen > 0)) continue;
+          const score = (now / btcNow) / (then / btcThen) - 1;
+          if (score > bestScore) {
+            bestScore = score;
+            best = i;
+          }
+        }
+        if (best < 0 || !(bestScore > 0)) {
+          return assets.map((asset) => ({ symbol: asset.symbol, weight: 0, sellLocked: false }));
+        }
+        const raw = assets.map(() => 0);
+        raw[best] = 1;
+        return allocate(assets, raw);
+      }
       if (spec.riskOff === "cash") {
         if (spec.cashWhenWeak) {
           let hot = false;

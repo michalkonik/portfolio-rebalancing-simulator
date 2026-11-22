@@ -57,11 +57,19 @@ export interface IntelligentSpec {
   /** Tilt only while total market cap is above this average. 0 or omitted leaves it out. */
   totalMaDays?: number;
   /** What to do when a Cowen filter fails. stay skips the check. mix returns to the entered weights. cash sells the book into USDT. */
-  riskOff?: "stay" | "mix" | "cash";
+  riskOff?: "stay" | "mix" | "cash" | "vsbtc";
   /** With cash: park only when no selected coin is above its own average. A coin still in an uptrend keeps the leader rule. */
   cashWhenWeak?: boolean;
   /** What to do when every Cowen filter passes. leader is the momentum tilt. mix returns to the entered weights. */
   riskOn?: "leader" | "mix";
+  /** Sell into USDT only when the selected coins' average trailing return is below basketHurdle. A rising basket stays invested. */
+  cashOnBasketDown?: boolean;
+  /** Trailing window for cashOnBasketDown, in days. */
+  basketDays?: number;
+  /** Cash when the basket return is below this fraction. 0 means any decline. */
+  basketHurdle?: number;
+  /** With cash: sell only if the same filters were already off this many days ago. 0 sells on the first failed check. */
+  cashConfirmDays?: number;
 }
 
 export type BlockedBuyPolicy = "keep_winners" | "park_usdt";
