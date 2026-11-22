@@ -38,6 +38,51 @@ interface Holding {
 const BASE = import.meta.env.BASE_URL;
 const PALETTE = ["#2196f3", "#ff5656", "#ff9800", "#00cf0a", "#9c27b0", "#14b8a6", "#0069d9", "#d14343", "#65748b", "#ffb020"];
 
+type AlgoId = "btc-eth" | "alts-stable" | "btc-alts" | "alts";
+
+const ALGOS: Array<{ id: AlgoId; label: string; hint: string }> = [
+  {
+    id: "btc-eth",
+    label: "Intelligent rebalancing BTC-ETH",
+    hint: "Only for a book that is exactly bitcoin and ether. Off until you turn it on. It changes the split between those two coins and does not add anything else.",
+  },
+  {
+    id: "alts-stable",
+    label: "Intelligent rebalancing alts - stable",
+    hint: "Only for USDT plus altcoins, with no bitcoin. USDT is the store of value: a coin below its average is sold into USDT.",
+  },
+  {
+    id: "btc-alts",
+    label: "Intelligent rebalancing BTC-alts",
+    hint: "Only for bitcoin plus altcoins, other than the bitcoin-and-ether pair. Bitcoin stays in the book. The tilt runs only while bitcoin is above its 200-day average.",
+  },
+  {
+    id: "alts",
+    label: "Intelligent rebalancing alts",
+    hint: "Only for a book of altcoins, with no bitcoin and no USDT. The split stays inside those coins.",
+  },
+];
+
+const ALGO_NOTES: Record<AlgoId, string> = {
+  "btc-eth": "Every 14 days. The tilt runs only while bitcoin is above its 200-day average. On the saved BTC/ETH list, all 6 windows finished ahead of both holding and a plain rebalance.",
+  "alts-stable": "Every 14 days. While bitcoin is above its 200-day average, a coin below its 50-day average is sold into USDT. While bitcoin is below that average, the book is left alone. On the saved USDT lists this beat both holding and a plain rebalance on 77% of windows, not 95%.",
+  "btc-alts": "Every 14 days. While bitcoin is above its 200-day average, the strongest coin above its 50-day average gets 80%. Below that, the book is left alone. On the saved bitcoin-plus-alt lists this beat both benchmarks on 69% of windows, not 95%.",
+  alts: "Every 14 days. While bitcoin is above its 100-day average, the strongest altcoin above its 50-day average gets 80% and the rest stays in the other altcoins. Below that, the book returns to your weights. Bitcoin is not added. On the saved altcoin lists this beat both benchmarks on 34% of windows, not 95%.",
+};
+
+function bookKind(symbols: string[]): AlgoId | null {
+  const set = new Set(symbols.map((symbol) => symbol.trim().toUpperCase()).filter(Boolean));
+  const hasBtc = set.has("BTC");
+  const hasEth = set.has("ETH");
+  const hasUsdt = set.has("USDT");
+  const alts = [...set].filter((symbol) => symbol !== "BTC" && symbol !== "USDT");
+  if (set.size === 2 && hasBtc && hasEth) return "btc-eth";
+  if (hasUsdt && !hasBtc && alts.length >= 1 && set.size === alts.length + 1) return "alts-stable";
+  if (hasBtc && !hasUsdt && alts.length >= 1 && !(set.size === 2 && hasEth)) return "btc-alts";
+  if (!hasBtc && !hasUsdt && alts.length >= 2) return "alts";
+  return null;
+}
+
 interface ChartSpec {
   id: string;
   name: string;
@@ -69,6 +114,7 @@ interface SavedBook {
   fee: string;
   slip: string;
   everyDays?: number;
+  algo?: AlgoId;
   intelligent?: boolean;
   momentumDays?: string;
   trendDays?: string;
@@ -276,71 +322,59 @@ function renderSimulator(): void {
     costs,
   );
 
-  const momentumDays = input("number", "30");
-  momentumDays.min = "5";
-  momentumDays.max = "400";
-  momentumDays.step = "1";
-  const trendDays = input("number", "50");
-  trendDays.min = "5";
-  trendDays.max = "400";
-  trendDays.step = "1";
-  const leaderPct = input("number", "80");
-  leaderPct.min = "50";
-  leaderPct.max = "100";
-  leaderPct.step = "5";
-  const score = el("select") as HTMLSelectElement;
-  for (const [value, text] of [
-    ["absolute", "Strongest in USDT"],
-    ["vsbtc", "Strongest against BTC"],
-  ] as const) {
-    const option = el("option");
-    option.value = value;
-    option.textContent = text;
-    score.append(option);
-  }
-  const defense = el("select") as HTMLSelectElement;
-  for (const [value, text] of [
-    ["equal", "Go back to your weights"],
-    ["stay", "Leave the book as it is"],
-  ] as const) {
-    const option = el("option");
-    option.value = value;
-    option.textContent = text;
-    defense.append(option);
-  }
-  defense.value = "equal";
-  const protect = el("input") as HTMLInputElement;
-  protect.type = "checkbox";
-  protect.checked = false;
+  const algoBoxes = new Map<AlgoId, HTMLInputElement>();
+  const algoRows = new Map<AlgoId, HTMLElement>();
   const guard = el("div", "guard");
-  const switchRow = el("label", "switch");
-  switchRow.append(protect, document.createTextNode("Intelligent rebalancing"));
-  switchRow.append(infoControl(
-    "Off, this is a plain rebalance back to the weights you typed. That is the default. On, the book still holds only the coins you added. Bitcoin is not added unless you added it. The tilt runs only while bitcoin itself is above its 200-day average of earlier closes. That average is a switch, not a holding. While bitcoin is below it, the check is skipped and the coins you already hold are left alone, so a downtrend does not sell a winner into something weaker. While bitcoin is above it, a selected coin can take the leader share only if its price is above the average below and its return over the strength window is positive. If USDT is one of the coins, a coin that fails that test is sold into USDT. If USDT is not in the book, the check only changes the split among the coins you picked. On 138 mixes this lost to holding about as often as it won. It is not a rule that wins every bear. This page does not send orders.",
-  ));
+  const missingAlgo = el("p", "hint", "Add a book that matches one rule: bitcoin and ether, bitcoin plus altcoins, USDT plus altcoins, or altcoins only.");
+  missingAlgo.hidden = true;
   const guardBody = el("div", "guard-body");
   guardBody.hidden = true;
-  guardBody.append(
-    field("Strength window, days", momentumDays, "How far back the return is measured. 30 uses the close about 30 days ago. Only past closes are used."),
-    field("Must be above this average, days", trendDays, "Daily average of earlier closes for each selected coin. A coin at or below this average cannot be the one we add to. This is not the bitcoin switch: that one is fixed at 200 days."),
-    field("Leader share, %", leaderPct, "How much of the coin sleeve goes to the leading coin. 80 leaves 20 percent for the other coins that still qualify. 100 puts that sleeve in the leader. If USDT is in the book, coins that fail their average are not part of this sleeve: their share sits in USDT."),
-    field("How strength is measured", score, "Strongest in USDT uses each coin's own dollar return. Strongest against BTC uses the coin's return versus bitcoin, which is the rotation Ben Cowen watches. The default is the USDT return, because that one beat hold by more on the five test books."),
-    field("If nothing qualifies", defense, "If USDT is in the book, a downtrend moves the book into USDT. If bitcoin is in the book and USDT is not, the book shifts to bitcoin. Otherwise, go back to your weights, or leave the book as it is. Nothing here adds a coin you left out."),
-  );
-  protect.addEventListener("change", () => {
-    guardBody.hidden = !protect.checked;
-    if (protect.checked) {
-      frequency.value = "custom";
-      everyDays.value = "14";
-      syncSchedule();
+  const algoNote = el("p", "hint");
+  guardBody.append(algoNote);
+  const syncAlgos = () => {
+    const kind = bookKind(holdings.map((row) => row.symbol));
+    missingAlgo.hidden = kind != null;
+    for (const [id, row] of algoRows) {
+      const fit = id === kind;
+      row.hidden = !fit;
+      const box = algoBoxes.get(id);
+      if (box && !fit) box.checked = false;
     }
-  });
+    const selected = selectedAlgo();
+    guardBody.hidden = selected == null;
+    algoNote.textContent = selected ? ALGO_NOTES[selected] : "";
+  };
+  for (const algo of ALGOS) {
+    const row = el("label", "switch");
+    const box = el("input") as HTMLInputElement;
+    box.type = "checkbox";
+    box.checked = false;
+    row.append(box, document.createTextNode(algo.label));
+    row.append(infoControl(algo.hint));
+    box.addEventListener("change", () => {
+      if (box.checked) {
+        for (const [id, other] of algoBoxes) if (id !== algo.id) other.checked = false;
+        frequency.value = "custom";
+        everyDays.value = "14";
+        syncSchedule();
+      }
+      syncAlgos();
+    });
+    algoBoxes.set(algo.id, box);
+    algoRows.set(algo.id, row);
+    guard.append(row);
+  }
+  const selectedAlgo = (): AlgoId | null => {
+    for (const [id, box] of algoBoxes) if (box.checked) return id;
+    return null;
+  };
   const actions = el("div", "actions");
   const runBtn = el("button", "btn primary");
   runBtn.type = "submit";
   runBtn.textContent = "Run";
   actions.append(runBtn);
-  guard.append(switchRow, guardBody, actions);
+  guard.append(missingAlgo, guardBody, actions);
+  syncAlgos();
   form.append(guard);
 
   const results = el("div", "results");
@@ -404,12 +438,7 @@ function renderSimulator(): void {
       fee: fee.value,
       slip: slip.value,
       everyDays: Number(everyDays.value),
-      intelligent: protect.checked,
-      momentumDays: momentumDays.value,
-      trendDays: trendDays.value,
-      leaderPct: leaderPct.value,
-      score: score.value === "vsbtc" ? "vsbtc" : "absolute",
-      defense: defense.value === "stay" ? "stay" : "equal",
+      algo: selectedAlgo() ?? undefined,
     };
     writeBooks([book, ...readBooks().filter((item) => item.name !== name)]);
     bookName.value = "";
@@ -428,15 +457,11 @@ function renderSimulator(): void {
     fee.value = book.fee;
     slip.value = book.slip;
     everyDays.value = String(book.everyDays ?? 14);
-    protect.checked = book.intelligent === true;
-    guardBody.hidden = !protect.checked;
-    momentumDays.value = book.momentumDays ?? "30";
-    trendDays.value = book.trendDays ?? "50";
-    leaderPct.value = book.leaderPct ?? "80";
-    score.value = book.score === "vsbtc" ? "vsbtc" : "absolute";
-    defense.value = book.defense === "stay" ? "stay" : "equal";
     syncSchedule();
     drawHoldings();
+    const kind = bookKind(holdings.map((row) => row.symbol));
+    for (const [id, box] of algoBoxes) box.checked = book.algo === id && id === kind;
+    syncAlgos();
     void run();
   };
 
@@ -475,6 +500,7 @@ function renderSimulator(): void {
       holdingHost.append(row);
     }
     paintSum();
+    syncAlgos();
   }
 
   function paintSum(): void {
@@ -518,7 +544,7 @@ function renderSimulator(): void {
   async function run(): Promise<void> {
     if (!manifest) return;
     results.replaceChildren(el("p", "muted", "Running…"));
-    const built = buildInput(capital, start, end, frequency, weekday, monthDay, everyDays, fee, slip, protect, momentumDays, trendDays, leaderPct, score, defense);
+    const built = buildInput(capital, start, end, frequency, weekday, monthDay, everyDays, fee, slip, selectedAlgo());
     if (typeof built === "string") {
       results.replaceChildren(el("p", "neg", built));
       return;
@@ -544,6 +570,20 @@ function renderSimulator(): void {
 
 }
 
+function algoSpec(algo: AlgoId | null): SimInput["intelligent"] {
+  if (algo == null) return undefined;
+  const common = {
+    enabled: true,
+    score: "absolute" as const,
+    momentumDays: 30,
+    trendDays: 50,
+    leaderWeight: 0.8,
+    defense: "equal" as const,
+  };
+  if (algo === "alts") return { ...common, regime: "btc-mix", regimeDays: 100 };
+  return { ...common, regime: "btc-stay", regimeDays: 200 };
+}
+
 function buildInput(
   capital: HTMLInputElement,
   start: HTMLInputElement,
@@ -554,12 +594,7 @@ function buildInput(
   everyDays: HTMLInputElement,
   fee: HTMLInputElement,
   slip: HTMLInputElement,
-  intelligentOn: HTMLInputElement,
-  momentumDays: HTMLInputElement,
-  trendDays: HTMLInputElement,
-  leaderPct: HTMLInputElement,
-  score: HTMLSelectElement,
-  defense: HTMLSelectElement,
+  algo: AlgoId | null,
 ): { symbols: string[]; input: Omit<SimInput, "series" | "btc"> } | string {
   if (holdings.length < 1 || holdings.length > 10) return "Add between 1 and 10 coins, then run.";
   if (holdings.every((row) => row.symbol === "USDT")) return "USDT alone has no price history. Pair it with a coin.";
@@ -572,7 +607,6 @@ function buildInput(
     weight: Number(row.weight),
     sellLocked: row.sellLocked,
   }));
-  const defenseValue = defense.value === "stay" ? "stay" : "equal";
   return {
     symbols: assets.map((asset) => asset.symbol),
     input: {
@@ -590,16 +624,7 @@ function buildInput(
       fraction: 1,
       trend: { enabled: false, smaDays: 50 },
       blockedBuyPolicy: "keep_winners",
-      intelligent: {
-        enabled: intelligentOn.checked,
-        momentumDays: Number(momentumDays.value),
-        trendDays: Number(trendDays.value),
-        leaderWeight: Number(leaderPct.value) / 100,
-        score: score.value === "vsbtc" ? "vsbtc" : "absolute",
-        defense: defenseValue,
-        regime: "btc-stay",
-        regimeDays: 200,
-      },
+      intelligent: algoSpec(algo),
     },
   };
 }
@@ -700,7 +725,7 @@ function paintResults(
       color: PALETTE[index % PALETTE.length],
       width: 1.7,
       axis: "left",
-      on: true,
+      on: false,
       values: result.points.map((point) => point.values[index] ?? null),
       label: money,
     });
@@ -724,7 +749,7 @@ function paintResults(
     dash: "3 3",
     width: 1.5,
     axis: "left",
-    on: false,
+    on: true,
     values: result.points.map((point) => point.hold),
     label: money,
   });
@@ -750,7 +775,7 @@ function paintResults(
       dash: "5 3",
       width: 1.8,
       axis: "right",
-      on: true,
+      on: false,
       values: result.points.map((point) => point.btcPrice),
       label: btcLabel,
     });
@@ -764,7 +789,16 @@ function paintResults(
     box.checked = spec.on;
     const swatch = el("i");
     swatch.style.background = spec.color;
-    item.append(box, swatch, document.createTextNode(spec.name));
+    const color = el("input") as HTMLInputElement;
+    color.type = "color";
+    color.value = spec.color;
+    color.title = `Color for ${spec.name}`;
+    color.addEventListener("input", () => {
+      spec.color = color.value;
+      swatch.style.background = color.value;
+      paint();
+    });
+    item.append(box, color, swatch, document.createTextNode(spec.name));
     box.addEventListener("change", () => {
       if (box.checked) hidden.delete(spec.id);
       else hidden.add(spec.id);
@@ -1323,7 +1357,7 @@ function infoControl(text: string): HTMLElement {
 
 function placeTip(anchor: HTMLElement, pop: HTMLElement): void {
   const margin = 8;
-  const width = Math.min(320, window.innerWidth - margin * 2);
+  const width = Math.min(440, window.innerWidth - margin * 2);
   pop.style.width = `${width}px`;
   const rect = anchor.getBoundingClientRect();
   const box = pop.getBoundingClientRect();
