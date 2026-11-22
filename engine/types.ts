@@ -70,6 +70,8 @@ export interface IntelligentSpec {
   basketHurdle?: number;
   /** With cash: sell only if the same filters were already off this many days ago. 0 sells on the first failed check. */
   cashConfirmDays?: number;
+  /** Minimum share for each selected coin that is not USDT. 0 allows a coin to be sold out. */
+  floorWeight?: number;
 }
 
 export type BlockedBuyPolicy = "keep_winners" | "park_usdt";

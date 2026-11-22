@@ -61,6 +61,26 @@ test("targets use only the selected coins and sum to 1", () => {
   assert.ok(targets.every((row) => row.weight > 0));
 });
 
+test("a coin floor keeps both coins when the defense would otherwise hold only bitcoin", () => {
+  const start = Date.UTC(2024, 0, 1);
+  const down = Array.from({ length: 80 }, (_, i) => 100 - i);
+  const decision = start + 79 * DAY;
+  const targets = intelligentTargets(
+    [
+      { symbol: "BTC", weight: 1 },
+      { symbol: "ETH", weight: 1 },
+    ],
+    { BTC: series("BTC", start, down), ETH: series("ETH", start, down) },
+    series("BTC", start, down),
+    decision,
+    [down[down.length - 1], down[down.length - 1]],
+    { ...DEFAULTS, defense: "equal", floorWeight: 0.2 },
+  );
+  assert.notEqual(targets, "stay");
+  if (targets === "stay") return;
+  assert.ok(targets.every((row) => row.weight >= 0.2 - 1e-9));
+});
+
 test("USDT takes the book when every selected coin is in a downtrend", () => {
   const start = Date.UTC(2024, 0, 1);
   const down = Array.from({ length: 80 }, (_, i) => 100 - i);

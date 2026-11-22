@@ -75,6 +75,9 @@ const specs: Array<[string, IntelligentSpec | null]> = [
   ["above200", { ...base, regime: "above-only", regimeDays: 200 }],
   ["vsbtc-stay200", { ...base, score: "vsbtc", regimeDays: 200 }],
   ["mom90-stay200", { ...base, momentumDays: 90, trendDays: 100, regimeDays: 200 }],
+  ["stay300-floor20", { ...base, regimeDays: 300, floorWeight: 0.2 }],
+  ["stay300-floor30", { ...base, regimeDays: 300, floorWeight: 0.3 }],
+  ["stay200-floor20", { ...base, regimeDays: 200, floorWeight: 0.2 }],
 ];
 
 function run(start: number, end: number, spec: IntelligentSpec | null): SimSuccess | null {

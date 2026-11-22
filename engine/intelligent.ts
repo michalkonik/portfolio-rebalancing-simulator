@@ -50,13 +50,33 @@ function smaBefore(series: CandleSeries, dayIndex: number, days: number): number
   return sum / closes.length;
 }
 
-function allocate(assets: AssetSpec[], raw: number[]): WeightTarget[] {
+function applyFloor(assets: AssetSpec[], raw: number[], floor: number): number[] {
+  if (!(floor > 0)) return raw;
+  const idxs: number[] = [];
+  for (let i = 0; i < assets.length; i++) if (assets[i].symbol !== "USDT") idxs.push(i);
+  if (idxs.length < 2) return raw;
+  const each = Math.min(floor, 1 / idxs.length);
+  const out = raw.slice();
+  let need = 0;
+  let spare = 0;
+  for (const i of idxs) {
+    if (out[i] < each) need += each - out[i];
+    else spare += out[i] - each;
+  }
+  if (need <= 0 || spare <= 0) return out;
+  const take = Math.min(1, need / spare);
+  for (const i of idxs) out[i] = out[i] < each ? each : out[i] - (out[i] - each) * take;
+  return out;
+}
+
+function allocate(assets: AssetSpec[], raw: number[], floor = 0): WeightTarget[] {
+  const floored = applyFloor(assets, raw, floor);
   let sum = 0;
-  for (const weight of raw) sum += weight;
+  for (const weight of floored) sum += weight;
   const scale = sum > 0 ? 1 / sum : 0;
   return assets.map((asset, i) => ({
     symbol: asset.symbol,
-    weight: scale > 0 ? raw[i] * scale : 0,
+    weight: scale > 0 ? floored[i] * scale : 0,
     sellLocked: false,
   }));
 }
@@ -96,7 +116,7 @@ export function intelligentTargets(
   const userMix = (): WeightTarget[] => {
     const raw = assets.map(() => 0);
     for (const i of tradable) raw[i] = assets[i].weight;
-    return allocate(assets, raw);
+    return allocate(assets, raw, spec.floorWeight ?? 0);
   };
   const regimeDays = Math.max(2, Math.round(spec.regimeDays ?? trendDays));
   const aboveAverage = (seriesFor: CandleSeries | null | undefined, px: number): boolean | null => {
@@ -171,7 +191,7 @@ export function intelligentTargets(
         }
         const raw = assets.map(() => 0);
         raw[best] = 1;
-        return allocate(assets, raw);
+        return allocate(assets, raw, spec.floorWeight ?? 0);
       }
       if (spec.riskOff === "cash") {
         if (spec.cashWhenWeak) {
@@ -287,14 +307,14 @@ export function intelligentTargets(
       const rest = hot.length === 1 ? 0 : (1 - share) / (hot.length - 1);
       for (const i of hot) raw[i] = i === leader ? share : rest;
     }
-    return allocate(assets, raw);
+    return allocate(assets, raw, spec.floorWeight ?? 0);
   }
 
   if (usdtIndex >= 0) {
     if (qualifying.length === 0 || best < 0) {
       const raw = assets.map(() => 0);
       raw[usdtIndex] = 1;
-      return allocate(assets, raw);
+      return allocate(assets, raw, spec.floorWeight ?? 0);
     }
     let typedSum = 0;
     for (const i of tradable) typedSum += assets[i].weight;
@@ -312,7 +332,7 @@ export function intelligentTargets(
       const rest = (1 - leaderWeight) / (qualifying.length - 1);
       for (const i of qualifying) raw[i] = risk * (i === best ? leaderWeight : rest);
     }
-    return allocate(assets, raw);
+    return allocate(assets, raw, spec.floorWeight ?? 0);
   }
 
   let altBest = -1;
@@ -355,7 +375,7 @@ export function intelligentTargets(
     if (btcIndex >= 0) {
       const raw = assets.map(() => 0);
       raw[btcIndex] = 1;
-      return allocate(assets, raw);
+      return allocate(assets, raw, spec.floorWeight ?? 0);
     }
     return userMix();
   }
@@ -363,5 +383,5 @@ export function intelligentTargets(
   const rest = coins.length === 1 ? 0 : (1 - share) / (coins.length - 1);
   const raw = assets.map(() => 0);
   for (const i of coins) raw[i] = i === leader ? share : rest;
-  return allocate(assets, raw);
+  return allocate(assets, raw, spec.floorWeight ?? 0);
 }

@@ -2,7 +2,7 @@
   "windows": 20,
   "rows": [
     {
-      "at": "2026-11-22T17:33:49.873Z",
+      "at": "2026-11-22T17:49:40.211Z",
       "book": "btc-eth",
       "version": "btc-eth/plain",
       "n": 17,
@@ -18,11 +18,11 @@
       "medianEthStack": 1.1352791217877631,
       "bearMedianBtcStack": 0.9672657859641041,
       "bearMedianEthStack": 1.2178127129377487,
-      "seconds": 0.104,
+      "seconds": 0.107,
       "spec": null
     },
     {
-      "at": "2026-11-22T17:33:50.034Z",
+      "at": "2026-11-22T17:49:40.356Z",
       "book": "btc-eth",
       "version": "btc-eth/stay100",
       "n": 17,
@@ -38,7 +38,7 @@
       "medianEthStack": 0.9329483793362561,
       "bearMedianBtcStack": 1.7192236734218085,
       "bearMedianEthStack": 0.39225827374534683,
-      "seconds": 0.16,
+      "seconds": 0.144,
       "spec": {
         "enabled": true,
         "score": "absolute",
@@ -51,7 +51,7 @@
       }
     },
     {
-      "at": "2026-11-22T17:33:50.178Z",
+      "at": "2026-11-22T17:49:40.501Z",
       "book": "btc-eth",
       "version": "btc-eth/stay150",
       "n": 17,
@@ -67,7 +67,7 @@
       "medianEthStack": 1.0019076586970153,
       "bearMedianBtcStack": 0.4656708113959293,
       "bearMedianEthStack": 1.7626562473070917,
-      "seconds": 0.144,
+      "seconds": 0.145,
       "spec": {
         "enabled": true,
         "score": "absolute",
@@ -80,7 +80,7 @@
       }
     },
     {
-      "at": "2026-11-22T17:33:50.318Z",
+      "at": "2026-11-22T17:49:40.642Z",
       "book": "btc-eth",
       "version": "btc-eth/stay200",
       "n": 17,
@@ -96,7 +96,7 @@
       "medianEthStack": 0,
       "bearMedianBtcStack": 2.3283540569796464,
       "bearMedianEthStack": 0,
-      "seconds": 0.14,
+      "seconds": 0.141,
       "spec": {
         "enabled": true,
         "score": "absolute",
@@ -109,7 +109,7 @@
       }
     },
     {
-      "at": "2026-11-22T17:33:50.472Z",
+      "at": "2026-11-22T17:49:40.791Z",
       "book": "btc-eth",
       "version": "btc-eth/stay250",
       "n": 17,
@@ -125,7 +125,7 @@
       "medianEthStack": 0,
       "bearMedianBtcStack": 1.0678149860238855,
       "bearMedianEthStack": 1.909202362779774,
-      "seconds": 0.154,
+      "seconds": 0.149,
       "spec": {
         "enabled": true,
         "score": "absolute",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "at": "2026-11-22T17:33:50.607Z",
+      "at": "2026-11-22T17:49:40.940Z",
       "book": "btc-eth",
       "version": "btc-eth/stay300",
       "n": 17,
@@ -154,7 +154,7 @@
       "medianEthStack": 0,
       "bearMedianBtcStack": 0.4656708113959293,
       "bearMedianEthStack": 1.8334525500085355,
-      "seconds": 0.135,
+      "seconds": 0.149,
       "spec": {
         "enabled": true,
         "score": "absolute",
@@ -167,7 +167,7 @@
       }
     },
     {
-      "at": "2026-11-22T17:33:50.743Z",
+      "at": "2026-11-22T17:49:41.078Z",
       "book": "btc-eth",
       "version": "btc-eth/mix200",
       "n": 17,
@@ -183,7 +183,7 @@
       "medianEthStack": 1.2054075559345805,
       "bearMedianBtcStack": 1.1355514687155677,
       "bearMedianEthStack": 1.2054075559345805,
-      "seconds": 0.136,
+      "seconds": 0.138,
       "spec": {
         "enabled": true,
         "score": "absolute",
@@ -196,7 +196,7 @@
       }
     },
     {
-      "at": "2026-11-22T17:33:50.874Z",
+      "at": "2026-11-22T17:49:41.216Z",
       "book": "btc-eth",
       "version": "btc-eth/above200",
       "n": 17,
@@ -212,7 +212,7 @@
       "medianEthStack": 0.9913165892216318,
       "bearMedianBtcStack": 0.8085722781314151,
       "bearMedianEthStack": 1.0745996190127223,
-      "seconds": 0.131,
+      "seconds": 0.137,
       "spec": {
         "enabled": true,
         "score": "absolute",
@@ -225,7 +225,7 @@
       }
     },
     {
-      "at": "2026-11-22T17:33:50.989Z",
+      "at": "2026-11-22T17:49:41.352Z",
       "book": "btc-eth",
       "version": "btc-eth/vsbtc-stay200",
       "n": 17,
@@ -241,7 +241,7 @@
       "medianEthStack": 0,
       "bearMedianBtcStack": 2.2932411343354224,
       "bearMedianEthStack": 0,
-      "seconds": 0.115,
+      "seconds": 0.136,
       "spec": {
         "enabled": true,
         "score": "vsbtc",
@@ -254,7 +254,7 @@
       }
     },
     {
-      "at": "2026-11-22T17:33:51.106Z",
+      "at": "2026-11-22T17:49:41.493Z",
       "book": "btc-eth",
       "version": "btc-eth/mom90-stay200",
       "n": 17,
@@ -270,7 +270,7 @@
       "medianEthStack": 1.385390829883473,
       "bearMedianBtcStack": 0.4597466450404389,
       "bearMedianEthStack": 1.5458841810552568,
-      "seconds": 0.116,
+      "seconds": 0.141,
       "spec": {
         "enabled": true,
         "score": "absolute",
@@ -280,6 +280,96 @@
         "defense": "equal",
         "regime": "btc-stay",
         "regimeDays": 200
+      }
+    },
+    {
+      "at": "2026-11-22T17:49:41.615Z",
+      "book": "btc-eth",
+      "version": "btc-eth/stay300-floor20",
+      "n": 17,
+      "windows": 20,
+      "bullN": 14,
+      "bearN": 3,
+      "bothRate": 0.9411764705882353,
+      "bullRate": 0.9285714285714286,
+      "bearRate": 1,
+      "medianExcessHold": 6684.810060919532,
+      "medianExcessPlain": 5723.069426089442,
+      "medianBtcStack": 1.5888342927500039,
+      "medianEthStack": 0.8189487605977157,
+      "bearMedianBtcStack": 0.45058378845127756,
+      "bearMedianEthStack": 1.7752056879596867,
+      "seconds": 0.122,
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 300,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "at": "2026-11-22T17:49:41.732Z",
+      "book": "btc-eth",
+      "version": "btc-eth/stay300-floor30",
+      "n": 17,
+      "windows": 20,
+      "bullN": 14,
+      "bearN": 3,
+      "bothRate": 0.9411764705882353,
+      "bullRate": 0.9285714285714286,
+      "bearRate": 1,
+      "medianExcessHold": 4061.9778177310473,
+      "medianExcessPlain": 3637.9299723795266,
+      "medianBtcStack": 1.3060327828783422,
+      "medianEthStack": 1.0556797130332483,
+      "bearMedianBtcStack": 0.6524656337541686,
+      "bearMedianEthStack": 1.5002280935121655,
+      "seconds": 0.117,
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 300,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "at": "2026-11-22T17:49:41.844Z",
+      "book": "btc-eth",
+      "version": "btc-eth/stay200-floor20",
+      "n": 17,
+      "windows": 20,
+      "bullN": 14,
+      "bearN": 3,
+      "bothRate": 0.8235294117647058,
+      "bullRate": 0.8571428571428571,
+      "bearRate": 0.6666666666666666,
+      "medianExcessHold": 3482.628326903312,
+      "medianExcessPlain": 2504.1173441026203,
+      "medianBtcStack": 1.6141598266543602,
+      "medianEthStack": 0.7880850443611561,
+      "bearMedianBtcStack": 1.8567590792282265,
+      "bearMedianEthStack": 0.39019485888451944,
+      "seconds": 0.111,
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 200,
+        "floorWeight": 0.2
       }
     }
   ]
