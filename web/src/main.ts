@@ -774,7 +774,7 @@ function paintResults(
     {
       id: "equity",
       name: "Portfolio",
-      color: "#0e8074",
+      color: "#1b9e4b",
       width: 2.6,
       axis: "left",
       on: true,
