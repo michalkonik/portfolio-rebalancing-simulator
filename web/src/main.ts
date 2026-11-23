@@ -1,6 +1,7 @@
 import { correlationMatrix } from "@engine/correlation.ts";
 import { guardsAreActive, simulate, simulateNaive } from "@engine/simulate.ts";
 import type { CandleSeries, Frequency, SimInput, SimSuccess } from "@engine/types.ts";
+import { legacyVariant, variantById, variantsFor, type BookKind } from "@engine/variants.ts";
 import { renderLineChart, renderStack, type ChartLine, type ValueScale } from "./chart.ts";
 import { cls, day, num, parseDayEnd, parseDayStart, pct, qty, quote, usdt } from "./format.ts";
 import { loadCandles } from "./load.ts";
@@ -38,39 +39,7 @@ interface Holding {
 const BASE = import.meta.env.BASE_URL;
 const PALETTE = ["#2196f3", "#ff5656", "#ff9800", "#00cf0a", "#9c27b0", "#14b8a6", "#0069d9", "#d14343", "#65748b", "#ffb020"];
 
-type AlgoId = "btc-eth" | "alts-stable" | "btc-alts" | "alts";
-
-const ALGOS: Array<{ id: AlgoId; label: string; hint: string }> = [
-  {
-    id: "btc-eth",
-    label: "Intelligent rebalancing BTC-ETH",
-    hint: "Only for a book that is exactly bitcoin and ether. Off until you turn it on. It changes the split between those two coins and does not add anything else.",
-  },
-  {
-    id: "alts-stable",
-    label: "Intelligent rebalancing alts - stable",
-    hint: "Only for USDT plus altcoins, with no bitcoin. USDT is the store of value: a coin below its average is sold into USDT.",
-  },
-  {
-    id: "btc-alts",
-    label: "Intelligent rebalancing BTC-alts",
-    hint: "Only for bitcoin plus altcoins, other than the bitcoin-and-ether pair. Bitcoin stays in the book. The tilt runs only while bitcoin is above its 200-day average.",
-  },
-  {
-    id: "alts",
-    label: "Intelligent rebalancing alts",
-    hint: "Only for a book of altcoins, with no bitcoin and no USDT. The split stays inside those coins.",
-  },
-];
-
-const ALGO_NOTES: Record<AlgoId, string> = {
-  "btc-eth": "Every 14 days. The tilt runs only while bitcoin is above its 200-day average. On the saved BTC/ETH list, all 6 windows finished ahead of both holding and a plain rebalance.",
-  "alts-stable": "Every 14 days. While bitcoin is above its 200-day average, a coin below its 50-day average is sold into USDT. While bitcoin is below that average, the book is left alone. On the saved USDT lists this beat both holding and a plain rebalance on 77% of windows, not 95%.",
-  "btc-alts": "Every 14 days. While bitcoin is above its 200-day average, the strongest coin above its 50-day average gets 80%. Below that, the book is left alone. On the saved bitcoin-plus-alt lists this beat both benchmarks on 69% of windows, not 95%.",
-  alts: "Every 14 days. The leader weight is used only while bitcoin is above its average, dominance is below its average, and total market cap is above its average. Otherwise the book does what you pick below, including selling into USDT. 0 turns a filter off. These series are the stored basket of coins listed by December 2021, at today's supply, not a live CoinGecko feed. On a balanced slice of the 5,000 windows the cash setting beat both hold and a plain rebalance about 64% of the time, not 75%.",
-};
-
-function bookKind(symbols: string[]): AlgoId | null {
+function bookKind(symbols: string[]): BookKind | null {
   const set = new Set(symbols.map((symbol) => symbol.trim().toUpperCase()).filter(Boolean));
   const hasBtc = set.has("BTC");
   const hasEth = set.has("ETH");
@@ -114,7 +83,8 @@ interface SavedBook {
   fee: string;
   slip: string;
   everyDays?: number;
-  algo?: AlgoId;
+  algo?: BookKind;
+  variant?: string;
   intelligent?: boolean;
   momentumDays?: string;
   trendDays?: string;
@@ -328,14 +298,14 @@ function renderSimulator(): void {
     costs,
   );
 
-  const algoBoxes = new Map<AlgoId, HTMLInputElement>();
-  const algoRows = new Map<AlgoId, HTMLElement>();
+  let pickedVariant: string | null = null;
+  const variantHost = el("div", "variants");
   const guard = el("div", "guard");
-  const missingAlgo = el("p", "hint", "Add a book that matches one rule: bitcoin and ether, bitcoin plus altcoins, USDT plus altcoins, or altcoins only.");
+  const missingAlgo = el("p", "hint", "Add a book that matches one group: bitcoin and ether, bitcoin plus altcoins, USDT plus altcoins, or altcoins only.");
   missingAlgo.hidden = true;
   const guardBody = el("div", "guard-body");
   guardBody.hidden = true;
-  const algoNote = el("p", "hint");
+  const algoNote = el("p", "hint", "The past results used bitcoin 200, dominance 50, total 50, momentum 30, coin average 50, and leader 80. Change a number and the run is no longer that test.");
   const btcMaDays = input("number", "200");
   const btcFastMaDays = input("number", "0");
   const dominanceMaDays = input("number", "50");
@@ -372,55 +342,75 @@ function renderSimulator(): void {
     labeled("Momentum, days", momentumDays, "How far back the leader's return is measured."),
     labeled("Coin average, days", trendDays, "A coin can lead only while its price is above this average."),
     labeled("Leader weight, percent", leaderWeight, "Share of the book given to the leader while every filter passes. The rest stays in the other selected coins."),
-    labeled("When a filter fails", riskOff, "Leave the book alone keeps the current mix. Return to your weights trades back to the numbers you typed. Sell into USDT holds cash until every filter passes again."),
   );
   cowenFields.hidden = true;
   guardBody.append(algoNote, cowenFields);
   const factors = () => ({ btcMaDays, btcFastMaDays, dominanceMaDays, totalMaDays, momentumDays, trendDays, leaderWeight, riskOff });
+  const selectedVariant = () => (pickedVariant ? variantById(pickedVariant) : null);
+  const applyAltsKnobs = (id: string) => {
+    const variant = variantById(id);
+    if (!variant || variant.book !== "alts") return;
+    const spec = variant.spec;
+    btcMaDays.value = String(spec.btcMaDays ?? 200);
+    btcFastMaDays.value = String(spec.btcFastMaDays ?? 0);
+    dominanceMaDays.value = String(spec.dominanceMaDays ?? 50);
+    totalMaDays.value = String(spec.totalMaDays ?? 50);
+    momentumDays.value = String(spec.momentumDays);
+    trendDays.value = String(spec.trendDays);
+    leaderWeight.value = String(Math.round(spec.leaderWeight * 100));
+    riskOff.value = spec.riskOff === "mix" || spec.riskOff === "stay" ? spec.riskOff : "cash";
+  };
   const syncAlgos = () => {
     const kind = bookKind(holdings.map((row) => row.symbol));
     missingAlgo.hidden = kind != null;
-    for (const [id, row] of algoRows) {
-      const fit = id === kind;
-      row.hidden = !fit;
-      const box = algoBoxes.get(id);
-      if (box && !fit) box.checked = false;
-    }
-    const selected = selectedAlgo();
-    guardBody.hidden = selected == null;
-    cowenFields.hidden = selected !== "alts";
-    algoNote.textContent = selected ? ALGO_NOTES[selected] : "";
-  };
-  for (const algo of ALGOS) {
-    const row = el("label", "switch");
-    const box = el("input") as HTMLInputElement;
-    box.type = "checkbox";
-    box.checked = false;
-    row.append(box, document.createTextNode(algo.label));
-    row.append(infoControl(algo.hint));
-    box.addEventListener("change", () => {
-      if (box.checked) {
-        for (const [id, other] of algoBoxes) if (id !== algo.id) other.checked = false;
-        frequency.value = "custom";
-        everyDays.value = "14";
-        syncSchedule();
+    if (pickedVariant && variantById(pickedVariant)?.book !== kind) pickedVariant = null;
+    variantHost.replaceChildren();
+    if (kind) {
+      variantHost.append(el("p", "hint", "Plain rebalance stays on until you pick a rule. Each rule below is available because the past tests did not agree."));
+      const off = el("label", "variant");
+      const offBox = el("input") as HTMLInputElement;
+      offBox.type = "radio";
+      offBox.name = "algo-variant";
+      offBox.checked = pickedVariant == null;
+      offBox.addEventListener("change", () => {
+        if (!offBox.checked) return;
+        pickedVariant = null;
+        syncAlgos();
+      });
+      const offName = el("span", "name", "Off");
+      const offText = el("p", "", "No intelligent rule. On each scheduled check the book trades back to the weights you typed.");
+      off.append(offBox, offName, offText);
+      variantHost.append(off);
+      for (const variant of variantsFor(kind)) {
+        const row = el("label", "variant");
+        const box = el("input") as HTMLInputElement;
+        box.type = "radio";
+        box.name = "algo-variant";
+        box.value = variant.id;
+        box.checked = pickedVariant === variant.id;
+        box.addEventListener("change", () => {
+          if (!box.checked) return;
+          pickedVariant = variant.id;
+          frequency.value = "custom";
+          everyDays.value = "14";
+          syncSchedule();
+          applyAltsKnobs(variant.id);
+          syncAlgos();
+        });
+        row.append(box, el("span", "name", variant.label), el("p", "", variant.rule), el("p", "", variant.results), el("p", "", variant.when));
+        variantHost.append(row);
       }
-      syncAlgos();
-    });
-    algoBoxes.set(algo.id, box);
-    algoRows.set(algo.id, row);
-    guard.append(row);
-  }
-  const selectedAlgo = (): AlgoId | null => {
-    for (const [id, box] of algoBoxes) if (box.checked) return id;
-    return null;
+    }
+    const selected = selectedVariant();
+    guardBody.hidden = selected?.book !== "alts";
+    cowenFields.hidden = selected?.book !== "alts";
   };
   const actions = el("div", "actions");
   const runBtn = el("button", "btn primary");
   runBtn.type = "submit";
   runBtn.textContent = "Run";
   actions.append(runBtn);
-  guard.append(missingAlgo, guardBody, actions);
+  guard.append(missingAlgo, variantHost, guardBody, actions);
   syncAlgos();
   form.append(guard);
 
@@ -485,7 +475,8 @@ function renderSimulator(): void {
       fee: fee.value,
       slip: slip.value,
       everyDays: Number(everyDays.value),
-      algo: selectedAlgo() ?? undefined,
+      algo: selectedVariant()?.book,
+      variant: selectedVariant()?.id,
       btcMaDays: btcMaDays.value,
       btcFastMaDays: btcFastMaDays.value,
       dominanceMaDays: dominanceMaDays.value,
@@ -523,7 +514,9 @@ function renderSimulator(): void {
     syncSchedule();
     drawHoldings();
     const kind = bookKind(holdings.map((row) => row.symbol));
-    for (const [id, box] of algoBoxes) box.checked = book.algo === id && id === kind;
+    const restored = legacyVariant(book);
+    pickedVariant = restored && variantById(restored)?.book === kind ? restored : null;
+    if (pickedVariant?.startsWith("alts-")) applyAltsKnobs(pickedVariant);
     syncAlgos();
     void run();
   };
@@ -607,7 +600,7 @@ function renderSimulator(): void {
   async function run(): Promise<void> {
     if (!manifest) return;
     results.replaceChildren(el("p", "muted", "Running…"));
-    const built = buildInput(capital, start, end, frequency, weekday, monthDay, everyDays, fee, slip, selectedAlgo(), factors());
+    const built = buildInput(capital, start, end, frequency, weekday, monthDay, everyDays, fee, slip, pickedVariant, factors());
     if (typeof built === "string") {
       results.replaceChildren(el("p", "neg", built));
       return;
@@ -639,7 +632,7 @@ function dayField(field: HTMLInputElement, fallback: number): number {
 }
 
 function algoSpec(
-  algo: AlgoId | null,
+  variantId: string | null,
   factors?: {
     btcMaDays: HTMLInputElement;
     btcFastMaDays: HTMLInputElement;
@@ -651,32 +644,22 @@ function algoSpec(
     riskOff: HTMLSelectElement;
   },
 ): SimInput["intelligent"] {
-  if (algo == null) return undefined;
-  const common = {
-    enabled: true,
-    score: "absolute" as const,
-    momentumDays: 30,
-    trendDays: 50,
-    leaderWeight: 0.8,
-    defense: "equal" as const,
+  const variant = variantId ? variantById(variantId) : null;
+  if (!variant) return undefined;
+  if (variant.book !== "alts" || !factors) return variant.spec;
+  const leader = dayField(factors.leaderWeight, 80) / 100;
+  const riskOff = factors.riskOff.value === "mix" || factors.riskOff.value === "cash" ? factors.riskOff.value : "stay";
+  return {
+    ...variant.spec,
+    momentumDays: Math.max(2, dayField(factors.momentumDays, 30)),
+    trendDays: Math.max(2, dayField(factors.trendDays, 50)),
+    leaderWeight: Math.min(1, Math.max(0.05, leader)),
+    btcMaDays: Math.max(0, dayField(factors.btcMaDays, 200)),
+    btcFastMaDays: Math.max(0, dayField(factors.btcFastMaDays, 0)),
+    dominanceMaDays: Math.max(0, dayField(factors.dominanceMaDays, 50)),
+    totalMaDays: Math.max(0, dayField(factors.totalMaDays, 50)),
+    riskOff,
   };
-  if (algo === "alts" && factors) {
-    const leader = dayField(factors.leaderWeight, 80) / 100;
-    return {
-      ...common,
-      regime: "cowen",
-      momentumDays: Math.max(2, dayField(factors.momentumDays, 30)),
-      trendDays: Math.max(2, dayField(factors.trendDays, 50)),
-      leaderWeight: Math.min(1, Math.max(0.05, leader)),
-      btcMaDays: Math.max(0, dayField(factors.btcMaDays, 200)),
-      btcFastMaDays: Math.max(0, dayField(factors.btcFastMaDays, 0)),
-      dominanceMaDays: Math.max(0, dayField(factors.dominanceMaDays, 50)),
-      totalMaDays: Math.max(0, dayField(factors.totalMaDays, 50)),
-      riskOff: factors.riskOff.value === "mix" || factors.riskOff.value === "cash" ? factors.riskOff.value : "stay",
-    };
-  }
-  if (algo === "alts") return { ...common, regime: "btc-mix", regimeDays: 100 };
-  return { ...common, regime: "btc-stay", regimeDays: 200 };
 }
 
 function buildInput(
@@ -689,7 +672,7 @@ function buildInput(
   everyDays: HTMLInputElement,
   fee: HTMLInputElement,
   slip: HTMLInputElement,
-  algo: AlgoId | null,
+  variantId: string | null,
   factors?: {
     btcMaDays: HTMLInputElement;
     btcFastMaDays: HTMLInputElement;
@@ -729,7 +712,7 @@ function buildInput(
       fraction: 1,
       trend: { enabled: false, smaDays: 50 },
       blockedBuyPolicy: "keep_winners",
-      intelligent: algoSpec(algo, factors),
+      intelligent: algoSpec(variantId, factors),
     },
   };
 }
