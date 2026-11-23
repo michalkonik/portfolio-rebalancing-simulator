@@ -39,18 +39,18 @@ test("each book has one default and the pair default keeps a coin floor", () => 
   assert.equal(defaultVariant("alts").spec.riskOff, "cash");
 });
 
-test("each rule exposes the knobs it actually reads, starting at the scored numbers", () => {
-  const floor = tunableFields(defaultVariant("btc-eth").spec);
-  assert.equal(floor.find((field) => field.key === "regimeDays")?.value, 300);
-  assert.equal(floor.find((field) => field.key === "floorPercent")?.value, 10);
-  const band = tunableFields(variantById("btc-eth-band-floor10")!.spec);
-  assert.equal(band.find((field) => field.key === "bandWeeks")?.value, 20);
-  assert.equal(band.find((field) => field.key === "regimeDays"), undefined);
-  const cash = tunableFields(defaultVariant("alts").spec);
-  assert.equal(cash.find((field) => field.key === "btcMaDays")?.value, 200);
-  const edited = applyTunables(defaultVariant("btc-eth").spec, { regimeDays: 250, floorPercent: 15 });
+test("each rule exposes only the knobs it reads, starting at the scored numbers", () => {
+  const keys = (id: string) => tunableFields(variantById(id)!.spec).map((field) => field.key);
+  assert.deepEqual(keys("btc-eth-stay300-floor10"), ["regimeDays", "momentumDays", "trendDays", "leaderPercent", "floorPercent"]);
+  assert.equal(tunableFields(defaultVariant("btc-eth").spec).find((field) => field.key === "regimeDays")?.value, 300);
+  assert.equal(tunableFields(defaultVariant("btc-eth").spec).find((field) => field.key === "floorPercent")?.value, 10);
+  assert.deepEqual(keys("btc-eth-band-floor10"), ["bandWeeks", "bandEmaWeeks", "pairMaDays", "dominanceTrendDays", "momentumDays", "trendDays", "leaderPercent", "floorPercent"]);
+  assert.deepEqual(keys("alts-cash"), ["btcMaDays", "btcFastMaDays", "dominanceMaDays", "totalMaDays", "momentumDays", "trendDays", "leaderPercent", "floorPercent"]);
+  assert.equal(tunableFields(defaultVariant("alts").spec).find((field) => field.key === "btcMaDays")?.value, 200);
+  const edited = applyTunables(defaultVariant("btc-eth").spec, { regimeDays: 250, floorPercent: 15, bandWeeks: 10 });
   assert.equal(edited.regimeDays, 250);
   assert.equal(edited.floorWeight, 0.15);
+  assert.equal(edited.bandWeeks, undefined);
 });
 
 test("the pair favorites are the 300-day rule and the 10 percent floor", () => {

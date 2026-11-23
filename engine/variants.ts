@@ -196,9 +196,7 @@ export function tunableFields(spec: IntelligentSpec): Tunable[] {
     days(fields, "totalMaDays", "Total market cap average, days", "Tilt only while the stored total is above this average. 0 turns it off.", spec.totalMaDays, 50);
   }
   days(fields, "momentumDays", "Momentum, days", "How far back the leader's return is measured.", spec.momentumDays, 30);
-  if (spec.regime !== "cowen-band") {
-    days(fields, "trendDays", "Coin average, days", "A coin can lead only while its price is above this average.", spec.trendDays, 50);
-  }
+  days(fields, "trendDays", "Coin average, days", "A coin can lead only while its price is above this average.", spec.trendDays, 50);
   fields.push({
     key: "leaderPercent",
     label: "Leader weight, percent",

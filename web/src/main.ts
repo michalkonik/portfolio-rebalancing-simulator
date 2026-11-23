@@ -153,12 +153,18 @@ function renderSimulator(): void {
   const defaultEnd = Number.isFinite(dataEnd) && dataEnd > 0 ? dataEnd : Date.now();
   const defaultStart = defaultEnd - 3 * 365.25 * 86_400_000;
 
-  const layout = el("div", "layout");
-  const form = el("form", "panel controls");
+  const screen = el("div", "screen");
+  const form = el("form", "screen-form");
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     void run();
   });
+  const coinsCard = el("section", "card");
+  const calendarCard = el("section", "card");
+  const rulesCard = el("section", "card");
+  coinsCard.append(el("h2", "", "Book"));
+  calendarCard.append(el("h2", "", "Calendar"));
+  rulesCard.append(el("h2", "", "Intelligent rule"));
 
   const booksHost = el("div", "books");
   const bookName = input("text", "");
@@ -169,11 +175,11 @@ function renderSimulator(): void {
   saveBook.textContent = "Save";
   const bookSave = el("div", "book-save");
   bookSave.append(bookName, saveBook);
-  form.append(
+  coinsCard.append(
     field(
       "Your books",
       bookSave,
-      "Nothing is saved until you save it. A book stores this mix, the weights, the calendar, the fees, and whether winner protection is on. Books stay in this browser only. There are no built-in books.",
+      "Nothing is saved until you save it. A book stores this mix, the weights, the calendar, the fees, and the rule you picked. Books stay in this browser only. There are no built-in books.",
     ),
     booksHost,
   );
@@ -183,7 +189,7 @@ function renderSimulator(): void {
   search.autocomplete = "off";
   const suggest = el("div", "suggest");
   search.addEventListener("input", () => fillSuggest(suggest, search.value));
-  form.append(
+  coinsCard.append(
     field(
       "Coins",
       search,
@@ -194,10 +200,10 @@ function renderSimulator(): void {
 
   const holdingHost = el("div");
   holdingHost.id = "holdings";
-  form.append(holdingHost);
+  coinsCard.append(holdingHost);
   const sum = el("p", "sum");
   sum.id = "weight-sum";
-  form.append(sum);
+  coinsCard.append(sum);
   const equal = el("button", "btn ghost");
   equal.type = "button";
   equal.textContent = "Equal weight";
@@ -214,7 +220,7 @@ function renderSimulator(): void {
     });
     drawHoldings();
   });
-  form.append(equal);
+  coinsCard.append(equal);
 
   const capital = input("number", "10000");
   capital.min = "1";
@@ -285,7 +291,7 @@ function renderSimulator(): void {
     labeled("Fee, bps", fee, "Exchange fee in basis points. 10 bps is 0.10% of the coin value, charged on the way out and on the way in. USDT transfers are free. 100 bps = 1%."),
     labeled("Slippage, bps", slip, "Extra haircut, in basis points, for crossing the spread and moving the price. It is added to the fee. 5 bps is 0.05%."),
   );
-  form.append(
+  calendarCard.append(
     field("Starting capital", capital, "USDT you start with. Weights are applied to this amount on the first bar."),
     dates,
     field(
@@ -301,17 +307,21 @@ function renderSimulator(): void {
 
   let pickedVariant: string | null = null;
   let lastKind: BookKind | null = null;
-  const variantHost = el("div", "variants");
-  const guard = el("div", "guard");
-  const missingAlgo = el("p", "hint", "Add a book that matches one group: bitcoin and ether, bitcoin plus altcoins, USDT plus altcoins, or altcoins only.");
+  const variantHost = el("div", "rule-picks");
+  const waitingAlgo = el("p", "hint", "Add coins first. The rules for that book show up here, and none is on until you pick one.");
+  const missingAlgo = el("p", "hint", "This mix has no intelligent rule. Use bitcoin and ether, bitcoin plus altcoins, USDT plus altcoins, or at least two altcoins.");
   missingAlgo.hidden = true;
   const guardBody = el("div", "guard-body");
   guardBody.hidden = true;
-  const knobHost = el("div", "knobs");
-  const knobNote = el("p", "hint", "These start at the measured numbers. Change one and this run is no longer that test.");
-  guardBody.append(knobNote, knobHost);
   const ruleDetail = el("div", "rule-detail");
-  ruleDetail.hidden = true;
+  const knobBar = el("div", "knob-bar");
+  const knobNote = el("p", "hint", "Measured numbers. Change one and this run is no longer that test.");
+  const resetKnobs = el("button", "btn ghost");
+  resetKnobs.type = "button";
+  resetKnobs.textContent = "Reset";
+  knobBar.append(knobNote, resetKnobs);
+  const knobHost = el("div", "knobs");
+  guardBody.append(ruleDetail, knobBar, knobHost);
   const knobInputs = new Map<string, HTMLInputElement>();
   let knobValues: Record<string, string> = {};
   const readKnobs = (): Record<string, number> => {
@@ -322,41 +332,42 @@ function renderSimulator(): void {
   const selectedVariant = () => (pickedVariant ? variantById(pickedVariant) : null);
   const paintDetail = (variant: ReturnType<typeof selectedVariant>) => {
     ruleDetail.replaceChildren();
-    if (!variant) {
-      ruleDetail.hidden = true;
-      return;
-    }
-    ruleDetail.hidden = false;
-    ruleDetail.append(el("h2", "", variant.label), el("p", "", variant.rule), el("p", "", variant.results), el("p", "", variant.when));
+    if (!variant) return;
+    const copy = el("details", "rule-copy");
+    copy.append(el("summary", "", "Past result"), el("p", "", variant.results), el("p", "", variant.when));
+    ruleDetail.append(el("p", "rule-now", variant.rule), copy);
   };
   const paintKnobs = (variant: ReturnType<typeof selectedVariant>) => {
     knobHost.replaceChildren();
     knobInputs.clear();
     if (!variant) return;
-    for (const field of tunableFields(variant.spec)) {
-      const box = input("number", knobValues[field.key] ?? String(field.value));
-      box.min = String(field.min);
-      box.max = String(field.max);
-      box.step = String(field.step);
+    for (const tunable of tunableFields(variant.spec)) {
+      const box = input("number", knobValues[tunable.key] ?? String(tunable.value));
+      box.min = String(tunable.min);
+      box.max = String(tunable.max);
+      box.step = String(tunable.step);
       box.addEventListener("input", () => {
-        knobValues[field.key] = box.value;
+        knobValues[tunable.key] = box.value;
       });
-      knobInputs.set(field.key, box);
-      const wrap = el("label", "knob");
-      wrap.append(el("span", "name", field.label), box, el("span", "", field.hint));
+      knobInputs.set(tunable.key, box);
+      const wrap = labeled(tunable.label, box, tunable.hint);
+      wrap.classList.add("knob");
       knobHost.append(wrap);
     }
   };
   const syncAlgos = () => {
     const kind = bookKind(holdings.map((row) => row.symbol));
-    missingAlgo.hidden = kind != null;
+    waitingAlgo.hidden = holdings.length > 0;
+    missingAlgo.hidden = kind != null || holdings.length === 0;
     if (kind !== lastKind) {
-      if (pickedVariant && variantById(pickedVariant)?.book !== kind) pickedVariant = null;
+      if (pickedVariant && variantById(pickedVariant)?.book !== kind) {
+        pickedVariant = null;
+        knobValues = {};
+      }
       lastKind = kind;
     }
     variantHost.replaceChildren();
     if (kind) {
-      variantHost.append(el("p", "hint", "Plain rebalance runs until you pick a rule. The full description is on the right. One name is marked as the best measured result."));
       const off = el("label", "rule-option");
       const offBox = el("input") as HTMLInputElement;
       offBox.type = "radio";
@@ -367,7 +378,7 @@ function renderSimulator(): void {
         pickedVariant = null;
         syncAlgos();
       });
-      off.append(offBox, document.createTextNode("Off. Plain rebalance."));
+      off.append(offBox, document.createTextNode("Off"));
       variantHost.append(off);
       for (const variant of variantsFor(kind)) {
         const row = el("label", "rule-option");
@@ -395,22 +406,31 @@ function renderSimulator(): void {
     paintKnobs(selected);
     paintDetail(selected);
   };
+  resetKnobs.addEventListener("click", () => {
+    knobValues = {};
+    if (pickedVariant) {
+      frequency.value = "custom";
+      everyDays.value = "14";
+      syncSchedule();
+    }
+    syncAlgos();
+  });
   const actions = el("div", "actions");
   const runBtn = el("button", "btn primary");
   runBtn.type = "submit";
   runBtn.textContent = "Run";
   actions.append(runBtn);
-  guard.append(missingAlgo, variantHost, guardBody, actions);
+  rulesCard.append(waitingAlgo, missingAlgo, variantHost, guardBody);
   syncAlgos();
-  form.append(guard);
+  const setup = el("div", "setup");
+  setup.append(coinsCard, calendarCard);
+  form.append(setup, rulesCard, actions);
 
   const results = el("div", "results");
   results.id = "results";
   results.append(el("p", "muted", "Add one or more coins, set the weights and the calendar, then run. Nothing is loaded for you. Intelligent rules stay off until you pick one."));
-  const stage = el("div", "stage");
-  stage.append(ruleDetail, results);
-  layout.append(form, stage);
-  ui.sim.replaceChildren(layout);
+  screen.append(form, results);
+  ui.sim.replaceChildren(screen);
 
   function readBooks(): SavedBook[] {
     try {
