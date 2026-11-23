@@ -39,7 +39,7 @@ export const VARIANTS: AlgoVariant[] = [
     label: "300-day bitcoin switch, 10% floor",
     rule: "Every 14 days. While bitcoin is above its 300-day average, the stronger of bitcoin and ether, measured over 30 days and only if it is also above its 50-day average, gets 80%. The other keeps 20%. While bitcoin is below its 300-day average, the book is left alone. Each coin keeps at least 10%, so ether cannot be sold out.",
     results: "From $10,000, 17 August 2017 through 20 November 2026, with a 0.10% fee and 0.05% slippage: $498,328, against $93,972 for holding and $122,467 for a plain rebalance. It ended with 7.62 BTC and 30.39 ETH. It beat holding on 7 of the 8 named stretches. The miss was the 2017 bull, $28,168 against $32,994. The 2018 bear finished at $3,837 against $1,431, and the 2020–21 bull at $325,516 against $258,447, with both coins still held.",
-    when: "Use this for a bull or a bear when the book has to keep both coins. It is the best measured balance of dollars and a remaining ether stack. It is not a euphoria rule: nothing here detects a blow-off.",
+    when: "Best measured rule for this book. Use this for a bull or a bear when the book has to keep both coins. It is the best measured balance of dollars and a remaining ether stack. It is not a euphoria rule: nothing here detects a blow-off.",
     spec: { ...pair, regime: "btc-stay", regimeDays: 300, floorWeight: 0.1 },
   },
   {
@@ -83,7 +83,7 @@ export const VARIANTS: AlgoVariant[] = [
     label: "200-day bitcoin switch",
     rule: "Every 14 days, for bitcoin plus one or more altcoins, not the bitcoin-and-ether pair. While bitcoin is above its 200-day average, the strongest selected coin above its 50-day average, by its own 30-day dollar gain, gets 80%. The rest is split across the other selected coins. While bitcoin is below that average, the book is left alone. Bitcoin is not added and is not sold just because the switch is off.",
     results: "448 saved books, four stretches (the 2022 bear, the 2023–24 bull, 2024–26, and November 2021 through 20 November 2026): 1,792 runs, none skipped. Beat both holding and a plain rebalance on 56.0%. Bull stretches 70.4%. The 2022 bear 27.2%. Median gap versus holding on the long stretch was +$1,365.",
-    when: "Use this in an uptrend. Do not expect it to rescue the book in a bear: with bitcoin under the average it holds the alts through the drop, and the bear pass rate was 27%. No euphoria test exists for this book.",
+    when: "Best measured rule for this book. Use this in an uptrend. Do not expect it to rescue the book in a bear: with bitcoin under the average it holds the alts through the drop, and the bear pass rate was 27%. No euphoria test exists for this book.",
     spec: { ...pair, regime: "btc-stay", regimeDays: 200 },
   },
   {
@@ -101,7 +101,7 @@ export const VARIANTS: AlgoVariant[] = [
     label: "200-day bitcoin switch, weak coins to USDT",
     rule: "Every 14 days, for USDT plus altcoins, with no bitcoin in the book. While bitcoin is above its 200-day average, a selected coin below its 50-day average, or without a positive 30-day dollar gain, is sold into USDT. A coin that still qualifies can receive the 80% leader weight. While bitcoin is below its 200-day average, the book is left alone.",
     results: "448 saved books, the same four stretches: 1,594 runs, 198 skipped because the coin was not listed yet. Beat both benchmarks on 73.0%. Bull stretches 57.5%. The 2022 bear 88.8%. Median gap versus holding on the long stretch was +$6,159.",
-    when: "Use this in a bear and in a mixed stretch. The bear result is the reason to keep it. In a broad uptrend it is only a modest edge over holding. It is not a euphoria rule.",
+    when: "Best measured rule for this book. Use this in a bear and in a mixed stretch. The bear result is the reason to keep it. In a broad uptrend it is only a modest edge over holding. It is not a euphoria rule.",
     spec: { ...pair, regime: "btc-stay", regimeDays: 200 },
   },
   {
@@ -119,7 +119,7 @@ export const VARIANTS: AlgoVariant[] = [
     label: "Cash when a filter fails",
     rule: "Every 14 days, for altcoins only. The 80% leader weight is used only while bitcoin is above its 200-day average, dominance is below its 50-day average, and the stored total is above its 50-day average. Otherwise the book is sold into USDT. Dominance and total are the stored basket, not a live feed. The day counts below are editable. The measured results use 200, 50, and 50.",
     results: "On the four long stretches, 550 books gave 2,080 runs, 120 skipped: beat both benchmarks on 70.2%. Bull stretches 52.3%. The 2022 bear 84.4%. Median gap versus holding on November 2021 through 20 November 2026 was +$8,245. The separate full test, 5,000 windows of 90 to 540 days from March 2022 through 20 November 2026, was 2,623,234 runs: beat both on 62.9%, 40.1% when bitcoin rose over the window, 85.7% when it fell.",
-    when: "Use this in a bear. That is where it earned its place. In an uptrend it often sits in cash while the alts rise, which is why the bitcoin-up rate stays near 40% on the large test. A euphoria rally, alts rising while dominance also rises, is exactly the case it steps out of. No tested alternative kept the bear result and caught that rally.",
+    when: "Best measured rule for this book. Use this in a bear. That is where it earned its place. In an uptrend it often sits in cash while the alts rise, which is why the bitcoin-up rate stays near 40% on the large test. A euphoria rally, alts rising while dominance also rises, is exactly the case it steps out of. No tested alternative kept the bear result and caught that rally.",
     spec: cash,
   },
   {
@@ -146,8 +146,21 @@ export function variantsFor(book: BookKind): AlgoVariant[] {
   return VARIANTS.filter((variant) => variant.book === book);
 }
 
+const DEFAULTS: Record<BookKind, string> = {
+  "btc-eth": "btc-eth-stay300-floor10",
+  "btc-alts": "btc-alts-stay200",
+  "alts-stable": "alts-stable-stay200",
+  alts: "alts-cash",
+};
+
 export function variantById(id: string): AlgoVariant | null {
   return VARIANTS.find((variant) => variant.id === id) ?? null;
+}
+
+export function defaultVariant(book: BookKind): AlgoVariant {
+  const found = variantById(DEFAULTS[book]);
+  if (!found) throw new Error(`Missing default for ${book}`);
+  return found;
 }
 
 /** Older saved books stored only the book kind. That meant the 200-day switch, or cash for alts. */

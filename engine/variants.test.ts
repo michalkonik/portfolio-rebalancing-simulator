@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { legacyVariant, variantById, variantsFor, VARIANTS, type BookKind } from "./variants.ts";
+import { defaultVariant, legacyVariant, variantById, variantsFor, VARIANTS, type BookKind } from "./variants.ts";
 
 const books: BookKind[] = ["btc-eth", "alts-stable", "btc-alts", "alts"];
 
@@ -27,6 +27,16 @@ test("an older saved book still opens on the rule it used to run", () => {
   assert.equal(legacyVariant({ algo: "alts", riskOff: "stay" }), "alts-stay");
   assert.equal(legacyVariant({ algo: "alts" }), "alts-cash");
   assert.equal(legacyVariant({ variant: "btc-eth-stay300" }), "btc-eth-stay300");
+});
+
+test("each book has one default and the pair default keeps a coin floor", () => {
+  for (const book of books) {
+    const chosen = defaultVariant(book);
+    assert.equal(chosen.book, book);
+    assert.match(chosen.when, /^Best measured/);
+  }
+  assert.equal(defaultVariant("btc-eth").id, "btc-eth-stay300-floor10");
+  assert.equal(defaultVariant("alts").spec.riskOff, "cash");
 });
 
 test("the pair favorites are the 300-day rule and the 10 percent floor", () => {

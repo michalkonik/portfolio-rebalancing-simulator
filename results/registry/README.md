@@ -16,9 +16,21 @@ One rule, on one book, on one frozen test.
 
 Costs are 10,000 USDT, 10 bps fee, 5 bps slippage. A pass means final equity is more than 0.01 USDT ahead of both buy-and-hold and a plain rebalance to the entered weights. Windows are not dropped. No price from after the decision is used.
 
-## What is still missing
+## Return size
 
-Every row so far stores how often the rule finished ahead. None stores by how much. From the next scored version, a row also needs the median and mean gap versus hold and versus the plain rebalance, in USDT. A rule is not comparable on return size until those fields are filled.
+Rows from `calendar-6` and `windows-5000` store how often a book finished ahead. They do not store by how much. Rows from `named-8`, `named-4`, and `overlap-3.5y` store the dollar gap. Do not treat a rate from one scope as a rate from another.
+
+## Defaults
+
+A new screen starts with no coins and with every intelligent rule off. Plain rebalance is the run until the user picks a rule. The defaults below are which rule the tests support once that switch is turned on. They are not applied by themselves.
+
+Bitcoin and ether: `btc-eth/stay300-floor10`. It finished the full span at 498,328 against 93,972 for holding, with both coins left, and it beat holding on 7 of the 8 named stretches. The no-floor 300-day rule finished higher, at 640,714, and sold all the ether, so it is logged and selectable but not the default.
+
+Bitcoin plus altcoins: `btc-alts/stay200`. USDT plus altcoins: `alts-stable/stay200`. Altcoins only: `alts/cash-200-50-50`, the full-pass champion below.
+
+## Not scored
+
+The candles stop on 2026-11-20. December 2026 through November 2029 has no test. The 75% alt beat-both target was retired. No later sample beat the cash champion on both rate and return size, so the 2,623,234-window pass was not replaced.
 
 ## Champion
 

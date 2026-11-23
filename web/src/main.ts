@@ -1,7 +1,7 @@
 import { correlationMatrix } from "@engine/correlation.ts";
 import { guardsAreActive, simulate, simulateNaive } from "@engine/simulate.ts";
 import type { CandleSeries, Frequency, SimInput, SimSuccess } from "@engine/types.ts";
-import { legacyVariant, variantById, variantsFor, type BookKind } from "@engine/variants.ts";
+import { defaultVariant, legacyVariant, variantById, variantsFor, type BookKind } from "@engine/variants.ts";
 import { renderLineChart, renderStack, type ChartLine, type ValueScale } from "./chart.ts";
 import { cls, day, num, parseDayEnd, parseDayStart, pct, qty, quote, usdt } from "./format.ts";
 import { loadCandles } from "./load.ts";
@@ -299,6 +299,7 @@ function renderSimulator(): void {
   );
 
   let pickedVariant: string | null = null;
+  let lastKind: BookKind | null = null;
   const variantHost = el("div", "variants");
   const guard = el("div", "guard");
   const missingAlgo = el("p", "hint", "Add a book that matches one group: bitcoin and ether, bitcoin plus altcoins, USDT plus altcoins, or altcoins only.");
@@ -363,10 +364,13 @@ function renderSimulator(): void {
   const syncAlgos = () => {
     const kind = bookKind(holdings.map((row) => row.symbol));
     missingAlgo.hidden = kind != null;
-    if (pickedVariant && variantById(pickedVariant)?.book !== kind) pickedVariant = null;
+    if (kind !== lastKind) {
+      if (pickedVariant && variantById(pickedVariant)?.book !== kind) pickedVariant = null;
+      lastKind = kind;
+    }
     variantHost.replaceChildren();
     if (kind) {
-      variantHost.append(el("p", "hint", "Plain rebalance stays on until you pick a rule. Each rule below is available because the past tests did not agree."));
+      variantHost.append(el("p", "hint", "No intelligent rule is on until you pick one. Until then the run is a plain rebalance. One rule is marked as the best measured result. The others stay available."));
       const off = el("label", "variant");
       const offBox = el("input") as HTMLInputElement;
       offBox.type = "radio";
@@ -397,7 +401,8 @@ function renderSimulator(): void {
           applyAltsKnobs(variant.id);
           syncAlgos();
         });
-        row.append(box, el("span", "name", variant.label), el("p", "", variant.rule), el("p", "", variant.results), el("p", "", variant.when));
+        const name = variant.id === defaultVariant(kind).id ? `${variant.label} (best measured)` : variant.label;
+        row.append(box, el("span", "name", name), el("p", "", variant.rule), el("p", "", variant.results), el("p", "", variant.when));
         variantHost.append(row);
       }
     }
@@ -416,7 +421,7 @@ function renderSimulator(): void {
 
   const results = el("div", "results");
   results.id = "results";
-  results.append(el("p", "muted", "Add one or more coins, set the weights and the calendar, then run. The default run is a plain rebalance. Nothing is loaded for you."));
+  results.append(el("p", "muted", "Add one or more coins, set the weights and the calendar, then run. Nothing is loaded for you. Intelligent rules stay off until you pick one."));
   layout.append(form, results);
   ui.sim.replaceChildren(layout);
 
@@ -516,6 +521,7 @@ function renderSimulator(): void {
     const kind = bookKind(holdings.map((row) => row.symbol));
     const restored = legacyVariant(book);
     pickedVariant = restored && variantById(restored)?.book === kind ? restored : null;
+    lastKind = kind;
     if (pickedVariant?.startsWith("alts-")) applyAltsKnobs(pickedVariant);
     syncAlgos();
     void run();
