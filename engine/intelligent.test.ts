@@ -61,6 +61,91 @@ test("targets use only the selected coins and sum to 1", () => {
   assert.ok(targets.every((row) => row.weight > 0));
 });
 
+test("a coin floor keeps both coins when the defense would otherwise hold only bitcoin", () => {
+  const start = Date.UTC(2024, 0, 1);
+  const down = Array.from({ length: 80 }, (_, i) => 100 - i);
+  const decision = start + 79 * DAY;
+  const targets = intelligentTargets(
+    [
+      { symbol: "BTC", weight: 1 },
+      { symbol: "ETH", weight: 1 },
+    ],
+    { BTC: series("BTC", start, down), ETH: series("ETH", start, down) },
+    series("BTC", start, down),
+    decision,
+    [down[down.length - 1], down[down.length - 1]],
+    { ...DEFAULTS, defense: "equal", floorWeight: 0.2 },
+  );
+  assert.notEqual(targets, "stay");
+  if (targets === "stay") return;
+  assert.ok(targets.every((row) => row.weight >= 0.2 - 1e-9));
+});
+
+test("Cowen band holds bitcoin when the weekly close is under the band", () => {
+  const start = Date.UTC(2020, 0, 6);
+  const closes = Array.from({ length: 200 }, (_, i) => 100 + i);
+  for (let i = 170; i < 200; i++) closes[i] = 120;
+  const decision = start + 199 * DAY;
+  const btc = series("BTC", start, closes);
+  const eth = series("ETH", start, closes.map(() => 10));
+  const targets = intelligentTargets(
+    [
+      { symbol: "BTC", weight: 1 },
+      { symbol: "ETH", weight: 1 },
+    ],
+    { BTC: btc, ETH: eth },
+    btc,
+    decision,
+    [closes[closes.length - 1], 10],
+    {
+      ...DEFAULTS,
+      regime: "cowen-band",
+      bandWeeks: 20,
+      bandEmaWeeks: 21,
+      dominanceTrendDays: 90,
+      pairMaDays: 40,
+      floorWeight: 0.2,
+    },
+  );
+  assert.notEqual(targets, "stay");
+  if (targets === "stay") return;
+  const btcWeight = targets.find((row) => row.symbol === "BTC")?.weight ?? 0;
+  const ethWeight = targets.find((row) => row.symbol === "ETH")?.weight ?? 0;
+  assert.ok(btcWeight > ethWeight);
+  assert.ok(ethWeight >= 0.2 - 1e-9);
+});
+
+test("Cowen band can tilt to ether when dominance history is missing and ether is leading", () => {
+  const start = Date.UTC(2019, 0, 1);
+  const btcCloses = Array.from({ length: 220 }, (_, i) => 100 + i);
+  const ethCloses = Array.from({ length: 220 }, (_, i) => 1 + i * 0.2);
+  const decision = start + 219 * DAY;
+  const btc = series("BTC", start, btcCloses);
+  const eth = series("ETH", start, ethCloses);
+  const targets = intelligentTargets(
+    [
+      { symbol: "BTC", weight: 1 },
+      { symbol: "ETH", weight: 1 },
+    ],
+    { BTC: btc, ETH: eth },
+    btc,
+    decision,
+    [btcCloses[btcCloses.length - 1], ethCloses[ethCloses.length - 1]],
+    {
+      ...DEFAULTS,
+      regime: "cowen-band",
+      bandWeeks: 20,
+      bandEmaWeeks: 21,
+      dominanceTrendDays: 90,
+      pairMaDays: 140,
+    },
+  );
+  assert.notEqual(targets, "stay");
+  if (targets === "stay") return;
+  const ethWeight = targets.find((row) => row.symbol === "ETH")?.weight ?? 0;
+  assert.ok(ethWeight > 0.5);
+});
+
 test("USDT takes the book when every selected coin is in a downtrend", () => {
   const start = Date.UTC(2024, 0, 1);
   const down = Array.from({ length: 80 }, (_, i) => 100 - i);
@@ -269,4 +354,38 @@ test("the bitcoin 200-day gate beats hold on the 2025 books it won in the sweep"
     const ratio = done.summary.finalEquity / done.summary.holdFinal;
     assert.ok(ratio > 1, `${symbols.join("/")} ${ratio.toFixed(3)} is not ahead of hold`);
   }
+});
+
+test("Cowen gate tilts only while bitcoin is strong, dominance is below its average, and total cap is above its average", () => {
+  const start = Date.UTC(2024, 0, 1);
+  const n = 120;
+  const day = (i: number) => start + i * DAY;
+  const btc = series("BTC", start, Array.from({ length: n }, (_, i) => 100 + i));
+  const total = series("TOTAL", start, Array.from({ length: n }, (_, i) => 1000 + i * 10));
+  const dominance = series("BTCD", start, Array.from({ length: n }, (_, i) => 80 - i * 0.4));
+  const leader = series("AAA", start, Array.from({ length: n }, (_, i) => 50 + i * 2));
+  const other = series("BBB", start, Array.from({ length: n }, () => 40));
+  const spec: IntelligentSpec = {
+    ...DEFAULTS,
+    regime: "cowen",
+    btcMaDays: 20,
+    dominanceMaDays: 20,
+    totalMaDays: 20,
+    trendDays: 20,
+    momentumDays: 20,
+    leaderWeight: 0.8,
+    riskOff: "stay",
+  };
+  const assets = [
+    { symbol: "AAA", weight: 1 },
+    { symbol: "BBB", weight: 1 },
+  ];
+  const map = { AAA: leader, BBB: other, TOTAL: total, BTCD: dominance };
+  const on = intelligentTargets(assets, map, btc, day(n - 1), [50 + (n - 1) * 2, 40], spec);
+  assert.notEqual(on, "stay");
+  if (on === "stay") return;
+  assert.ok(on[0].weight > on[1].weight);
+  const risingDominance = series("BTCD", start, Array.from({ length: n }, (_, i) => 40 + i * 0.4));
+  const off = intelligentTargets(assets, { ...map, BTCD: risingDominance }, btc, day(n - 1), [50 + (n - 1) * 2, 40], spec);
+  assert.equal(off, "stay");
 });

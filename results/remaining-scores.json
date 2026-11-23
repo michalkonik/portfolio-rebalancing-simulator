@@ -1,0 +1,3844 @@
+{
+  "at": "2026-11-23T09:25:18.283Z",
+  "pair": [
+    {
+      "id": "stay300-floor10",
+      "beatsHold": 7,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 498328,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 7.616474916192621,
+        "eth": 30.39001998156099
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11987,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 0.582085794970363,
+          "eth": 85.26564984122321
+        },
+        "2017-bull": {
+          "equity": 28168,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 0.2624375526931716,
+          "eth": 33.910416370674845
+        },
+        "2018-bear": {
+          "equity": 3837,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 1.1516791254553453,
+          "eth": 1.6512494847765833
+        },
+        "2020-bull": {
+          "equity": 325516,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.983572063252209,
+          "eth": 53.889484832884456
+        },
+        "2022-bear": {
+          "equity": 2603,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.03344483135666544,
+          "eth": 1.8740435386208054
+        },
+        "2023-24": {
+          "equity": 39102,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.11029659352456947,
+          "eth": 7.7513676260133035
+        },
+        "2024-26": {
+          "equity": 8551,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.13166047559084443,
+          "eth": 0.4861667934227635
+        },
+        "full": {
+          "equity": 498328,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 7.616474916192621,
+          "eth": 30.39001998156099
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 300,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "stay300-floor20",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 384059,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 5.2236485660737255,
+        "eth": 46.896251858870706
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11621,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 0.5643177823423179,
+          "eth": 82.66293877002924
+        },
+        "2017-bull": {
+          "equity": 27925,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 0.2601803084388356,
+          "eth": 33.61875044204023
+        },
+        "2018-bear": {
+          "equity": 3449,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.9906000327891609,
+          "eth": 3.1953842006478705
+        },
+        "2020-bull": {
+          "equity": 323005,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.9759860370029101,
+          "eth": 53.47384978616887
+        },
+        "2022-bear": {
+          "equity": 2561,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.03289412968690886,
+          "eth": 1.8437948566261806
+        },
+        "2023-24": {
+          "equity": 38504,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10860946796225397,
+          "eth": 7.632800682434781
+        },
+        "2024-26": {
+          "equity": 8070,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.11141476000083485,
+          "eth": 0.9253608232327947
+        },
+        "full": {
+          "equity": 384059,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 5.2236485660737255,
+          "eth": 46.896251858870706
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 300,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "stay300-floor30",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 272400,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.2454959939078867,
+        "eth": 49.94973570960952
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11355,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 0.810333431358183,
+          "eth": 69.23837852225734
+        },
+        "2017-bull": {
+          "equity": 29477,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 0.4177435526506506,
+          "eth": 31.48351156505083
+        },
+        "2018-bear": {
+          "equity": 2793,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.760125014417457,
+          "eth": 4.200955870419333
+        },
+        "2020-bull": {
+          "equity": 294035,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.3293472165616758,
+          "eth": 42.48550036354026
+        },
+        "2022-bear": {
+          "equity": 2477,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.04763218234444215,
+          "eth": 1.5581928682095612
+        },
+        "2023-24": {
+          "equity": 38615,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.16276044220005023,
+          "eth": 6.6723380260391565
+        },
+        "2024-26": {
+          "equity": 7314,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.08912821303089614,
+          "eth": 1.2690232189840889
+        },
+        "full": {
+          "equity": 272400,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.2454959939078867,
+          "eth": 49.94973570960952
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 300,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "stay300-floor40",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 187899,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.9210634521493457,
+        "eth": 45.99219291449893
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11060,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.031537736412436,
+          "eth": 56.65799200051811
+        },
+        "2017-bull": {
+          "equity": 31002,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 0.5941247876520629,
+          "eth": 28.781879126721883
+        },
+        "2018-bear": {
+          "equity": 2234,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.5683318927520331,
+          "eth": 4.882346280257854
+        },
+        "2020-bull": {
+          "equity": 266347,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.6015561653205683,
+          "eth": 32.90382331171978
+        },
+        "2022-bear": {
+          "equity": 2395,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.06127931725621301,
+          "eth": 1.2895415273926385
+        },
+        "2023-24": {
+          "equity": 38700,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.2166695137447672,
+          "eth": 5.7100232420193295
+        },
+        "2024-26": {
+          "equity": 6608,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06962760258612857,
+          "eth": 1.5421402454099025
+        },
+        "full": {
+          "equity": 187899,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.9210634521493457,
+          "eth": 45.99219291449893
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 300,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f10-p90-d60",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 242054,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.699567030662804,
+        "eth": 14.76141091805357
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 13039,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.4458898236814084,
+          "eth": 56.56801730638698
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2622,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7400549286110703,
+          "eth": 2.9224625587206345
+        },
+        "2020-bull": {
+          "equity": 233235,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.7063279251451418,
+          "eth": 38.58987596820607
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 38933,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.11004739290033672,
+          "eth": 7.713639458984316
+        },
+        "2024-26": {
+          "equity": 8873,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.1358760791249677,
+          "eth": 0.5318579321623401
+        },
+        "full": {
+          "equity": 242054,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.699567030662804,
+          "eth": 14.76141091805357
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 90,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f10-p90-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 280567,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 4.2881940708045505,
+        "eth": 17.110054839083755
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 13039,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.4458898236814084,
+          "eth": 56.56801730638698
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2622,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7400549286110703,
+          "eth": 2.9224625587206345
+        },
+        "2020-bull": {
+          "equity": 242295,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.7337654636464097,
+          "eth": 40.08891227973127
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 38150,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10761102348218937,
+          "eth": 7.5626306313421
+        },
+        "2024-26": {
+          "equity": 8706,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.133317545215343,
+          "eth": 0.5218430968557615
+        },
+        "full": {
+          "equity": 280567,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 4.2881940708045505,
+          "eth": 17.110054839083755
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 90,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f10-p90-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 258353,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.948685553421145,
+        "eth": 15.755403147753494
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 13343,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.4795256121032665,
+          "eth": 57.883961184266354
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2590,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7311383590630127,
+          "eth": 2.8872511985242584
+        },
+        "2020-bull": {
+          "equity": 233235,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.7063279251451418,
+          "eth": 38.58987596820607
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 43077,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.5325382169157601,
+          "eth": 1.0395348194696736
+        },
+        "2024-26": {
+          "equity": 6966,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.10667142082066536,
+          "eth": 0.41754252598294767
+        },
+        "full": {
+          "equity": 258353,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.948685553421145,
+          "eth": 15.755403147753494
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 90,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f10-p140-d60",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 164865,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.5198095421804383,
+        "eth": 10.054134383583248
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12388,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.373688817383381,
+          "eth": 53.74327388063527
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2622,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7400549286110703,
+          "eth": 2.9224625587206345
+        },
+        "2020-bull": {
+          "equity": 210322,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.636939225110571,
+          "eth": 34.798858747162626
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 38933,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.11004739290033672,
+          "eth": 7.713639458984316
+        },
+        "2024-26": {
+          "equity": 8873,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.1358760791249677,
+          "eth": 0.5318579321623401
+        },
+        "full": {
+          "equity": 164865,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.5198095421804383,
+          "eth": 10.054134383583248
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 140,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f10-p140-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 202485,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.0947907761301585,
+        "eth": 12.348331027178242
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12388,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.373688817383381,
+          "eth": 53.74327388063527
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2622,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7400549286110703,
+          "eth": 2.9224625587206345
+        },
+        "2020-bull": {
+          "equity": 218362,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6612858736735343,
+          "eth": 36.129025819479914
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 38150,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10761102348218937,
+          "eth": 7.5626306313421
+        },
+        "2024-26": {
+          "equity": 8487,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.12993772156531447,
+          "eth": 0.5093449921965041
+        },
+        "full": {
+          "equity": 202485,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.0947907761301585,
+          "eth": 12.348331027178242
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 140,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f10-p140-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 179237,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.739473512224304,
+        "eth": 10.930601845540972
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 13039,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.4458898236814084,
+          "eth": 56.56801730638698
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2590,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7311383590630127,
+          "eth": 2.8872511985242584
+        },
+        "2020-bull": {
+          "equity": 210196,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6365585493196506,
+          "eth": 34.77806071407806
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 43077,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.5325382169157601,
+          "eth": 1.0395348194696736
+        },
+        "2024-26": {
+          "equity": 6790,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.10396712117061181,
+          "eth": 0.40754241249889733
+        },
+        "full": {
+          "equity": 179237,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.739473512224304,
+          "eth": 10.930601845540972
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 140,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f10-p200-d60",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 196649,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.0055903765065684,
+        "eth": 11.992418094128203
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12388,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.373688817383381,
+          "eth": 53.74327388063527
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2701,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7625876666070195,
+          "eth": 3.0114439040137637
+        },
+        "2020-bull": {
+          "equity": 226989,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6858634263191902,
+          "eth": 37.57815839329861
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 38933,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.11004739290033672,
+          "eth": 7.713639458984316
+        },
+        "2024-26": {
+          "equity": 8706,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.133317545215343,
+          "eth": 0.5218430968557615
+        },
+        "full": {
+          "equity": 196649,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.0055903765065684,
+          "eth": 11.992418094128203
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 200,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f10-p200-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 185117,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.8293363615392817,
+        "eth": 11.289157977653781
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12388,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.373688817383381,
+          "eth": 53.74327388063527
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2701,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7625876666070195,
+          "eth": 3.0114439040137637
+        },
+        "2020-bull": {
+          "equity": 216026,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6527393772768729,
+          "eth": 35.76330617378352
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 38150,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10761102348218937,
+          "eth": 7.5626306313421
+        },
+        "2024-26": {
+          "equity": 8578,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.13133687675747308,
+          "eth": 0.5148306022782083
+        },
+        "full": {
+          "equity": 185117,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.8293363615392817,
+          "eth": 11.289157977653781
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 200,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f10-p200-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 217425,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.323126479254268,
+        "eth": 13.259399028687753
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 13039,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.4458898236814084,
+          "eth": 56.56801730638698
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2701,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.7625876666070195,
+          "eth": 3.0114439040137637
+        },
+        "2020-bull": {
+          "equity": 226853,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6854535102842285,
+          "eth": 37.55569927228611
+        },
+        "2022-bear": {
+          "equity": 2515,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.1442961402012653,
+          "eth": 0.21435541324503418
+        },
+        "2023-24": {
+          "equity": 43077,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.5325382169157601,
+          "eth": 1.0395348194696736
+        },
+        "2024-26": {
+          "equity": 6864,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.10508662777459926,
+          "eth": 0.4119316158894759
+        },
+        "full": {
+          "equity": 217425,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.323126479254268,
+          "eth": 13.259399028687753
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 200,
+        "floorWeight": 0.1
+      }
+    },
+    {
+      "id": "band-f20-p90-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 212265,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.8870464804307874,
+        "eth": 25.91898309428451
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12563,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3930734237722873,
+          "eth": 54.5016641827158
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2351,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.5941821878374215,
+          "eth": 5.2795877710477805
+        },
+        "2020-bull": {
+          "equity": 241756,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.7318985895792562,
+          "eth": 40.003066252531625
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 38517,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10884004492008664,
+          "eth": 7.631820205664989
+        },
+        "2024-26": {
+          "equity": 8101,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.11059657811540007,
+          "eth": 0.9740561267292596
+        },
+        "full": {
+          "equity": 212265,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.8870464804307874,
+          "eth": 25.91898309428451
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 90,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f20-p90-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 240109,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.2657628073595,
+        "eth": 29.318977566742813
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12563,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3930734237722873,
+          "eth": 54.5016641827158
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2351,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.5941821878374215,
+          "eth": 5.2795877710477805
+        },
+        "2020-bull": {
+          "equity": 249826,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.7563310215379637,
+          "eth": 41.338459172084214
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 37854,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10677504084951926,
+          "eth": 7.5038817513262535
+        },
+        "2024-26": {
+          "equity": 8101,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.11059657811540007,
+          "eth": 0.9740561267292596
+        },
+        "full": {
+          "equity": 240109,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.2657628073595,
+          "eth": 29.318977566742813
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 90,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f20-p90-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 225106,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.0617004767186677,
+        "eth": 27.486971004357162
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12782,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.417356423746182,
+          "eth": 55.451695880501184
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2329,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.5888148780352508,
+          "eth": 5.231896702929259
+        },
+        "2020-bull": {
+          "equity": 241756,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.7318985895792562,
+          "eth": 40.003066252531625
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 42016,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.4634357173508067,
+          "eth": 2.0354665816869177
+        },
+        "2024-26": {
+          "equity": 6701,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.0914917213145465,
+          "eth": 0.8057941141583178
+        },
+        "full": {
+          "equity": 225106,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.0617004767186677,
+          "eth": 27.486971004357162
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 90,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f20-p140-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 153204,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.0837599809202296,
+        "eth": 18.707332938387324
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12022,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.333069830191877,
+          "eth": 52.15412409525932
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2351,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.5941821878374215,
+          "eth": 5.2795877710477805
+        },
+        "2020-bull": {
+          "equity": 221129,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6694520205098491,
+          "eth": 36.589950999552606
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 38517,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10884004492008664,
+          "eth": 7.631820205664989
+        },
+        "2024-26": {
+          "equity": 8101,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.11059657811540007,
+          "eth": 0.9740561267292596
+        },
+        "full": {
+          "equity": 153204,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.0837599809202296,
+          "eth": 18.707332938387324
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 140,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f20-p140-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 182246,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.4787536374056565,
+        "eth": 22.253460087427108
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12022,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.333069830191877,
+          "eth": 52.15412409525932
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2351,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.5941821878374215,
+          "eth": 5.2795877710477805
+        },
+        "2020-bull": {
+          "equity": 228408,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6914881396274644,
+          "eth": 37.794369679355476
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 37854,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10677504084951926,
+          "eth": 7.5038817513262535
+        },
+        "2024-26": {
+          "equity": 7947,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.10847137305082902,
+          "eth": 0.9564921547326537
+        },
+        "full": {
+          "equity": 182246,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.4787536374056565,
+          "eth": 22.253460087427108
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 140,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f20-p140-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 165262,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.247750240903267,
+        "eth": 20.179585222836963
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12563,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3930734237722873,
+          "eth": 54.5016641827158
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2329,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.5888148780352508,
+          "eth": 5.231896702929259
+        },
+        "2020-bull": {
+          "equity": 221029,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6691503848076941,
+          "eth": 36.57346462678289
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 42016,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.4634357173508067,
+          "eth": 2.0354665816869177
+        },
+        "2024-26": {
+          "equity": 6574,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.08973363193404929,
+          "eth": 0.7912642068277911
+        },
+        "full": {
+          "equity": 165262,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.247750240903267,
+          "eth": 20.179585222836963
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 140,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f20-p200-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 178325,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.4254332106768244,
+        "eth": 21.77476629142061
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12022,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.333069830191877,
+          "eth": 52.15412409525932
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2404,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.6077864334770459,
+          "eth": 5.400467882204769
+        },
+        "2020-bull": {
+          "equity": 235736,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.712295792001286,
+          "eth": 39.02637619613727
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 38517,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10884004492008664,
+          "eth": 7.631820205664989
+        },
+        "2024-26": {
+          "equity": 8101,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.11059657811540007,
+          "eth": 0.9740561267292596
+        },
+        "full": {
+          "equity": 178325,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.4254332106768244,
+          "eth": 21.77476629142061
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 200,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f20-p200-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 169629,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.3071525000221262,
+        "eth": 20.712879771539694
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12022,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.333069830191877,
+          "eth": 52.15412409525932
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2404,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.6077864334770459,
+          "eth": 5.400467882204769
+        },
+        "2020-bull": {
+          "equity": 226110,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6832091217224276,
+          "eth": 37.4327302005511
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 37854,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10677504084951926,
+          "eth": 7.5038817513262535
+        },
+        "2024-26": {
+          "equity": 8011,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.10934407394642995,
+          "eth": 0.9641892003520405
+        },
+        "full": {
+          "equity": 169629,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.3071525000221262,
+          "eth": 20.712879771539694
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 200,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f20-p200-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 194652,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.6474994313648534,
+        "eth": 23.768406040152502
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12563,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3930734237722873,
+          "eth": 54.5016641827158
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2404,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.6077864334770459,
+          "eth": 5.400467882204769
+        },
+        "2020-bull": {
+          "equity": 235630,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.7119748521371674,
+          "eth": 39.008792040770814
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 42016,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.4634357173508067,
+          "eth": 2.0354665816869177
+        },
+        "2024-26": {
+          "equity": 6627,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.09045557928985157,
+          "eth": 0.7976316366773726
+        },
+        "full": {
+          "equity": 194652,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.6474994313648534,
+          "eth": 23.768406040152502
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 200,
+        "floorWeight": 0.2
+      }
+    },
+    {
+      "id": "band-f30-p90-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 175848,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.0951349095761245,
+        "eth": 32.24512838892578
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11941,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3245139070795826,
+          "eth": 51.78728929106599
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2099,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.4678351814838173,
+          "eth": 7.126390568724121
+        },
+        "2020-bull": {
+          "equity": 242882,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.09948103666551,
+          "eth": 35.0746670445924
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 38650,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.16310066590316052,
+          "eth": 6.674843973624733
+        },
+        "2024-26": {
+          "equity": 7345,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.08800507814224896,
+          "eth": 1.3287413545813116
+        },
+        "full": {
+          "equity": 175848,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.0951349095761245,
+          "eth": 32.24512838892578
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 90,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f30-p90-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 190852,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.273903022027328,
+        "eth": 34.99645514668634
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11941,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3245139070795826,
+          "eth": 51.78728929106599
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2099,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.4678351814838173,
+          "eth": 7.126390568724121
+        },
+        "2020-bull": {
+          "equity": 248211,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.1236080069664347,
+          "eth": 35.84434421216429
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 38207,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.161043541248579,
+          "eth": 6.601953948983336
+        },
+        "2024-26": {
+          "equity": 7345,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.08800507814224896,
+          "eth": 1.3287413545813116
+        },
+        "full": {
+          "equity": 190852,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.273903022027328,
+          "eth": 34.99645514668634
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 90,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f30-p90-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 182941,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.1796392463934575,
+        "eth": 33.545690552078405
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12080,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3399434436217268,
+          "eth": 52.39057013867665
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2087,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.465018975299823,
+          "eth": 7.083492159233954
+        },
+        "2020-bull": {
+          "equity": 242882,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.09948103666551,
+          "eth": 35.0746670445924
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 40950,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.3967041102682155,
+          "eth": 2.986950926850335
+        },
+        "2024-26": {
+          "equity": 6473,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.07755471850545939,
+          "eth": 1.1709569935788133
+        },
+        "full": {
+          "equity": 182941,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.1796392463934575,
+          "eth": 33.545690552078405
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 90,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f30-p140-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 141555,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.6865517095695715,
+        "eth": 25.956837510113157
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11597,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2862631101464506,
+          "eth": 50.2917179151809
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2099,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.4678351814838173,
+          "eth": 7.126390568724121
+        },
+        "2020-bull": {
+          "equity": 228890,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.0361446871921949,
+          "eth": 33.05416710369865
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 38650,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.16310066590316052,
+          "eth": 6.674843973624733
+        },
+        "2024-26": {
+          "equity": 7345,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.08800507814224896,
+          "eth": 1.3287413545813116
+        },
+        "full": {
+          "equity": 141555,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.6865517095695715,
+          "eth": 25.956837510113157
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 140,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f30-p140-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 158869,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.8928406026040947,
+        "eth": 29.131722244601857
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11597,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2862631101464506,
+          "eth": 50.2917179151809
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2099,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.4678351814838173,
+          "eth": 7.126390568724121
+        },
+        "2020-bull": {
+          "equity": 233840,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.0585510880077407,
+          "eth": 33.76895619242765
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 38207,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.161043541248579,
+          "eth": 6.601953948983336
+        },
+        "2024-26": {
+          "equity": 7252,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.08686528037770792,
+          "eth": 1.3127321305507509
+        },
+        "full": {
+          "equity": 158869,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.8928406026040947,
+          "eth": 29.131722244601857
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 140,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f30-p140-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 148953,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.7746980730093678,
+        "eth": 27.31345220501475
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11941,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3245139070795826,
+          "eth": 51.78728929106599
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2087,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.465018975299823,
+          "eth": 7.083492159233954
+        },
+        "2020-bull": {
+          "equity": 228819,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.0358210696169623,
+          "eth": 33.04384334337669
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 40950,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.3967041102682155,
+          "eth": 2.986950926850335
+        },
+        "2024-26": {
+          "equity": 6390,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.07655026857315803,
+          "eth": 1.1568488206257197
+        },
+        "full": {
+          "equity": 148953,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.7746980730093678,
+          "eth": 27.31345220501475
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 140,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f30-p200-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 156721,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.8672483158232427,
+        "eth": 28.7378447099176
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11597,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2862631101464506,
+          "eth": 50.2917179151809
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2132,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.4749831134059832,
+          "eth": 7.235272834641881
+        },
+        "2020-bull": {
+          "equity": 238858,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.0798924965540166,
+          "eth": 34.513009508751004
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 38650,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.16310066590316052,
+          "eth": 6.674843973624733
+        },
+        "2024-26": {
+          "equity": 7345,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.08800507814224896,
+          "eth": 1.3287413545813116
+        },
+        "full": {
+          "equity": 156721,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.8672483158232427,
+          "eth": 28.7378447099176
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 200,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f30-p200-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 151580,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.8059881921272525,
+        "eth": 27.79502210471441
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11597,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2862631101464506,
+          "eth": 50.2917179151809
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2132,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.4749831134059832,
+          "eth": 7.235272834641881
+        },
+        "2020-bull": {
+          "equity": 232286,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.0501800632920124,
+          "eth": 33.563409900482604
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 38207,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.161043541248579,
+          "eth": 6.601953948983336
+        },
+        "2024-26": {
+          "equity": 7290,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.08732888124809438,
+          "eth": 1.3197398964609839
+        },
+        "full": {
+          "equity": 151580,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.8059881921272525,
+          "eth": 27.79502210471441
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 200,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f30-p200-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 166098,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.9789657202191693,
+        "eth": 30.4572289994725
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11941,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.3245139070795826,
+          "eth": 51.78728929106599
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2132,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.4749831134059832,
+          "eth": 7.235272834641881
+        },
+        "2020-bull": {
+          "equity": 238784,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.0795552152910322,
+          "eth": 34.50223011036305
+        },
+        "2022-bear": {
+          "equity": 2439,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.11020733647823124,
+          "eth": 0.6315017885805059
+        },
+        "2023-24": {
+          "equity": 40950,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.3967041102682155,
+          "eth": 2.986950926850335
+        },
+        "2024-26": {
+          "equity": 6425,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.07695881812235061,
+          "eth": 1.1630244337152433
+        },
+        "full": {
+          "equity": 166098,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.9789657202191693,
+          "eth": 30.4572289994725
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 200,
+        "floorWeight": 0.3
+      }
+    },
+    {
+      "id": "band-f40-p90-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 142681,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.458756407311577,
+        "eth": 34.92409687211085
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11320,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.25597694702157,
+          "eth": 49.07754909541431
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1868,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.35945134816949437,
+          "eth": 8.517572329698481
+        },
+        "2020-bull": {
+          "equity": 242925,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.461634134611006,
+          "eth": 29.997340364057116
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 38751,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.2170850568529361,
+          "eth": 5.7152654622908265
+        },
+        "2024-26": {
+          "equity": 6636,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06835951856399992,
+          "eth": 1.6055526191522838
+        },
+        "full": {
+          "equity": 142681,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.458756407311577,
+          "eth": 34.92409687211085
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 90,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f40-p90-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 148597,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.5192376729798824,
+        "eth": 36.37207925666849
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11320,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.25597694702157,
+          "eth": 49.07754909541431
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1868,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.35945134816949437,
+          "eth": 8.517572329698481
+        },
+        "2020-bull": {
+          "equity": 245521,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.4772546187744857,
+          "eth": 30.317921943952946
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 38533,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.2157325940465604,
+          "eth": 5.685332028381526
+        },
+        "2024-26": {
+          "equity": 6636,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06835951856399992,
+          "eth": 1.6055526191522838
+        },
+        "full": {
+          "equity": 148597,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.5192376729798824,
+          "eth": 36.37207925666849
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 90,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f40-p90-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 145504,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.4876171619592051,
+        "eth": 35.61505239152701
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11387,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2634088713019342,
+          "eth": 49.36795301533331
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1862,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.3583699373644568,
+          "eth": 8.491947179599777
+        },
+        "2020-bull": {
+          "equity": 242925,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.461634134611006,
+          "eth": 29.997340364057116
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 39881,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.3324040992200683,
+          "eth": 3.8932922324055643
+        },
+        "2024-26": {
+          "equity": 6229,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06417016836184976,
+          "eth": 1.5071578040496716
+        },
+        "full": {
+          "equity": 145504,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.4876171619592051,
+          "eth": 35.61505239152701
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 90,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f40-p140-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 128051,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.3091785474722564,
+        "eth": 31.343052332550727
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11156,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2377789954388116,
+          "eth": 48.366460516633666
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1868,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.35945134816949437,
+          "eth": 8.517572329698481
+        },
+        "2020-bull": {
+          "equity": 235854,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.419093510036451,
+          "eth": 29.124272634969003
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 38751,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.2170850568529361,
+          "eth": 5.7152654622908265
+        },
+        "2024-26": {
+          "equity": 6636,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06835951856399992,
+          "eth": 1.6055526191522838
+        },
+        "full": {
+          "equity": 128051,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.3091785474722564,
+          "eth": 31.343052332550727
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 140,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f40-p140-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 135610,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.3864634378888836,
+        "eth": 33.19333040922776
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11156,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2377789954388116,
+          "eth": 48.366460516633666
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1868,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.35945134816949437,
+          "eth": 8.517572329698481
+        },
+        "2020-bull": {
+          "equity": 238336,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.4340226847348339,
+          "eth": 29.43066636523109
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 38533,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.2157325940465604,
+          "eth": 5.685332028381526
+        },
+        "2024-26": {
+          "equity": 6594,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.0679134171403934,
+          "eth": 1.595921747701963
+        },
+        "full": {
+          "equity": 135610,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.3864634378888836,
+          "eth": 33.19333040922776
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 140,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f40-p140-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 131339,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.3428009277490744,
+        "eth": 32.148005962898274
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11320,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.25597694702157,
+          "eth": 49.07754909541431
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1862,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.3583699373644568,
+          "eth": 8.491947179599777
+        },
+        "2020-bull": {
+          "equity": 235815,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.418859334861165,
+          "eth": 29.11946662211563
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 39881,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.3324040992200683,
+          "eth": 3.8932922324055643
+        },
+        "2024-26": {
+          "equity": 6190,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06375140585356047,
+          "eth": 1.4981171516954546
+        },
+        "full": {
+          "equity": 131339,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.3428009277490744,
+          "eth": 32.148005962898274
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 140,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f40-p200-d60",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 134748,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.3776567068466217,
+        "eth": 32.98248840263571
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11156,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2377789954388116,
+          "eth": 48.366460516633666
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1882,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.3621817603590666,
+          "eth": 8.582272277084975
+        },
+        "2020-bull": {
+          "equity": 240935,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.4487504714167159,
+          "eth": 29.764444492495773
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 38751,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.2170850568529361,
+          "eth": 5.7152654622908265
+        },
+        "2024-26": {
+          "equity": 6636,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06835951856399992,
+          "eth": 1.6055526191522838
+        },
+        "full": {
+          "equity": 134748,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.3776567068466217,
+          "eth": 32.98248840263571
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 60,
+        "pairMaDays": 200,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f40-p200-d90",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 132516,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.3548319862620484,
+        "eth": 32.43604161496155
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11156,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.2377789954388116,
+          "eth": 48.366460516633666
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1882,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.3621817603590666,
+          "eth": 8.582272277084975
+        },
+        "2020-bull": {
+          "equity": 237565,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.4284840333796998,
+          "eth": 29.348072396738328
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 38533,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.2157325940465604,
+          "eth": 5.685332028381526
+        },
+        "2024-26": {
+          "equity": 6611,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06809303832973984,
+          "eth": 1.6001439297884483
+        },
+        "full": {
+          "equity": 132516,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.3548319862620484,
+          "eth": 32.43604161496155
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 200,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "band-f40-p200-d180",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 138672,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 1.4177710354775417,
+        "eth": 33.942865811806776
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 11320,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.25597694702157,
+          "eth": 49.07754909541431
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 1882,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.3621817603590666,
+          "eth": 8.582272277084975
+        },
+        "2020-bull": {
+          "equity": 240895,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 1.448511402327987,
+          "eth": 29.75953284017072
+        },
+        "2022-bear": {
+          "equity": 2392,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.09324205143424946,
+          "eth": 0.8311330194099467
+        },
+        "2023-24": {
+          "equity": 39881,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.3324040992200683,
+          "eth": 3.8932922324055643
+        },
+        "2024-26": {
+          "equity": 6206,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.06392001912357538,
+          "eth": 1.502080581237319
+        },
+        "full": {
+          "equity": 138672,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 1.4177710354775417,
+          "eth": 33.942865811806776
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 180,
+        "pairMaDays": 200,
+        "floorWeight": 0.4
+      }
+    },
+    {
+      "id": "stay200",
+      "beatsHold": 6,
+      "scored": 8,
+      "keepsBothOnFull": false,
+      "full": {
+        "equity": 470341,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 7.978442196420135,
+        "eth": 0
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 9432,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 0.45801504542866966,
+          "eth": 67.09139921960053
+        },
+        "2017-bull": {
+          "equity": 28391,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 0.26452103380533626,
+          "eth": 34.179629794168925
+        },
+        "2018-bear": {
+          "equity": 3822,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 1.1901674556455961,
+          "eth": 0
+        },
+        "2020-bull": {
+          "equity": 276286,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.8348189064894179,
+          "eth": 45.739364340822334
+        },
+        "2022-bear": {
+          "equity": 2682,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.16997766513211027,
+          "eth": 0
+        },
+        "2023-24": {
+          "equity": 42819,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.12078157149149611,
+          "eth": 8.488225543751051
+        },
+        "2024-26": {
+          "equity": 8918,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.15127134223955993,
+          "eth": 0
+        },
+        "full": {
+          "equity": 470341,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 7.978442196420135,
+          "eth": 0
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 200
+      }
+    },
+    {
+      "id": "stay300",
+      "beatsHold": 7,
+      "scored": 8,
+      "keepsBothOnFull": false,
+      "full": {
+        "equity": 640714,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 10.86849363860598,
+        "eth": 0
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12353,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 0.5998349152575705,
+          "eth": 87.86559350641579
+        },
+        "2017-bull": {
+          "equity": 28391,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 0.26452103380533626,
+          "eth": 34.179629794168925
+        },
+        "2018-bear": {
+          "equity": 4242,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 1.3207203741070563,
+          "eth": 0
+        },
+        "2020-bull": {
+          "equity": 327854,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.9906373626553809,
+          "eth": 54.27658948237098
+        },
+        "2022-bear": {
+          "equity": 2645,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.03399553302642205,
+          "eth": 1.9042922206154296
+        },
+        "2023-24": {
+          "equity": 39705,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.11199693389531322,
+          "eth": 7.870863273036057
+        },
+        "2024-26": {
+          "equity": 9050,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.1535103954862139,
+          "eth": 0
+        },
+        "full": {
+          "equity": 640714,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 10.86849363860598,
+          "eth": 0
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "btc-stay",
+        "regimeDays": 300
+      }
+    },
+    {
+      "id": "cowen-band",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": false,
+      "full": {
+        "equity": 220738,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 3.7444049754594335,
+        "eth": 0
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12738,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.4124131869556562,
+          "eth": 55.2582999207454
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2913,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.9069731507067212,
+          "eth": 0
+        },
+        "2020-bull": {
+          "equity": 208211,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6307520954620087,
+          "eth": 34.44660086585181
+        },
+        "2022-bear": {
+          "equity": 2543,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.16115892576218682,
+          "eth": 0
+        },
+        "2023-24": {
+          "equity": 38423,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10838042222155475,
+          "eth": 7.616700087398137
+        },
+        "2024-26": {
+          "equity": 9036,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.1532797123313064,
+          "eth": 0
+        },
+        "full": {
+          "equity": 220738,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 3.7444049754594335,
+          "eth": 0
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 140,
+        "floorWeight": 0
+      }
+    },
+    {
+      "id": "cowen-band-floor20",
+      "beatsHold": 5,
+      "scored": 8,
+      "keepsBothOnFull": true,
+      "full": {
+        "equity": 182246,
+        "hold": 93972,
+        "plain": 122467,
+        "btc": 2.4787536374056565,
+        "eth": 22.253460087427108
+      },
+      "byWindow": {
+        "2019": {
+          "equity": 12022,
+          "hold": 10588,
+          "plain": 10699,
+          "btc": 1.333069830191877,
+          "eth": 52.15412409525932
+        },
+        "2017-bull": {
+          "equity": 32994,
+          "hold": 32994,
+          "plain": 32492,
+          "btc": 1.1477037878247998,
+          "eth": 16.21152097675023
+        },
+        "2018-bear": {
+          "equity": 2351,
+          "hold": 1431,
+          "plain": 1574,
+          "btc": 0.5941821878374215,
+          "eth": 5.2795877710477805
+        },
+        "2020-bull": {
+          "equity": 228408,
+          "hold": 258447,
+          "plain": 241458,
+          "btc": 0.6914881396274644,
+          "eth": 37.794369679355476
+        },
+        "2022-bear": {
+          "equity": 2483,
+          "hold": 2299,
+          "plain": 2343,
+          "btc": 0.12743704072386433,
+          "eth": 0.4259585203737814
+        },
+        "2023-24": {
+          "equity": 37854,
+          "hold": 38811,
+          "plain": 38811,
+          "btc": 0.10677504084951926,
+          "eth": 7.5038817513262535
+        },
+        "2024-26": {
+          "equity": 7947,
+          "hold": 6046,
+          "plain": 5971,
+          "btc": 0.10847137305082902,
+          "eth": 0.9564921547326537
+        },
+        "full": {
+          "equity": 182246,
+          "hold": 93972,
+          "plain": 122467,
+          "btc": 2.4787536374056565,
+          "eth": 22.253460087427108
+        }
+      },
+      "spec": {
+        "enabled": true,
+        "score": "absolute",
+        "momentumDays": 30,
+        "trendDays": 50,
+        "leaderWeight": 0.8,
+        "defense": "equal",
+        "regime": "cowen-band",
+        "bandWeeks": 20,
+        "bandEmaWeeks": 21,
+        "dominanceTrendDays": 90,
+        "pairMaDays": 140,
+        "floorWeight": 0.2
+      }
+    }
+  ],
+  "books": [
+    {
+      "book": "btc-alts",
+      "id": "stay200",
+      "n": 1792,
+      "skipped": 0,
+      "bothRate": 0.5597098214285714,
+      "bullRate": 0.7042410714285714,
+      "bearRate": 0.27232142857142855,
+      "bullN": 896,
+      "bearN": 448,
+      "medianExcessHoldFull": 1365.4055825827645,
+      "seconds": 8.819
+    },
+    {
+      "book": "btc-alts",
+      "id": "stay300",
+      "n": 1792,
+      "skipped": 0,
+      "bothRate": 0.46261160714285715,
+      "bullRate": 0.6339285714285714,
+      "bearRate": 0.15401785714285715,
+      "bullN": 896,
+      "bearN": 448,
+      "medianExcessHoldFull": 396.0085548828438,
+      "seconds": 8.431
+    },
+    {
+      "book": "btc-alts",
+      "id": "stay300-floor20",
+      "n": 1792,
+      "skipped": 0,
+      "bothRate": 0.36886160714285715,
+      "bullRate": 0.4921875,
+      "bearRate": 0.15178571428571427,
+      "bullN": 896,
+      "bearN": 448,
+      "medianExcessHoldFull": -28.607146472616478,
+      "seconds": 8.529
+    },
+    {
+      "book": "alts-stable",
+      "id": "stay200",
+      "n": 1594,
+      "skipped": 198,
+      "bothRate": 0.7302383939774153,
+      "bullRate": 0.5752753977968176,
+      "bearRate": 0.8875379939209727,
+      "bullN": 817,
+      "bearN": 329,
+      "medianExcessHoldFull": 6158.715465865941,
+      "seconds": 6.344
+    },
+    {
+      "book": "alts-stable",
+      "id": "above-only",
+      "n": 1594,
+      "skipped": 198,
+      "bothRate": 0.20702634880803011,
+      "bullRate": 0.27539779681762544,
+      "bearRate": 0.07598784194528875,
+      "bullN": 817,
+      "bearN": 329,
+      "medianExcessHoldFull": -332.54865421483555,
+      "seconds": 6.287
+    },
+    {
+      "book": "alts-stable",
+      "id": "stay300",
+      "n": 1594,
+      "skipped": 198,
+      "bothRate": 0.6028858218318696,
+      "bullRate": 0.5826193390452876,
+      "bearRate": 0.2857142857142857,
+      "bullN": 817,
+      "bearN": 329,
+      "medianExcessHoldFull": 5641.517521716109,
+      "seconds": 6.497
+    },
+    {
+      "book": "alts",
+      "id": "cash-200-50-50",
+      "n": 2080,
+      "skipped": 120,
+      "bothRate": 0.7024038461538461,
+      "bullRate": 0.5225988700564972,
+      "bearRate": 0.844017094017094,
+      "bullN": 1062,
+      "bearN": 468,
+      "medianExcessHoldFull": 8244.935088257265,
+      "seconds": 9.228
+    },
+    {
+      "book": "alts",
+      "id": "stay-200-50-50",
+      "n": 2080,
+      "skipped": 120,
+      "bothRate": 0.2692307692307692,
+      "bullRate": 0.4077212806026365,
+      "bearRate": 0.09615384615384616,
+      "bullN": 1062,
+      "bearN": 468,
+      "medianExcessHoldFull": -584.4529644455921,
+      "seconds": 8.873
+    },
+    {
+      "book": "alts",
+      "id": "mix-200-50-50",
+      "n": 2080,
+      "skipped": 120,
+      "bothRate": 0.25817307692307695,
+      "bullRate": 0.4105461393596987,
+      "bearRate": 0.09829059829059829,
+      "bullN": 1062,
+      "bearN": 468,
+      "medianExcessHoldFull": -431.6920423019178,
+      "seconds": 8.892
+    }
+  ]
+}

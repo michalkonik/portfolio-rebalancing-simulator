@@ -1,0 +1,32 @@
+{
+  "id": "cash-200-50-50",
+  "keptBecause": "Best full pass so far. Later sample losses must not replace this.",
+  "full": {
+    "books": 550,
+    "windows": 5000,
+    "n": 2623234,
+    "skipped": 126766,
+    "bothRate": 0.6287368949929744,
+    "holdRate": 0.650881316725843,
+    "plainRate": 0.6479189428011378,
+    "bullRate": 0.40075813358579043,
+    "bearRate": 0.8568161436345445,
+    "finished": "2026-11-22T13:48:05.356Z"
+  },
+  "sample": { "n": 9665, "bothRate": 0.637, "bullRate": 0.391, "bearRate": 0.883 },
+  "spec": {
+    "enabled": true,
+    "score": "absolute",
+    "momentumDays": 30,
+    "trendDays": 50,
+    "leaderWeight": 0.8,
+    "defense": "equal",
+    "regime": "cowen",
+    "riskOff": "cash",
+    "btcMaDays": 200,
+    "btcFastMaDays": 0,
+    "dominanceMaDays": 50,
+    "totalMaDays": 50,
+    "everyDays": 14
+  }
+}

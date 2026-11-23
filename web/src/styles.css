@@ -177,6 +177,24 @@ input:focus, select:focus { outline: 2px solid rgba(0, 105, 217, 0.35); outline-
 .switch input { width: auto; accent-color: var(--primary); }
 .switch[hidden] { display: none; }
 .guard-body[hidden] { display: none; }
+.variants { display: flex; flex-direction: column; gap: 8px; margin: 0 0 8px; }
+.variant {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  align-items: start;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--ink);
+}
+.variant input { width: auto; margin-top: 3px; accent-color: var(--primary); }
+.variant .name { font-weight: 600; font-size: 0.9rem; }
+.variant p { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 0.8rem; line-height: 1.35; }
 .check { display: flex; gap: 8px; align-items: center; margin: 8px 0; text-transform: none; letter-spacing: 0; color: var(--ink); font-size: 0.84rem; font-weight: 500; }
 .check input { width: auto; accent-color: var(--primary); }
 .actions { display: flex; gap: 8px; margin-top: 8px; }

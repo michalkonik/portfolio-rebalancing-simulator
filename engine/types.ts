@@ -45,9 +45,41 @@ export interface IntelligentSpec {
    * mix returns to the typed weights. stay skips the check.
    * above-only holds a coin only while it is above its average.
    */
-  regime?: "down-mix" | "down-stay" | "alldown-mix" | "alldown-stay" | "btc-mix" | "btc-stay" | "above-only";
+  regime?: "down-mix" | "down-stay" | "alldown-mix" | "alldown-stay" | "btc-mix" | "btc-stay" | "above-only" | "cowen" | "cowen-band";
   /** Average length for the regime switch. Omitted uses trendDays. */
   regimeDays?: number;
+  /** Cowen gate: bitcoin must close above this average. 0 or omitted leaves it out. */
+  btcMaDays?: number;
+  /** Second, shorter bitcoin average. Both must pass. 0 or omitted leaves it out. */
+  btcFastMaDays?: number;
+  /** Tilt only while BTC dominance is below this average. 0 or omitted leaves it out. */
+  dominanceMaDays?: number;
+  /** Tilt only while total market cap is above this average. 0 or omitted leaves it out. */
+  totalMaDays?: number;
+  /** What to do when a Cowen filter fails. stay skips the check. mix returns to the entered weights. cash sells the book into USDT. */
+  riskOff?: "stay" | "mix" | "cash" | "vsbtc";
+  /** With cash: park only when no selected coin is above its own average. A coin still in an uptrend keeps the leader rule. */
+  cashWhenWeak?: boolean;
+  /** What to do when every Cowen filter passes. leader is the momentum tilt. mix returns to the entered weights. */
+  riskOn?: "leader" | "mix";
+  /** Sell into USDT only when the selected coins' average trailing return is below basketHurdle. A rising basket stays invested. */
+  cashOnBasketDown?: boolean;
+  /** Trailing window for cashOnBasketDown, in days. */
+  basketDays?: number;
+  /** Cash when the basket return is below this fraction. 0 means any decline. */
+  basketHurdle?: number;
+  /** With cash: sell only if the same filters were already off this many days ago. 0 sells on the first failed check. */
+  cashConfirmDays?: number;
+  /** Minimum share for each selected coin that is not USDT. 0 allows a coin to be sold out. */
+  floorWeight?: number;
+  /** Cowen band: weeks in the slow average. He uses 20. 0 leaves the band out. */
+  bandWeeks?: number;
+  /** Cowen band: weeks in the faster average. He uses the 21-week EMA. 0 leaves it out. */
+  bandEmaWeeks?: number;
+  /** Durable dominance drop, in days. A 50-day cross is not enough. 0 leaves it out. */
+  dominanceTrendDays?: number;
+  /** Days in the ETH/BTC average. The tilt toward ether needs the ratio above it. */
+  pairMaDays?: number;
 }
 
 export type BlockedBuyPolicy = "keep_winners" | "park_usdt";
