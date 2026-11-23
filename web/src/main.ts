@@ -774,7 +774,7 @@ function paintResults(
     {
       id: "equity",
       name: "Portfolio",
-      color: "#0069d9",
+      color: "#0e8074",
       width: 2.6,
       axis: "left",
       on: true,
@@ -809,7 +809,7 @@ function paintResults(
   specs.push({
     id: "hold",
     name: "Hold",
-    color: "#0f5499",
+    color: "#0069d9",
     dash: "3 3",
     width: 1.5,
     axis: "left",
