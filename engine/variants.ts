@@ -163,6 +163,76 @@ export function defaultVariant(book: BookKind): AlgoVariant {
   return found;
 }
 
+export interface Tunable {
+  key: string;
+  label: string;
+  hint: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+}
+
+function days(fields: Tunable[], key: string, label: string, hint: string, value: number | undefined, fallback: number): void {
+  fields.push({ key, label, hint, value: value ?? fallback, min: 0, max: 400, step: 1 });
+}
+
+/** Knobs the selected rule actually reads. The value is the number that was scored. */
+export function tunableFields(spec: IntelligentSpec): Tunable[] {
+  const fields: Tunable[] = [];
+  if (spec.regime === "btc-stay" || spec.regime === "btc-mix") {
+    days(fields, "regimeDays", "Bitcoin average, days", "The tilt runs only while bitcoin is above this average.", spec.regimeDays, 200);
+  }
+  if (spec.regime === "cowen-band") {
+    days(fields, "bandWeeks", "Slow band, weeks", "The last weekly close must be above this average.", spec.bandWeeks, 20);
+    days(fields, "bandEmaWeeks", "Fast band, weeks", "The last weekly close must also be above this exponential average.", spec.bandEmaWeeks, 21);
+    days(fields, "pairMaDays", "Ether versus bitcoin, days", "Ether is tilted only while it is above this average against bitcoin.", spec.pairMaDays, 90);
+    days(fields, "dominanceTrendDays", "Dominance window, days", "From 2022, a rise in dominance over this many days blocks the tilt.", spec.dominanceTrendDays, 180);
+  }
+  if (spec.regime === "cowen") {
+    days(fields, "btcMaDays", "Bitcoin average, days", "Tilt only while bitcoin closes above this average. 0 turns it off.", spec.btcMaDays, 200);
+    days(fields, "btcFastMaDays", "Bitcoin fast average, days", "A second bitcoin average. Both must pass. 0 turns it off.", spec.btcFastMaDays, 0);
+    days(fields, "dominanceMaDays", "Dominance average, days", "Tilt only while dominance is below this average. 0 turns it off.", spec.dominanceMaDays, 50);
+    days(fields, "totalMaDays", "Total market cap average, days", "Tilt only while the stored total is above this average. 0 turns it off.", spec.totalMaDays, 50);
+  }
+  days(fields, "momentumDays", "Momentum, days", "How far back the leader's return is measured.", spec.momentumDays, 30);
+  if (spec.regime !== "cowen-band") {
+    days(fields, "trendDays", "Coin average, days", "A coin can lead only while its price is above this average.", spec.trendDays, 50);
+  }
+  fields.push({
+    key: "leaderPercent",
+    label: "Leader weight, percent",
+    hint: "Share given to the leader while the rule is on. The rest stays in the other selected coins.",
+    value: Math.round(spec.leaderWeight * 100),
+    min: 5,
+    max: 100,
+    step: 1,
+  });
+  fields.push({
+    key: "floorPercent",
+    label: "Coin floor, percent",
+    hint: "Minimum share for each selected coin. 0 lets a coin be sold out.",
+    value: Math.round((spec.floorWeight ?? 0) * 100),
+    min: 0,
+    max: 40,
+    step: 1,
+  });
+  return fields;
+}
+
+export function applyTunables(spec: IntelligentSpec, values: Record<string, number>): IntelligentSpec {
+  const next: IntelligentSpec = { ...spec };
+  const bag = next as unknown as Record<string, number>;
+  for (const field of tunableFields(spec)) {
+    const raw = values[field.key];
+    if (raw == null || !Number.isFinite(raw)) continue;
+    if (field.key === "leaderPercent") next.leaderWeight = Math.min(1, Math.max(0.05, raw / 100));
+    else if (field.key === "floorPercent") next.floorWeight = Math.max(0, raw / 100);
+    else bag[field.key] = Math.max(0, raw);
+  }
+  return next;
+}
+
 /** Older saved books stored only the book kind. That meant the 200-day switch, or cash for alts. */
 export function legacyVariant(book: { algo?: BookKind; variant?: string; riskOff?: string }): string | null {
   if (book.variant && variantById(book.variant)) return book.variant;
