@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { defaultVariant, legacyVariant, variantById, variantsFor, VARIANTS, type BookKind } from "./variants.ts";
+import { applyTunables, defaultVariant, legacyVariant, tunableFields, variantById, variantsFor, VARIANTS, type BookKind } from "./variants.ts";
 
 const books: BookKind[] = ["btc-eth", "alts-stable", "btc-alts", "alts"];
 
@@ -37,6 +37,20 @@ test("each book has one default and the pair default keeps a coin floor", () => 
   }
   assert.equal(defaultVariant("btc-eth").id, "btc-eth-stay300-floor10");
   assert.equal(defaultVariant("alts").spec.riskOff, "cash");
+});
+
+test("each rule exposes the knobs it actually reads, starting at the scored numbers", () => {
+  const floor = tunableFields(defaultVariant("btc-eth").spec);
+  assert.equal(floor.find((field) => field.key === "regimeDays")?.value, 300);
+  assert.equal(floor.find((field) => field.key === "floorPercent")?.value, 10);
+  const band = tunableFields(variantById("btc-eth-band-floor10")!.spec);
+  assert.equal(band.find((field) => field.key === "bandWeeks")?.value, 20);
+  assert.equal(band.find((field) => field.key === "regimeDays"), undefined);
+  const cash = tunableFields(defaultVariant("alts").spec);
+  assert.equal(cash.find((field) => field.key === "btcMaDays")?.value, 200);
+  const edited = applyTunables(defaultVariant("btc-eth").spec, { regimeDays: 250, floorPercent: 15 });
+  assert.equal(edited.regimeDays, 250);
+  assert.equal(edited.floorWeight, 0.15);
 });
 
 test("the pair favorites are the 300-day rule and the 10 percent floor", () => {

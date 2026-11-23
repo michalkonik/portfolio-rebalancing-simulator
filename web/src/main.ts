@@ -1,7 +1,7 @@
 import { correlationMatrix } from "@engine/correlation.ts";
 import { guardsAreActive, simulate, simulateNaive } from "@engine/simulate.ts";
 import type { CandleSeries, Frequency, SimInput, SimSuccess } from "@engine/types.ts";
-import { defaultVariant, legacyVariant, variantById, variantsFor, type BookKind } from "@engine/variants.ts";
+import { applyTunables, defaultVariant, legacyVariant, tunableFields, variantById, variantsFor, type BookKind } from "@engine/variants.ts";
 import { renderLineChart, renderStack, type ChartLine, type ValueScale } from "./chart.ts";
 import { cls, day, num, parseDayEnd, parseDayStart, pct, qty, quote, usdt } from "./format.ts";
 import { loadCandles } from "./load.ts";
@@ -85,6 +85,7 @@ interface SavedBook {
   everyDays?: number;
   algo?: BookKind;
   variant?: string;
+  knobs?: Record<string, string>;
   intelligent?: boolean;
   momentumDays?: string;
   trendDays?: string;
@@ -306,60 +307,45 @@ function renderSimulator(): void {
   missingAlgo.hidden = true;
   const guardBody = el("div", "guard-body");
   guardBody.hidden = true;
-  const algoNote = el("p", "hint", "The past results used bitcoin 200, dominance 50, total 50, momentum 30, coin average 50, and leader 80. Change a number and the run is no longer that test.");
-  const btcMaDays = input("number", "200");
-  const btcFastMaDays = input("number", "0");
-  const dominanceMaDays = input("number", "50");
-  const totalMaDays = input("number", "50");
-  const momentumDays = input("number", "30");
-  const trendDays = input("number", "50");
-  const leaderWeight = input("number", "80");
-  for (const field of [btcMaDays, btcFastMaDays, dominanceMaDays, totalMaDays, momentumDays, trendDays]) {
-    field.min = "0";
-    field.max = "400";
-    field.step = "1";
-  }
-  leaderWeight.min = "5";
-  leaderWeight.max = "100";
-  leaderWeight.step = "1";
-  const riskOff = el("select") as HTMLSelectElement;
-  for (const [value, label] of [
-    ["stay", "Leave the book alone"],
-    ["mix", "Return to your weights"],
-    ["cash", "Sell into USDT"],
-  ] as const) {
-    const option = el("option");
-    option.value = value;
-    option.textContent = label;
-    riskOff.append(option);
-  }
-  riskOff.value = "cash";
-  const cowenFields = el("div", "field");
-  cowenFields.append(
-    labeled("Bitcoin average, days", btcMaDays, "Tilt only while bitcoin closes above this average. 140 is about 20 weeks. 0 turns this off."),
-    labeled("Bitcoin fast average, days", btcFastMaDays, "A second bitcoin average. Both must pass. 0 turns this off."),
-    labeled("Dominance average, days", dominanceMaDays, "Tilt only while bitcoin's share of the stored basket is below this average. That is the alt-season side. 0 turns this off."),
-    labeled("Total market cap average, days", totalMaDays, "Tilt only while the stored basket's total value is above this average. 0 turns this off."),
-    labeled("Momentum, days", momentumDays, "How far back the leader's return is measured."),
-    labeled("Coin average, days", trendDays, "A coin can lead only while its price is above this average."),
-    labeled("Leader weight, percent", leaderWeight, "Share of the book given to the leader while every filter passes. The rest stays in the other selected coins."),
-  );
-  cowenFields.hidden = true;
-  guardBody.append(algoNote, cowenFields);
-  const factors = () => ({ btcMaDays, btcFastMaDays, dominanceMaDays, totalMaDays, momentumDays, trendDays, leaderWeight, riskOff });
+  const knobHost = el("div", "knobs");
+  const knobNote = el("p", "hint", "These start at the measured numbers. Change one and this run is no longer that test.");
+  guardBody.append(knobNote, knobHost);
+  const ruleDetail = el("div", "rule-detail");
+  ruleDetail.hidden = true;
+  const knobInputs = new Map<string, HTMLInputElement>();
+  let knobValues: Record<string, string> = {};
+  const readKnobs = (): Record<string, number> => {
+    const values: Record<string, number> = {};
+    for (const [key, field] of knobInputs) values[key] = Number(field.value);
+    return values;
+  };
   const selectedVariant = () => (pickedVariant ? variantById(pickedVariant) : null);
-  const applyAltsKnobs = (id: string) => {
-    const variant = variantById(id);
-    if (!variant || variant.book !== "alts") return;
-    const spec = variant.spec;
-    btcMaDays.value = String(spec.btcMaDays ?? 200);
-    btcFastMaDays.value = String(spec.btcFastMaDays ?? 0);
-    dominanceMaDays.value = String(spec.dominanceMaDays ?? 50);
-    totalMaDays.value = String(spec.totalMaDays ?? 50);
-    momentumDays.value = String(spec.momentumDays);
-    trendDays.value = String(spec.trendDays);
-    leaderWeight.value = String(Math.round(spec.leaderWeight * 100));
-    riskOff.value = spec.riskOff === "mix" || spec.riskOff === "stay" ? spec.riskOff : "cash";
+  const paintDetail = (variant: ReturnType<typeof selectedVariant>) => {
+    ruleDetail.replaceChildren();
+    if (!variant) {
+      ruleDetail.hidden = true;
+      return;
+    }
+    ruleDetail.hidden = false;
+    ruleDetail.append(el("h2", "", variant.label), el("p", "", variant.rule), el("p", "", variant.results), el("p", "", variant.when));
+  };
+  const paintKnobs = (variant: ReturnType<typeof selectedVariant>) => {
+    knobHost.replaceChildren();
+    knobInputs.clear();
+    if (!variant) return;
+    for (const field of tunableFields(variant.spec)) {
+      const box = input("number", knobValues[field.key] ?? String(field.value));
+      box.min = String(field.min);
+      box.max = String(field.max);
+      box.step = String(field.step);
+      box.addEventListener("input", () => {
+        knobValues[field.key] = box.value;
+      });
+      knobInputs.set(field.key, box);
+      const wrap = el("label", "knob");
+      wrap.append(el("span", "name", field.label), box, el("span", "", field.hint));
+      knobHost.append(wrap);
+    }
   };
   const syncAlgos = () => {
     const kind = bookKind(holdings.map((row) => row.symbol));
@@ -370,8 +356,8 @@ function renderSimulator(): void {
     }
     variantHost.replaceChildren();
     if (kind) {
-      variantHost.append(el("p", "hint", "No intelligent rule is on until you pick one. Until then the run is a plain rebalance. One rule is marked as the best measured result. The others stay available."));
-      const off = el("label", "variant");
+      variantHost.append(el("p", "hint", "Plain rebalance runs until you pick a rule. The full description is on the right. One name is marked as the best measured result."));
+      const off = el("label", "rule-option");
       const offBox = el("input") as HTMLInputElement;
       offBox.type = "radio";
       offBox.name = "algo-variant";
@@ -381,12 +367,10 @@ function renderSimulator(): void {
         pickedVariant = null;
         syncAlgos();
       });
-      const offName = el("span", "name", "Off");
-      const offText = el("p", "", "No intelligent rule. On each scheduled check the book trades back to the weights you typed.");
-      off.append(offBox, offName, offText);
+      off.append(offBox, document.createTextNode("Off. Plain rebalance."));
       variantHost.append(off);
       for (const variant of variantsFor(kind)) {
-        const row = el("label", "variant");
+        const row = el("label", "rule-option");
         const box = el("input") as HTMLInputElement;
         box.type = "radio";
         box.name = "algo-variant";
@@ -395,20 +379,21 @@ function renderSimulator(): void {
         box.addEventListener("change", () => {
           if (!box.checked) return;
           pickedVariant = variant.id;
+          knobValues = {};
           frequency.value = "custom";
           everyDays.value = "14";
           syncSchedule();
-          applyAltsKnobs(variant.id);
           syncAlgos();
         });
         const name = variant.id === defaultVariant(kind).id ? `${variant.label} (best measured)` : variant.label;
-        row.append(box, el("span", "name", name), el("p", "", variant.rule), el("p", "", variant.results), el("p", "", variant.when));
+        row.append(box, document.createTextNode(name));
         variantHost.append(row);
       }
     }
     const selected = selectedVariant();
-    guardBody.hidden = selected?.book !== "alts";
-    cowenFields.hidden = selected?.book !== "alts";
+    guardBody.hidden = selected == null;
+    paintKnobs(selected);
+    paintDetail(selected);
   };
   const actions = el("div", "actions");
   const runBtn = el("button", "btn primary");
@@ -422,7 +407,9 @@ function renderSimulator(): void {
   const results = el("div", "results");
   results.id = "results";
   results.append(el("p", "muted", "Add one or more coins, set the weights and the calendar, then run. Nothing is loaded for you. Intelligent rules stay off until you pick one."));
-  layout.append(form, results);
+  const stage = el("div", "stage");
+  stage.append(ruleDetail, results);
+  layout.append(form, stage);
   ui.sim.replaceChildren(layout);
 
   function readBooks(): SavedBook[] {
@@ -482,14 +469,14 @@ function renderSimulator(): void {
       everyDays: Number(everyDays.value),
       algo: selectedVariant()?.book,
       variant: selectedVariant()?.id,
-      btcMaDays: btcMaDays.value,
-      btcFastMaDays: btcFastMaDays.value,
-      dominanceMaDays: dominanceMaDays.value,
-      totalMaDays: totalMaDays.value,
-      momentumDays: momentumDays.value,
-      trendDays: trendDays.value,
-      leaderWeight: leaderWeight.value,
-      riskOff: riskOff.value === "mix" || riskOff.value === "cash" ? riskOff.value : "stay",
+      knobs: Object.fromEntries([...knobInputs].map(([key, field]) => [key, field.value])),
+      momentumDays: knobInputs.get("momentumDays")?.value,
+      trendDays: knobInputs.get("trendDays")?.value,
+      leaderWeight: knobInputs.get("leaderPercent")?.value,
+      btcMaDays: knobInputs.get("btcMaDays")?.value,
+      btcFastMaDays: knobInputs.get("btcFastMaDays")?.value,
+      dominanceMaDays: knobInputs.get("dominanceMaDays")?.value,
+      totalMaDays: knobInputs.get("totalMaDays")?.value,
     };
     writeBooks([book, ...readBooks().filter((item) => item.name !== name)]);
     bookName.value = "";
@@ -508,21 +495,20 @@ function renderSimulator(): void {
     fee.value = book.fee;
     slip.value = book.slip;
     everyDays.value = String(book.everyDays ?? 14);
-    btcMaDays.value = book.btcMaDays ?? "200";
-    btcFastMaDays.value = book.btcFastMaDays ?? "0";
-    dominanceMaDays.value = book.dominanceMaDays ?? "50";
-    totalMaDays.value = book.totalMaDays ?? "50";
-    momentumDays.value = book.momentumDays ?? "30";
-    trendDays.value = book.trendDays ?? "50";
-    leaderWeight.value = book.leaderWeight ?? "80";
-    riskOff.value = book.riskOff === "mix" || book.riskOff === "stay" ? book.riskOff : "cash";
+    knobValues = { ...(book.knobs ?? {}) };
+    if (book.momentumDays) knobValues.momentumDays = book.momentumDays;
+    if (book.trendDays) knobValues.trendDays = book.trendDays;
+    if (book.leaderWeight) knobValues.leaderPercent = book.leaderWeight;
+    if (book.btcMaDays) knobValues.btcMaDays = book.btcMaDays;
+    if (book.btcFastMaDays) knobValues.btcFastMaDays = book.btcFastMaDays;
+    if (book.dominanceMaDays) knobValues.dominanceMaDays = book.dominanceMaDays;
+    if (book.totalMaDays) knobValues.totalMaDays = book.totalMaDays;
     syncSchedule();
     drawHoldings();
     const kind = bookKind(holdings.map((row) => row.symbol));
     const restored = legacyVariant(book);
     pickedVariant = restored && variantById(restored)?.book === kind ? restored : null;
     lastKind = kind;
-    if (pickedVariant?.startsWith("alts-")) applyAltsKnobs(pickedVariant);
     syncAlgos();
     void run();
   };
@@ -606,7 +592,7 @@ function renderSimulator(): void {
   async function run(): Promise<void> {
     if (!manifest) return;
     results.replaceChildren(el("p", "muted", "Running…"));
-    const built = buildInput(capital, start, end, frequency, weekday, monthDay, everyDays, fee, slip, pickedVariant, factors());
+    const built = buildInput(capital, start, end, frequency, weekday, monthDay, everyDays, fee, slip, pickedVariant, readKnobs());
     if (typeof built === "string") {
       results.replaceChildren(el("p", "neg", built));
       return;
@@ -632,40 +618,10 @@ function renderSimulator(): void {
 
 }
 
-function dayField(field: HTMLInputElement, fallback: number): number {
-  const value = Math.round(Number(field.value));
-  return Number.isFinite(value) ? value : fallback;
-}
-
-function algoSpec(
-  variantId: string | null,
-  factors?: {
-    btcMaDays: HTMLInputElement;
-    btcFastMaDays: HTMLInputElement;
-    dominanceMaDays: HTMLInputElement;
-    totalMaDays: HTMLInputElement;
-    momentumDays: HTMLInputElement;
-    trendDays: HTMLInputElement;
-    leaderWeight: HTMLInputElement;
-    riskOff: HTMLSelectElement;
-  },
-): SimInput["intelligent"] {
+function algoSpec(variantId: string | null, knobs?: Record<string, number>): SimInput["intelligent"] {
   const variant = variantId ? variantById(variantId) : null;
   if (!variant) return undefined;
-  if (variant.book !== "alts" || !factors) return variant.spec;
-  const leader = dayField(factors.leaderWeight, 80) / 100;
-  const riskOff = factors.riskOff.value === "mix" || factors.riskOff.value === "cash" ? factors.riskOff.value : "stay";
-  return {
-    ...variant.spec,
-    momentumDays: Math.max(2, dayField(factors.momentumDays, 30)),
-    trendDays: Math.max(2, dayField(factors.trendDays, 50)),
-    leaderWeight: Math.min(1, Math.max(0.05, leader)),
-    btcMaDays: Math.max(0, dayField(factors.btcMaDays, 200)),
-    btcFastMaDays: Math.max(0, dayField(factors.btcFastMaDays, 0)),
-    dominanceMaDays: Math.max(0, dayField(factors.dominanceMaDays, 50)),
-    totalMaDays: Math.max(0, dayField(factors.totalMaDays, 50)),
-    riskOff,
-  };
+  return applyTunables(variant.spec, knobs ?? {});
 }
 
 function buildInput(
@@ -679,16 +635,7 @@ function buildInput(
   fee: HTMLInputElement,
   slip: HTMLInputElement,
   variantId: string | null,
-  factors?: {
-    btcMaDays: HTMLInputElement;
-    btcFastMaDays: HTMLInputElement;
-    dominanceMaDays: HTMLInputElement;
-    totalMaDays: HTMLInputElement;
-    momentumDays: HTMLInputElement;
-    trendDays: HTMLInputElement;
-    leaderWeight: HTMLInputElement;
-    riskOff: HTMLSelectElement;
-  },
+  knobs?: Record<string, number>,
 ): { symbols: string[]; input: Omit<SimInput, "series" | "btc"> } | string {
   if (holdings.length < 1 || holdings.length > 10) return "Add between 1 and 10 coins, then run.";
   if (holdings.every((row) => row.symbol === "USDT")) return "USDT alone has no price history. Pair it with a coin.";
@@ -718,7 +665,7 @@ function buildInput(
       fraction: 1,
       trend: { enabled: false, smaDays: 50 },
       blockedBuyPolicy: "keep_winners",
-      intelligent: algoSpec(variantId, factors),
+      intelligent: algoSpec(variantId, knobs),
     },
   };
 }
